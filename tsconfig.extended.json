@@ -10,5 +10,6 @@
     "sourceMap": true,
     "jsx": "react-jsx",
     "moduleResolution": "node"
-  }
+  },
+  "exclude": ["node_modules"]
 }

@@ -1,7 +1,16 @@
-import { defineComponent, h } from "vue"
+import { defineComponent, h, ref } from "vue"
 
 export const Button = defineComponent({
   setup(_, { slots }) {
-    return () => h("button", { type: "button" }, slots.default?.())
+    const link = ref("https://www.google.com")
+
+    return () =>
+      h(
+        "div",
+        {
+          class: "beae-wrapper",
+        },
+        h("a", { href: link.value }, slots.default?.()),
+      )
   },
 })
