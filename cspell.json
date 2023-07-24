@@ -2,6 +2,7 @@
   "version": "0.2",
   "language": "en",
   "words": [
+    "autodocs",
     "beae",
     "composability",
     "Licence",
@@ -11,8 +12,5 @@
     "typecheck",
     "unocss"
   ],
-  "ignorePaths": [
-    "node_modules/**",
-    "dist/**"
-  ]
+  "ignorePaths": ["node_modules/**", "dist/**"]
 }

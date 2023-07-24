@@ -19,7 +19,7 @@
     "format:check": "prettier --check packages/**/**/src --cache",
     "format:write": "prettier --write packages/**/**/src --cache",
     "clean:storybook": "rm -rf node_modules/.cache/storybook",
-    "storybook": "pnpm build:addon && start-storybook -p 6006",
+    "storybook": "storybook dev -p 6006",
     "clean": "pnpm -r --parallel exec rimraf dist .turbo *.log",
     "changelog": "tsx scripts/changelog.ts",
     "changelog:latest": "tsx scripts/changelog.ts --latest",
@@ -34,36 +34,46 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.7",
-    "@storybook/addon-a11y": "^7.1.0",
     "@storybook/addon-essentials": "^7.1.0",
-    "@storybook/addon-storysource": "^7.1.0",
-    "@storybook/builder-webpack5": "^7.1.0",
-    "@storybook/cli": "^7.1.0",
-    "@storybook/manager-webpack5": "^6.5.16",
-    "@storybook/theming": "^7.1.0",
+    "@storybook/addon-interactions": "^7.1.0",
+    "@storybook/addon-links": "^7.1.0",
+    "@storybook/blocks": "^7.1.0",
+    "@storybook/testing-library": "^0.2.0",
+    "@storybook/vue3": "^7.1.0",
+    "@storybook/vue3-vite": "^7.1.0",
     "@types/node": "^20.4.4",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
     "@typescript-eslint/parser": "^6.1.0",
-    "add": "^2.0.6",
     "commitlint-config-jira": "^1.6.4",
     "commitlint-plugin-jira-rules": "^1.6.4",
     "cspell": "^6.31.2",
     "eslint": "^8.45.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-storybook": "^0.6.13",
+    "find-packages": "^10.0.4",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
     "plop": "^3.1.2",
     "prettier": "^3.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "storybook": "^7.1.0",
     "tsup": "^7.1.0",
     "tsx": "^3.12.7",
     "turbo": "^1.10.9",
-    "typescript": "^5.1.6"
+    "typescript": "^5.1.6",
+    "vue": "^3.3.4"
   },
   "pnpm": {
     "overrides": {}
   },
   "engines": {
     "node": ">=16.x"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
   }
 }
