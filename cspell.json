@@ -1,0 +1,18 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "beae",
+    "composability",
+    "Licence",
+    "postpack",
+    "preversion",
+    "tsup",
+    "typecheck",
+    "unocss"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "dist/**"
+  ]
+}

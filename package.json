@@ -1,0 +1,62 @@
+{
+  "name": "beae-ui",
+  "version": "1.0.0",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chakra-ui/chakra-ui.git"
+  },
+  "author": "Toan Tran (Albert) <trantoan.fox.97@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "husky install",
+    "build": "turbo run build --filter=!./examples/*",
+    "typedocs": "pnpm --filter=./packages/components/** typedocs",
+    "dev": "turbo run dev --filter=!./examples/*",
+    "start:dev": "pnpm --filter vue-app dev",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint packages/**/**/src --ext .ts,.tsx,.vue --config .eslintrc --cache",
+    "format:check": "prettier --check packages/**/**/src --cache",
+    "format:write": "prettier --write packages/**/**/src --cache",
+    "clean:storybook": "rm -rf node_modules/.cache/storybook",
+    "storybook": "pnpm build:addon && start-storybook -p 6006",
+    "clean": "pnpm -r --parallel exec rimraf dist .turbo *.log",
+    "changelog": "tsx scripts/changelog.ts",
+    "changelog:latest": "tsx scripts/changelog.ts --latest",
+    "changelog:commit": "git add . && git commit -am 'docs: add changelog' && git push",
+    "changelog:format": "prettier --write .changelog",
+    "create:pkg": "plop component",
+    "spell": "cspell lint --config cspell.json **/**/*.ts --color --gitignore --no-must-find-files --no-summary --no-progress || true",
+    "version": "changeset version",
+    "release": "changeset publish",
+    "version:dev": "changeset version --snapshot dev",
+    "release:dev": "changeset publish --tag dev"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.7",
+    "@types/node": "^20.4.4",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
+    "add": "^2.0.6",
+    "commitlint-config-jira": "^1.6.4",
+    "commitlint-plugin-jira-rules": "^1.6.4",
+    "cspell": "^6.31.2",
+    "eslint": "^8.45.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "plop": "^3.1.2",
+    "prettier": "^3.0.0",
+    "tsup": "^7.1.0",
+    "tsx": "^3.12.7",
+    "turbo": "^1.10.9",
+    "typescript": "^5.1.6"
+  },
+  "pnpm": {
+    "overrides": {}
+  },
+  "engines": {
+    "node": ">=16.x"
+  }
+}
