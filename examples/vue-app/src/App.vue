@@ -1,14 +1,20 @@
 <script setup lang="ts">
-import { Button as BeaeButton } from "@beae-ui/vue"
+import {ref} from 'vue';
+import { Checkbox } from "@beae-ui/vue"
+
+const checked = ref<boolean>(false);
+function handleChange() {
+    checked.value = !checked.value
+  }
 </script>
 
 <template>
   <div class="relative bg-gray-700">
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <h3>Button</h3>
-    <beae-button>Click me</beae-button>
+    <checkbox
+      label="Basic checkbox"
+      :checked="checked"
+      :onChange="handleChange"
+    />
   </div>
 </template>
 

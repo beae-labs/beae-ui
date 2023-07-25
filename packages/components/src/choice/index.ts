@@ -1,2 +1,1 @@
-export { Choice } from "./choice"
-export { useChoice } from "./use-choice"
+export * from "./choice"
