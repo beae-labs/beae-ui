@@ -3,7 +3,7 @@ import { Button as BeaeButton } from "@beae-ui/vue"
 </script>
 
 <template>
-  <div>
+  <div class="relative bg-gray-700">
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
