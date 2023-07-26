@@ -1,0 +1,54 @@
+{
+  "name": "@beae-ui/attr-utils",
+  "version": "1.0.0",
+  "description": "Beae UI | Attributes function for building components",
+  "author": "Toan Tran (Albert) <trantoan.fox.97@gmail.com>",
+  "homepage": "https://github.com/beae-labs/beae-ui#readme",
+  "license": "MIT",
+  "sideEffects": false,
+  "main": "src/index.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beae-labs/beae-ui.git",
+    "directory": "packages/utilities/attr-utils"
+  },
+  "bugs": {
+    "url": "https://github.com/beae-labs/beae-ui/issues"
+  },
+  "scripts": {
+    "build": "tsup src --dts",
+    "dev": "pnpm build:fast -- --watch",
+    "clean": "rimraf dist .turbo",
+    "typecheck": "tsc --noEmit",
+    "build:fast": "tsup src",
+    "prepack": "clean-package",
+    "postpack": "clean-package restore"
+  },
+  "dependencies": {
+    "@beae-ui/styled-system": "workspace:^",
+    "lodash.camelcase": "^4.3.0",
+    "lodash.memoize": "^4.1.2",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@types/lodash.camelcase": "^4.3.7",
+    "@types/lodash.memoize": "^4.1.7",
+    "clean-package": "2.2.0"
+  },
+  "clean-package": "../../../clean-package.config.json",
+  "tsup": {
+    "clean": true,
+    "target": "es2019",
+    "format": [
+      "cjs",
+      "esm"
+    ]
+  }
+}
