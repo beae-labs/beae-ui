@@ -175,6 +175,28 @@ importers:
         specifier: 2.2.0
         version: 2.2.0
 
+  packages/core/composables:
+    dependencies:
+      '@beae-ui/color-mode':
+        specifier: workspace:^
+        version: link:../color-mode
+      '@beae-ui/number-utils':
+        specifier: workspace:^
+        version: link:../../utilities/number-utils
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
   packages/core/styled:
     dependencies:
       '@beae-ui/attr-utils':
