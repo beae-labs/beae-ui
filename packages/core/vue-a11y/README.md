@@ -15,10 +15,10 @@ npm i @beae-ui/vue-a11y
 ## Contribution
 
 Yes please! See the
-[contributing guidelines](https://github.com/beae/beae-ui/blob/master/CONTRIBUTING.md)
+[contributing guidelines](https://github.com/beae-labs/beae-ui/blob/master/CONTRIBUTING.md)
 for details.
 
 ## License
 
 This project is licensed under the terms of the
-[MIT license](https://github.com/beae/beae-ui/blob/master/LICENSE).
+[MIT license](https://github.com/beae-labs/beae-ui/blob/master/LICENSE).

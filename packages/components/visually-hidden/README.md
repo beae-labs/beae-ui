@@ -1,4 +1,4 @@
-# @beae-ui/composables
+# @beae-ui/visually-hidden
 
 A Quick description of the component
 
@@ -7,9 +7,9 @@ A Quick description of the component
 ## Installation
 
 ```sh
-yarn add @beae-ui/composables
+yarn add @beae-ui/visually-hidden
 # or
-npm i @beae-ui/composables
+npm i @beae-ui/visually-hidden
 ```
 
 ## Contribution

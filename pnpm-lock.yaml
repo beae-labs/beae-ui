@@ -168,6 +168,22 @@ importers:
         specifier: 2.2.0
         version: 2.2.0
 
+  packages/components/visually-hidden:
+    dependencies:
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@emotion/css':
+        specifier: ^11.11.2
+        version: 11.11.2
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
   packages/core/anatomy:
     dependencies:
       '@beae-ui/theme-tools':
