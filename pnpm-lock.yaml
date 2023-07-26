@@ -152,6 +152,31 @@ importers:
         specifier: 2.2.0
         version: 2.2.0
 
+  packages/components/button:
+    dependencies:
+      '@beae-ui/icon':
+        specifier: workspace:^
+        version: link:../icon
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/spinner':
+        specifier: workspace:^
+        version: link:../spinner
+      '@beae-ui/styled-system':
+        specifier: workspace:^
+        version: link:../../core/styled-system
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
   packages/components/css-reset:
     dependencies:
       '@beae-ui/system':
@@ -160,6 +185,41 @@ importers:
       vue:
         specifier: ^3.3.4
         version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
+  packages/components/icon:
+    dependencies:
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
+  packages/components/spinner:
+    dependencies:
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      '@beae-ui/visually-hidden':
+        specifier: workspace:^
+        version: link:../visually-hidden
     devDependencies:
       clean-package:
         specifier: 2.2.0

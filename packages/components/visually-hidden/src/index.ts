@@ -1,2 +1,2 @@
-export { default as LVisuallyHidden } from "./visually-hidden"
+export { default as VisuallyHidden } from "./visually-hidden"
 export * from "./visually-hidden"

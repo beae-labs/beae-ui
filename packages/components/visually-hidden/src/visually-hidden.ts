@@ -14,7 +14,7 @@ export const visuallyHiddenStyle: CSSObject = {
   position: "absolute",
 }
 
-export const LVisuallyHidden = defineComponent({
+export const VisuallyHidden = defineComponent({
   setup(_, { attrs }) {
     return () => {
       return h(
@@ -30,7 +30,7 @@ export const LVisuallyHidden = defineComponent({
   },
 })
 
-export const LVisuallyHiddenInput = defineComponent({
+export const VisuallyHiddenInput = defineComponent({
   setup(_, { attrs }) {
     return () => {
       return h(
@@ -46,4 +46,4 @@ export const LVisuallyHiddenInput = defineComponent({
   },
 })
 
-export default LVisuallyHidden
+export default VisuallyHidden
