@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@beae-ui/vue':
+        specifier: workspace:^
+        version: link:packages/core/vue
     devDependencies:
       '@commitlint/cli':
         specifier: ^17.6.7
@@ -453,6 +457,73 @@ importers:
       '@types/tinycolor2':
         specifier: ^1.4.3
         version: 1.4.3
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
+  packages/core/vue:
+    dependencies:
+      '@beae-ui/button':
+        specifier: workspace:^
+        version: link:../../components/button
+      '@beae-ui/color-mode':
+        specifier: workspace:^
+        version: link:../color-mode
+      '@beae-ui/composables':
+        specifier: workspace:^
+        version: link:../composables
+      '@beae-ui/css-reset':
+        specifier: workspace:^
+        version: link:../../components/css-reset
+      '@beae-ui/icon':
+        specifier: workspace:^
+        version: link:../../components/icon
+      '@beae-ui/spinner':
+        specifier: workspace:^
+        version: link:../../components/spinner
+      '@beae-ui/styled':
+        specifier: workspace:^
+        version: link:../styled
+      '@beae-ui/styled-system':
+        specifier: workspace:^
+        version: link:../styled-system
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../system
+      '@beae-ui/theme':
+        specifier: workspace:^
+        version: link:../theme
+      '@beae-ui/theme-provider':
+        specifier: workspace:^
+        version: link:../../components/theme-provider
+      '@beae-ui/theme-tools':
+        specifier: workspace:^
+        version: link:../theme-tools
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      '@beae-ui/visually-hidden':
+        specifier: workspace:^
+        version: link:../../components/visually-hidden
+      '@beae-ui/vue-a11y':
+        specifier: workspace:^
+        version: link:../vue-a11y
+      '@emotion/cache':
+        specifier: ^11.11.0
+        version: 11.11.0
+      '@emotion/serialize':
+        specifier: ^1.1.2
+        version: 1.1.2
+      '@emotion/sheet':
+        specifier: ^1.2.2
+        version: 1.2.2
+      '@emotion/utils':
+        specifier: ^1.2.1
+        version: 1.2.1
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
       clean-package:
         specifier: 2.2.0
         version: 2.2.0
@@ -4023,7 +4094,7 @@ packages:
       ts-dedent: 2.2.0
       type-fest: 3.13.1
       vue: 3.3.4
-      vue-component-type-helpers: 1.8.7
+      vue-component-type-helpers: 1.8.8
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -10898,8 +10969,8 @@ packages:
     resolution: {integrity: sha512-eOpPHogvorZRobNqJGhapa0JdwaxpjVvyBp0QIUMRMSf8ZAlqOdEquKuRmw9Qwu0qXtJIWqFtMkmvJjUZmMjVA==}
     dev: true
 
-  /vue-component-type-helpers@1.8.7:
-    resolution: {integrity: sha512-6boKJUzhAxUo98nmYrvhi+PHmJMstGxxWbyE3eRLHiPpjRoR4a0FnV2mbcIHfw+Fh0MCdmXnzc5ndhNhcsqhlA==}
+  /vue-component-type-helpers@1.8.8:
+    resolution: {integrity: sha512-Ohv9HQY92nSbpReC6WhY0X4YkOszHzwUHaaN/lev5tHQLM1AEw+LrLeB2bIGIyKGDU7ZVrncXcv/oBny4rjbYg==}
     dev: true
 
   /vue-docgen-api@4.73.1(vue@3.3.4):
