@@ -26,7 +26,7 @@ export const filter: Config = {
 export interface FilterProps {
   /**
    * The CSS `filter` property. When set to `auto`, you allow
-   * Luniand UI to define the color based on the filter style props
+   * Beae UI to define the color based on the filter style props
    * (`blur`, `saturate`, etc.)
    */
   filter?: Token<CSS.Property.Filter | "auto">
@@ -67,7 +67,7 @@ export interface FilterProps {
   dropShadow?: Token<CSS.Property.BoxShadow, "shadows">
   /**
    * The CSS `backdrop-filter` property. When set to `auto`, you allow
-   * Luniand UI to define the color based on the backdrop filter style props
+   * Beae UI to define the color based on the backdrop filter style props
    * (`backdropBlur`, `backdropSaturate`, etc.)
    */
   backdropFilter?: Token<CSS.Property.BackdropFilter | "auto">
