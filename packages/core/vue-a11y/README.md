@@ -1,4 +1,4 @@
-# @luniand-ui/vue-a11y
+# @beae-ui/vue-a11y
 
 A Quick description of the component
 
@@ -7,18 +7,18 @@ A Quick description of the component
 ## Installation
 
 ```sh
-yarn add @luniand-ui/vue-a11y
+yarn add @beae-ui/vue-a11y
 # or
-npm i @luniand-ui/vue-a11y
+npm i @beae-ui/vue-a11y
 ```
 
 ## Contribution
 
 Yes please! See the
-[contributing guidelines](https://github.com/luniand/luniand-ui/blob/master/CONTRIBUTING.md)
+[contributing guidelines](https://github.com/beae/beae-ui/blob/master/CONTRIBUTING.md)
 for details.
 
 ## License
 
 This project is licensed under the terms of the
-[MIT license](https://github.com/luniand/luniand-ui/blob/master/LICENSE).
+[MIT license](https://github.com/beae/beae-ui/blob/master/LICENSE).

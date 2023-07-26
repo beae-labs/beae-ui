@@ -152,6 +152,22 @@ importers:
         specifier: 2.2.0
         version: 2.2.0
 
+  packages/components/theme-provider:
+    dependencies:
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/theme':
+        specifier: workspace:^
+        version: link:../../core/theme
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
   packages/core/anatomy:
     dependencies:
       '@beae-ui/theme-tools':
@@ -3918,7 +3934,7 @@ packages:
       ts-dedent: 2.2.0
       type-fest: 3.13.1
       vue: 3.3.4
-      vue-component-type-helpers: 1.8.6
+      vue-component-type-helpers: 1.8.7
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -10793,8 +10809,8 @@ packages:
     resolution: {integrity: sha512-eOpPHogvorZRobNqJGhapa0JdwaxpjVvyBp0QIUMRMSf8ZAlqOdEquKuRmw9Qwu0qXtJIWqFtMkmvJjUZmMjVA==}
     dev: true
 
-  /vue-component-type-helpers@1.8.6:
-    resolution: {integrity: sha512-vKWeoKVEV51ZzoB8+UY0apMXiifbPQxWlcZlvQRDVdiOHmEkCBClWeIGbqQ8cCR9P4j+oCyLW87sraZFMz/qnA==}
+  /vue-component-type-helpers@1.8.7:
+    resolution: {integrity: sha512-6boKJUzhAxUo98nmYrvhi+PHmJMstGxxWbyE3eRLHiPpjRoR4a0FnV2mbcIHfw+Fh0MCdmXnzc5ndhNhcsqhlA==}
     dev: true
 
   /vue-docgen-api@4.73.1(vue@3.3.4):
