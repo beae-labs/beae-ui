@@ -14,26 +14,26 @@ type Element =
   | "span"
   | "legend"
 type Variant =
-  | "headingXs"
-  | "headingSm"
-  | "headingMd"
-  | "headingLg"
-  | "headingXl"
-  | "heading2xl"
-  | "heading3xl"
-  | "heading4xl"
-  | "bodySm"
-  | "bodyMd"
-  | "bodyLg"
+  | "heading-xs"
+  | "heading-sm"
+  | "heading-md"
+  | "heading-lg"
+  | "heading-xl"
+  | "heading-2xl"
+  | "heading-3xl"
+  | "heading-4xl"
+  | "body-sm"
+  | "body-md"
+  | "body-lg"
 type Alignment = "start" | "center" | "end" | "justify"
 type FontWeight = "regular" | "medium" | "semibold" | "bold"
 type Color = "success" | "critical" | "warning" | "subdued" | "text-inverse"
 
 const styles = {
-  Break: "break",
-  Number: "numeric",
-  Truncate: "truncate",
-  VisuallyHidden: "visuallyHidden",
+  break: "break",
+  number: "numeric",
+  truncate: "truncate",
+  visuallyHidden: "visuallyHidden",
 }
 
 export interface TextProps {
@@ -64,27 +64,60 @@ export interface TextProps {
 export const Text = defineComponent({
   props: {
     /** Adjust horizontal alignment of text */
-    alignment: String as PropType<TextProps["alignment"]>,
+    alignment: {
+      type: String as PropType<TextProps["alignment"]>,
+      required: false,
+    },
     /** The element type */
-    as: String as PropType<TextProps["as"]>,
+    as: {
+      type: String as PropType<TextProps["as"]>,
+      required: false,
+    },
     /** Prevent text from overflowing */
-    breakWord: Boolean as PropType<TextProps["breakWord"]>,
+    breakWord: {
+      type: Boolean as PropType<TextProps["breakWord"]>,
+      required: false,
+    },
     /** Text to display */
-    children: String as PropType<TextProps["children"]>,
+    children: {
+      type: String as PropType<TextProps["children"]>,
+      required: false,
+    },
     /** Adjust color of text */
-    color: String as PropType<TextProps["color"]>,
+    color: {
+      type: String as PropType<TextProps["color"]>,
+      required: false,
+    },
     /** Adjust weight of text */
-    fontWeight: String as PropType<TextProps["fontWeight"]>,
+    fontWeight: {
+      type: String as PropType<TextProps["fontWeight"]>,
+      required: false,
+    },
     /** HTML id attribute */
-    id: String as PropType<TextProps["id"]>,
+    id: {
+      type: String as PropType<TextProps["id"]>,
+      required: false,
+    },
     /** Use a numeric font variant with monospace appearance */
-    numeric: Boolean as PropType<TextProps["numeric"]>,
+    numeric: {
+      type: Boolean as PropType<TextProps["numeric"]>,
+      required: false,
+    },
     /** Truncate text overflow with ellipsis */
-    truncate: Boolean as PropType<TextProps["truncate"]>,
+    truncate: {
+      type: Boolean as PropType<TextProps["truncate"]>,
+      required: false,
+    },
     /** Typographic style of text */
-    variant: String as PropType<TextProps["color"]>,
+    variant: {
+      type: String as PropType<TextProps["color"]>,
+      required: false,
+    },
     /** Visually hide the text */
-    visuallyHidden: Boolean as PropType<TextProps["numeric"]>,
+    visuallyHidden: {
+      type: Boolean as PropType<TextProps["numeric"]>,
+      required: false,
+    },
   },
   setup(props, { slots }) {
     const Component = props?.as || (props?.visuallyHidden ? "span" : "p")
@@ -95,10 +128,10 @@ export const Text = defineComponent({
       props?.color,
       props?.fontWeight,
       props?.variant,
-      props?.breakWord && styles["Break"],
-      props?.numeric && styles["Number"],
-      props?.truncate && styles["Truncate"],
-      props?.visuallyHidden && styles["VisuallyHidden"],
+      props?.breakWord && styles["break"],
+      props?.numeric && styles["number"],
+      props?.truncate && styles["truncate"],
+      props?.visuallyHidden && styles["visuallyHidden"],
     )
     return () =>
       h(Component, { class: className, id: props?.id }, slots.default?.())
