@@ -352,6 +352,16 @@ importers:
         specifier: 2.2.0
         version: 2.2.0
 
+  packages/core/vue-a11y:
+    dependencies:
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
   packages/hooks:
     dependencies:
       '@beae-ui/tokens':
