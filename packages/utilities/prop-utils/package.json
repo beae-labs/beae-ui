@@ -1,42 +1,52 @@
 {
   "name": "@beae-ui/prop-utils",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Beae UI | Prop attributes function for building components",
   "keywords": [
     "number-utils"
   ],
   "author": "Albert Tran <trantoan.fox.97@gmail.com>",
-  "homepage": "https://github.com/beae/beae-ui#readme",
+  "homepage": "https://github.com/beae-labs/beae-ui#readme",
   "license": "MIT",
   "main": "src/index.ts",
   "sideEffects": false,
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "publishConfig": {
     "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/beae/beae-ui.git",
+    "url": "git+https://github.com/beae-labs/beae-ui.git",
     "directory": "packages/utilities/number-utils"
   },
   "bugs": {
-    "url": "https://github.com/beae/beae-ui/issues"
+    "url": "https://github.com/beae-labs/beae-ui/issues"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format=esm,cjs --dts",
-    "dev": "yarn build:fast -- --watch",
+    "build": "tsup src --dts",
+    "dev": "pnpm build:fast -- --watch",
     "clean": "rimraf dist .turbo",
     "typecheck": "tsc --noEmit",
-    "build:fast": "tsup src/index.ts --format=esm,cjs",
+    "build:fast": "tsup src",
     "prepack": "clean-package",
     "postpack": "clean-package restore"
+  },
+  "dependencies": {
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "clean-package": "2.1.1"
   },
-  "dependencies": {
-    "vue": "^3.3.4"
+  "clean-package": "../../../clean-package.config.json",
+  "tsup": {
+    "clean": true,
+    "target": "es2019",
+    "format": [
+      "cjs",
+      "esm"
+    ]
   }
 }
