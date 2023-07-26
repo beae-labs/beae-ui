@@ -16,7 +16,7 @@ export type ColorModeContext = {
 
 /** Injects color mode into component instance */
 export const useColorMode = (): ColorModeContext => {
-  const _colorMode = inject("$luniandColorMode") as ColorModeRef
+  const _colorMode = inject("$beaeColorMode") as ColorModeRef
   const colorMode = isRef(_colorMode) ? _colorMode : ref(_colorMode)
 
   const toggleColorMode = () => {

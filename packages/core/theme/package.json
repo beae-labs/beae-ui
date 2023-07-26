@@ -1,7 +1,7 @@
 {
-  "name": "@beae-ui/color-mode",
+  "name": "@beae-ui/theme",
   "version": "1.0.0",
-  "description": "Beae UI | Vue component and hooks for handling light and dark mode",
+  "description": "Beae UI | The default theme for beae components",
   "author": "Toan Tran (Albert) <trantoan.fox.97@gmail.com>",
   "homepage": "https://github.com/beae-labs/beae-ui#readme",
   "license": "MIT",
@@ -17,7 +17,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/beae-labs/beae-ui.git",
-    "directory": "packages/core/color-mode"
+    "directory": "packages/core/theme"
   },
   "bugs": {
     "url": "https://github.com/beae-labs/beae-ui/issues"
@@ -32,8 +32,11 @@
     "postpack": "clean-package restore"
   },
   "dependencies": {
-    "@beae-ui/utils": "workspace:^",
-    "vue": "^3.3.4"
+    "@beae-ui/anatomy": "workspace:^",
+    "@beae-ui/styled-system": "workspace:^",
+    "@beae-ui/system": "workspace:^",
+    "@beae-ui/theme-tools": "workspace:^",
+    "@beae-ui/utils": "workspace:^"
   },
   "devDependencies": {
     "clean-package": "2.2.0"
