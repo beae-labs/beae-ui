@@ -1,4 +1,4 @@
-import { defineComponent, h } from "vue"
+import { PropType, defineComponent, h } from "vue"
 import { classNames } from "@beae-ui/utils"
 
 type Breakpoints = "xs" | "sm" | "md" | "lg" | "xl"
@@ -26,7 +26,23 @@ export interface CellProps {
   row?: Cell
 }
 
-export const Cell = defineComponent<CellProps>({
+const _cellProps = {
+  column: {
+    type: Object as PropType<CellProps["column"]>,
+    require: false,
+  },
+  columnSpan: {
+    type: Object as PropType<CellProps["columnSpan"]>,
+    require: false,
+  },
+  row: {
+    type: Object as PropType<CellProps["row"]>,
+    require: false,
+  },
+}
+
+export const Cell = defineComponent({
+  props: _cellProps,
   setup({ columnSpan }, { slots }) {
     const className = classNames(
       "cell",

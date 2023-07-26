@@ -48,6 +48,7 @@
     "postpack": "clean-package restore"
   },
   "dependencies": {
+    "@beae-ui/hooks": "workspace:^",
     "@beae-ui/utils": "workspace:^",
     "vue": "^3.3.4"
   },

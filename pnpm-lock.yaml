@@ -135,6 +135,9 @@ importers:
 
   packages/components:
     dependencies:
+      '@beae-ui/hooks':
+        specifier: workspace:^
+        version: link:../hooks
       '@beae-ui/utils':
         specifier: workspace:^
         version: link:../utilities

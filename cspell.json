@@ -11,6 +11,7 @@
     "Licence",
     "postpack",
     "preversion",
+    "screenreaders",
     "tsup",
     "typecheck",
     "unocss"

@@ -1,7 +1,5 @@
-import { defineComponent, h } from "vue"
+import { PropType, defineComponent, h } from "vue"
 import { classNames } from "@beae-ui/utils"
-
-import { Cell } from "../cell"
 
 type Breakpoints = "xs" | "sm" | "md" | "lg" | "xl"
 
@@ -20,7 +18,19 @@ export interface GridProps {
   gap?: Gap
 }
 
-export const Grid = defineComponent<GridProps>({
+const _gridProps = {
+  columns: {
+    type: Object as PropType<GridProps["columns"]>,
+    require: false,
+  },
+  gap: {
+    type: Object as PropType<GridProps["gap"]>,
+    require: false,
+  },
+}
+
+export const Grid = defineComponent({
+  props: _gridProps,
   setup({ columns, gap }, { slots }) {
     const className = classNames(
       "grid",
@@ -46,5 +56,3 @@ export const Grid = defineComponent<GridProps>({
       )
   },
 })
-
-Grid.Cell = Cell
