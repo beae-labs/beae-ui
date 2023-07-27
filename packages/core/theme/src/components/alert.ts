@@ -97,11 +97,32 @@ const variantSolid: PartsStyleFunction<typeof parts> = (props) => {
   }
 }
 
+const variantPolaris: PartsStyleFunction<typeof parts> = (props) => {
+  const { status: c } = props
+  let color =
+    c == "error" ? "colors.polaris.red.600" : "colors.polaris.gray.900"
+  return {
+    container: {
+      bg: color,
+      color: "white",
+      borderRadius: "base",
+      fontSize: "sm",
+    },
+    icon: {
+      color: "white",
+    },
+    spinner: {
+      color: "white",
+    },
+  }
+}
+
 const variants = {
   subtle: variantSubtle,
   "left-accent": variantLeftAccent,
   "top-accent": variantTopAccent,
   solid: variantSolid,
+  polaris: variantPolaris,
 }
 
 const defaultProps = {
