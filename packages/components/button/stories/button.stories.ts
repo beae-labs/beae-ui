@@ -16,10 +16,10 @@ const meta = {
       options: [
         "default",
         "outline",
-        "outlineMonochrome",
+        "outline-monochrome",
         "plain",
-        "plainMonochrome",
-        "plainDestructive",
+        "plain-monochrome",
+        "plain-destructive",
         "primary",
         "destructive",
       ],
