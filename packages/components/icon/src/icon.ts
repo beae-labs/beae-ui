@@ -7,12 +7,12 @@
  * For example, if you wanted to build an accordion component,
  * you'll first create a `useAccordion` hook and then create an `Accordion` component
  *
- * - Ensure this component is properly theme able by following [this guide](https://beae-ui.beae.com/docs/theming/component-style)
+ * - Ensure this component is properly theme able by following [this guide](https://ui.beae.com/docs/theming/component-style)
  *
  * - Ensure the component is composable and can adapt to multiple use-cases
  *
- * @see Guide https://beae-ui.beae.com/guides/component-guide
- * @see Theming https://beae-ui.beae.com/docs/theming/component-style
+ * @see Guide https://ui.beae.com/guides/component-guide
+ * @see Theming https://ui.beae.com/docs/theming/component-style
  */
 
 import {

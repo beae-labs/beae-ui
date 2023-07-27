@@ -4,17 +4,21 @@
   "words": [
     "autodocs",
     "beae",
+    "Behaviour",
     "camelcase",
     "clsx",
     "composability",
     "composables",
     "csstype",
     "datetime",
+    "describedby",
+    "Easings",
     "HSBA",
     "Hsbl",
     "HSBLA",
     "interactable",
     "interactables",
+    "labelledby",
     "Licence",
     "mergewith",
     "mpath",
@@ -33,7 +37,8 @@
     "tinycolor",
     "tsup",
     "typecheck",
-    "unocss"
+    "unocss",
+    "vueuse"
   ],
   "ignorePaths": ["node_modules/**", "dist/**"]
 }

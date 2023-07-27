@@ -8,7 +8,7 @@
  *
  * > If you're not creating an interactive component, you can delete this file.
  *
- * @see https://beae-ui.beae.com/guides/component-guide
+ * @see https://ui.beae.com/guides/component-guide
  */
 
 export interface UseIconProps {}
