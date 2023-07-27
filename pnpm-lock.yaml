@@ -232,8 +232,52 @@ importers:
         specifier: 2.2.0
         version: 2.2.0
 
+  packages/components/form-control:
+    dependencies:
+      '@beae-ui/composables':
+        specifier: workspace:^
+        version: link:../../core/composables
+      '@beae-ui/icon':
+        specifier: workspace:^
+        version: link:../icon
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
   packages/components/icon:
     dependencies:
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
+  packages/components/input:
+    dependencies:
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
       '@beae-ui/system':
         specifier: workspace:^
         version: link:../../core/system
@@ -296,6 +340,34 @@ importers:
       '@vueuse/motion':
         specifier: ^2.0.0
         version: 2.0.0(vue@3.3.4)
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
+  packages/components/pin-input:
+    dependencies:
+      '@beae-ui/input':
+        specifier: workspace:^
+        version: link:../input
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      '@zag-js/pin-input':
+        specifier: ^0.13.0
+        version: 0.13.0
+      '@zag-js/vue':
+        specifier: ^0.13.0
+        version: 0.13.0(vue@3.3.4)
       vue:
         specifier: ^3.3.4
         version: 3.3.4
@@ -579,6 +651,9 @@ importers:
       '@beae-ui/button':
         specifier: workspace:^
         version: link:../../components/button
+      '@beae-ui/close-button':
+        specifier: workspace:^
+        version: link:../../components/close-button
       '@beae-ui/color-mode':
         specifier: workspace:^
         version: link:../color-mode
@@ -588,9 +663,30 @@ importers:
       '@beae-ui/css-reset':
         specifier: workspace:^
         version: link:../../components/css-reset
+      '@beae-ui/focus-lock':
+        specifier: workspace:^
+        version: link:../../components/focus-lock
+      '@beae-ui/form-control':
+        specifier: workspace:^
+        version: link:../../components/form-control
       '@beae-ui/icon':
         specifier: workspace:^
         version: link:../../components/icon
+      '@beae-ui/input':
+        specifier: workspace:^
+        version: link:../../components/input
+      '@beae-ui/modal':
+        specifier: workspace:^
+        version: link:../../components/modal
+      '@beae-ui/motion':
+        specifier: workspace:^
+        version: link:../../components/motion
+      '@beae-ui/pin-input':
+        specifier: workspace:^
+        version: link:../../components/pin-input
+      '@beae-ui/portal':
+        specifier: workspace:^
+        version: link:../../components/portal
       '@beae-ui/spinner':
         specifier: workspace:^
         version: link:../../components/spinner
@@ -5099,6 +5195,88 @@ packages:
       tslib: 1.14.1
     dev: true
 
+  /@zag-js/anatomy@0.13.0:
+    resolution: {integrity: sha512-rZuXK78u4FVYkwnkm4UONNE9o+eHIPzf5dJiWqYl5CvBg0Mfygc5nsJqCU00PLoXnGGUM3U+Avjg9OYBgi7MDw==}
+    dev: false
+
+  /@zag-js/core@0.13.0:
+    resolution: {integrity: sha512-Ni/4kpexCStdSmt/u4ZPAr8wxJAtEwSxnw3aAxDb0BEDyUoJvTqeHukkKOEXdcmVa8G3HcfzgU8haQl7A2eUyA==}
+    dependencies:
+      '@zag-js/store': 0.13.0
+      klona: 2.0.6
+    dev: false
+
+  /@zag-js/dom-event@0.13.0:
+    resolution: {integrity: sha512-IY4zFr+YlakzuNl6ZCbh1AyVh0lp22KXabskb2RNa8cBr9z4lxVeQYxiVPwiCBOa3uJ7HdTO5nl3ku62dl1PHg==}
+    dependencies:
+      '@zag-js/text-selection': 0.13.0
+      '@zag-js/types': 0.13.0
+    dev: false
+
+  /@zag-js/dom-query@0.13.0:
+    resolution: {integrity: sha512-lVT+0pZ8xDL1nus4pv3mrmNjck4bMloDwNBCF6sOK6onHx1vdmtq+V0GKUP4q4QnkPeK/JnhiCExqrW4h07cUQ==}
+    dev: false
+
+  /@zag-js/form-utils@0.13.0:
+    resolution: {integrity: sha512-EYyacPBxgFXHBzdLXNYD8ngV8lu34oJsQNG8lA9TEYfZdGSLhpzAp5MocudTfsA/ItnBDlv0X5nLYYOHhHVH0w==}
+    dependencies:
+      '@zag-js/mutation-observer': 0.13.0
+    dev: false
+
+  /@zag-js/mutation-observer@0.13.0:
+    resolution: {integrity: sha512-CHvtIIFdAhstMKtwxoRKfhfMiZY4spnK6HYLYQk8fSD03Dq6VBqhEi1ThRZ21CkyR17HKLB/X5pgchHYSNu9FA==}
+    dev: false
+
+  /@zag-js/pin-input@0.13.0:
+    resolution: {integrity: sha512-FhAtFKjuqiYWya03nu9wJZOxmEEb/LFo3ZThQye4g9obkRGXH+JDtiAbtw7wvW0JpQO0AhaYxKWiJMIafWcaYQ==}
+    dependencies:
+      '@zag-js/anatomy': 0.13.0
+      '@zag-js/core': 0.13.0
+      '@zag-js/dom-event': 0.13.0
+      '@zag-js/dom-query': 0.13.0
+      '@zag-js/form-utils': 0.13.0
+      '@zag-js/types': 0.13.0
+      '@zag-js/utils': 0.13.0
+      '@zag-js/visually-hidden': 0.13.0
+    dev: false
+
+  /@zag-js/store@0.13.0:
+    resolution: {integrity: sha512-dKFwsAMRtw7E4oqbD6uLpy+GFyhLCLGcQksdBQD6TeKCSMftLtyYeLel4OTHnPXt1qea8Yd+MXObsabkh6YfrQ==}
+    dependencies:
+      proxy-compare: 2.5.1
+    dev: false
+
+  /@zag-js/text-selection@0.13.0:
+    resolution: {integrity: sha512-TQeGdiA1K9XPXQpj5Bh4B6EqJ/4X/L+V12zNooAQwVi7cy9vxoo0eezQMJc5eB18Z33zE218Pxa6hdRHOx3Fdw==}
+    dependencies:
+      '@zag-js/dom-query': 0.13.0
+    dev: false
+
+  /@zag-js/types@0.13.0:
+    resolution: {integrity: sha512-mYD43OoEBr1LhwLo3m24nJokIJEoCN83/5t5l3kf3L/vLvMYZKWqb+WC6+87KTQh6TNPR6sHHP1Sv07v3MDwHw==}
+    dependencies:
+      csstype: 3.1.2
+    dev: false
+
+  /@zag-js/utils@0.13.0:
+    resolution: {integrity: sha512-1n4x3FfvyWgeuZpAdMUfckdJfgneRxLe7HIRXZfymMq1qvclx3eYZ82odXjkX6hGGNTlvgetpXVzIePMxVkw/g==}
+    dev: false
+
+  /@zag-js/visually-hidden@0.13.0:
+    resolution: {integrity: sha512-azTNAYZnlhWnBn6BF47x669ABjm5CHesTJcK6KQCNibrOuea/ge6EV0oUTEdhLkEJuRSPMiu3ZV/1erBtUZ1eA==}
+    dev: false
+
+  /@zag-js/vue@0.13.0(vue@3.3.4):
+    resolution: {integrity: sha512-nozoLrYm+7OKzEmdMyyg5w5eVKlORrF6NyDZ8ViUbzBKOCny3zFmiQP/lOSYLHlnRJbn624WtGNMVNLy1n/oyg==}
+    peerDependencies:
+      vue: '>=3.0.0'
+    dependencies:
+      '@zag-js/core': 0.13.0
+      '@zag-js/store': 0.13.0
+      '@zag-js/types': 0.13.0
+      vue: 3.3.4
+    dev: false
+
   /JSONStream@1.3.5:
     resolution: {integrity: sha512-E+iruNOY8VV9s4JEbe1aNEm6MiszPRr/UfcHMz0TQh1BXSxHK+ASV1R6W4HpjBhSeS+54PIsAMCBmwD06LLsqQ==}
     hasBin: true
@@ -8298,6 +8476,11 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /klona@2.0.6:
+    resolution: {integrity: sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==}
+    engines: {node: '>= 8'}
+    dev: false
+
   /knitwork@1.0.0:
     resolution: {integrity: sha512-dWl0Dbjm6Xm+kDxhPQJsCBTxrJzuGl0aP9rhr+TG8D3l+GL90N8O8lYUi7dTSAN2uuDqCtNgb6aEuQH5wsiV8Q==}
     dev: false
@@ -9588,6 +9771,10 @@ packages:
       forwarded: 0.2.0
       ipaddr.js: 1.9.1
     dev: true
+
+  /proxy-compare@2.5.1:
+    resolution: {integrity: sha512-oyfc0Tx87Cpwva5ZXezSp5V9vht1c7dZBhvuV/y3ctkgMVUmiAGDVeeB0dKhGSyT0v1ZTEQYpe/RXlBVBNuCLA==}
+    dev: false
 
   /proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}

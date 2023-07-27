@@ -127,21 +127,29 @@ export type { ThemingProps }
 export * from "@beae-ui/button"
 
 // C
+export * from "@beae-ui/close-button"
+export * from "@beae-ui/css-reset"
 export * from "@beae-ui/color-mode"
 
 // F
+export * from "@beae-ui/focus-lock"
+export * from "@beae-ui/form-control"
 
 // I
 export * from "@beae-ui/icon"
+export * from "@beae-ui/input"
 
 // L
 
 // M
+export * from "@beae-ui/modal"
+export * from "@beae-ui/motion"
 
 // P
+export * from "@beae-ui/pin-input"
+export * from "@beae-ui/portal"
 
 // R
-export * from "@beae-ui/css-reset"
 
 // S
 export * from "@beae-ui/spinner"

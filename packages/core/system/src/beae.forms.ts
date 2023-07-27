@@ -58,14 +58,10 @@ export const formElements: Record<string, FormElementProps> = {
           }),
           onChange: (event: Event) => {
             if (type === "checkbox") {
-              emit(
-                "change",
-                !(event?.target as HTMLInputElement).checked,
-                event,
-              )
+              emit("change", !(event?.target as HTMInputElement).checked, event)
               emit(
                 "update:modelValue",
-                !(event?.target as HTMLInputElement).checked,
+                !(event?.target as HTMInputElement).checked,
                 event,
               )
               return
@@ -74,12 +70,12 @@ export const formElements: Record<string, FormElementProps> = {
           onInput: (event: any) => {
             emit(
               "input",
-              (event?.currentTarget as HTMLInputElement).value,
+              (event?.currentTarget as HTMInputElement).value,
               event,
             )
             emit(
               "update:modelValue",
-              (event?.currentTarget as HTMLInputElement).value,
+              (event?.currentTarget as HTMInputElement).value,
               event,
             )
           },
@@ -98,12 +94,12 @@ export const formElements: Record<string, FormElementProps> = {
           onInput: (event: any) => {
             emit(
               "input",
-              (event?.currentTarget as HTMLInputElement).value,
+              (event?.currentTarget as HTMInputElement).value,
               event,
             )
             emit(
               "update:modelValue",
-              (event?.currentTarget as HTMLInputElement).value,
+              (event?.currentTarget as HTMInputElement).value,
               event,
             )
           },
@@ -122,12 +118,12 @@ export const formElements: Record<string, FormElementProps> = {
           onChange: (event: any) => {
             emit(
               "input",
-              (event?.currentTarget as HTMLInputElement).value,
+              (event?.currentTarget as HTMInputElement).value,
               event,
             )
             emit(
               "update:modelValue",
-              (event?.currentTarget as HTMLInputElement).value,
+              (event?.currentTarget as HTMInputElement).value,
               event,
             )
           },

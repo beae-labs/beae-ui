@@ -38,6 +38,8 @@
     "tsup",
     "typecheck",
     "unocss",
+    "unthemed",
+    "Vnode",
     "vueuse"
   ],
   "ignorePaths": ["node_modules/**", "dist/**"]

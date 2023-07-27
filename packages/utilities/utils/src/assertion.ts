@@ -87,8 +87,6 @@ export function isRefObject(val: any): val is { current: any } {
   return "current" in val
 }
 
-export function isInputEvent(
-  value: any,
-): value is { target: HTMLInputElement } {
+export function isInputEvent(value: any): value is { target: HTMInputElement } {
   return value && isObject(value) && isObject(value.target)
 }
