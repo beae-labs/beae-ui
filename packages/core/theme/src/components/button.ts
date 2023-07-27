@@ -155,10 +155,10 @@ const variantDestructive: SystemStyleFunction = () => {
 const variants = {
   default: variantDefault,
   outline: variantOutline,
-  outlineMonochrome: variantOutlineMonochrome,
+  "outline-monochrome": variantOutlineMonochrome,
   plain: variantPlain,
-  plainMonochrome: variantPlainMonochrome,
-  plainDestructive: variantPlainDestructive,
+  "plain-monochrome": variantPlainMonochrome,
+  "plain-destructive": variantPlainDestructive,
   primary: variantPrimary,
   destructive: variantDestructive,
 }

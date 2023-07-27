@@ -98,9 +98,9 @@ const variantSolid: PartsStyleFunction<typeof parts> = (props) => {
 }
 
 const variantPolaris: PartsStyleFunction<typeof parts> = (props) => {
-  const { status: c } = props
+  const { status: _status } = props
   let color =
-    c == "error" ? "colors.polaris.red.600" : "colors.polaris.gray.900"
+    _status == "error" ? "colors.polaris.red.600" : "colors.polaris.gray.900"
   return {
     container: {
       bg: color,
