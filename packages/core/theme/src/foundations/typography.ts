@@ -45,13 +45,16 @@ const typography = {
   },
 
   fontSizes: {
+    "4xs": "0.25rem",
+    "3xs": "0.45rem",
+    "2xs": "0.625rem",
     xs: "0.75rem",
     sm: "0.875rem",
     md: "1rem",
-    lg: "1.125rem",
-    xl: "1.25rem",
-    "2xl": "1.5rem",
-    "3xl": "1.875rem",
+    lg: "1.25rem",
+    xl: "1.5rem",
+    "2xl": "1.75rem",
+    "3xl": "2rem",
     "4xl": "2.25rem",
     "5xl": "3rem",
     "6xl": "3.75rem",
@@ -60,7 +63,5 @@ const typography = {
     "9xl": "8rem",
   },
 }
-
-export type Typography = typeof typography
 
 export default typography

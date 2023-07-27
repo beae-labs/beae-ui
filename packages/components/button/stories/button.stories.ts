@@ -10,15 +10,24 @@ const meta = {
   // This component will have an automatically generated docsPage entry: https://storybook.js.org/docs/vue/writing-docs/autodocs
   tags: ["autodocs"],
   argTypes: {
-    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
+    size: { control: "select", options: ["large", "medium", "slim", "micro"] },
     variant: {
       control: "select",
-      options: ["ghost", "outline", "solid", "link", "unstyled"],
+      options: [
+        "default",
+        "outline",
+        "outlineMonochrome",
+        "plain",
+        "plainMonochrome",
+        "plainDestructive",
+        "primary",
+        "destructive",
+      ],
     },
   },
   args: {
     size: "md",
-    variant: "solid",
+    variant: "default",
   },
 } satisfies Meta<typeof Button>
 
