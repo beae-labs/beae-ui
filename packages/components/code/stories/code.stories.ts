@@ -36,7 +36,7 @@ export const Primary: Story = {
         args,
       }
     },
-    template: `<Code>Example Code</Code>`,
+    template: `<Code v-bind="args">Example Code</Code>`,
   }),
   args: {},
 }
