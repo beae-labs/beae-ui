@@ -14,9 +14,35 @@ const meta = {
       control: "select",
       options: ["solid", "subtle", "outline"],
     },
+    colorScheme: {
+      control: "select",
+      options: [
+        "blue",
+        "red",
+        "orange",
+        "whiteAlpha",
+        "blackAlpha",
+        "gray",
+        "yellow",
+        "green",
+        "teal",
+        "cyan",
+        "purple",
+        "pink",
+        "linkedin",
+        "facebook",
+        "messenger",
+        "whatsapp",
+        "twitter",
+        "telegram",
+      ],
+    },
+    size: { control: "select", options: ["xs", "sm", "md", "lg"] },
   },
   args: {
     variant: "subtle",
+    colorScheme: "gray",
+    size: "lg",
   },
 } satisfies Meta<typeof Code>
 
@@ -35,7 +61,7 @@ export const Primary: Story = {
         args,
       }
     },
-    template: `<Code :variant="args.variant">Example Code</Code>`,
+    template: `<Code :variant="args.variant" :colorScheme="args.colorScheme" :size="args.size">Example Code</Code>`,
   }),
   args: {},
 }
