@@ -17,7 +17,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/beae-labs/beae-ui.git",
-    "directory": "packages/components/button"
+    "directory": "packages/components/code"
   },
   "bugs": {
     "url": "https://github.com/beae-labs/beae-ui/issues"
@@ -34,7 +34,8 @@
   "dependencies": {
     "@beae-ui/prop-utils": "workspace:^",
     "@beae-ui/system": "workspace:^",
-    "@beae-ui/utils": "workspace:^"
+    "@beae-ui/utils": "workspace:^",
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "clean-package": "2.2.0"

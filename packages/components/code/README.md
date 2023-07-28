@@ -1,4 +1,4 @@
-# @beae-ui/button
+# @beae-ui/code
 
 A Quick description of the component
 
@@ -7,18 +7,17 @@ A Quick description of the component
 ## Installation
 
 ```sh
-yarn add @beae-ui/button
+yarn add @beae-ui/code
 # or
-npm i @beae-ui/button
+npm i @beae-ui/code
 ```
 
 ## Contribution
 
 Yes please! See the
-[contributing guidelines](https://github.com/beae-labs/beae-ui/blob/master/CONTRIBUTING.md)
-for details.
+[contributing guidelines](https://github.com/beae-labs/beae-ui) for details.
 
 ## License
 
 This project is licensed under the terms of the
-[MIT license](https://github.com/beae-labs/beae-ui/blob/master/LICENSE).
+[MIT license](https://github.com/beae-labs/beae-ui).
