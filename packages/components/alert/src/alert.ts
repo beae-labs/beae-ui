@@ -12,27 +12,33 @@ import {
 } from "@beae-ui/system"
 
 import { createContext, getValidChildren } from "@beae-ui/utils"
-import { LCheckIcon, LErrorIcon, LInfoIcon, LWarningIcon } from "./icons"
+import {
+  CheckIcon,
+  ErrorIcon,
+  InfoIcon,
+  WarningIcon,
+  LoadingIcon,
+} from "./icons"
 import { vueThemingProps } from "@beae-ui/prop-utils"
 
 const STATUSES = {
   info: {
     colorScheme: "blue",
-    icon: LInfoIcon,
+    icon: InfoIcon,
   },
   success: {
     colorScheme: "green",
-    icon: LCheckIcon,
+    icon: CheckIcon,
   },
   warning: {
     colorScheme: "orange",
-    icon: LWarningIcon,
+    icon: WarningIcon,
   },
   error: {
     colorScheme: "red",
-    icon: LErrorIcon,
+    icon: ErrorIcon,
   },
-  loading: { icon: LInfoIcon, colorScheme: "blue" },
+  loading: { icon: LoadingIcon, colorScheme: "blue" },
 }
 
 const [StylesProvider, useStyles] = createStylesContext("Alert")
@@ -88,7 +94,7 @@ export const Alert: ComponentWithProps<DeepPartial<AlertProps>> =
 
       const computedColorScheme = computed(
         () =>
-          colorScheme.value || STATUSES[status.value]?.colorScheme || "blue",
+          colorScheme.value || STATUSES?.[status?.value]?.colorScheme || "blue",
       )
       const themingProps = computed<ThemingProps>(() => ({
         colorScheme: computedColorScheme.value,
@@ -173,7 +179,10 @@ export const AlertIcon: ComponentWithProps<DeepPartial<AlertIconProps>> =
       const styles = useStyles()
       const { status } = useAlertContext()
       console.log(status.value, "status")
-      const { icon: BaseIcon } = STATUSES[status.value]
+      const { icon: BaseIcon } = STATUSES?.[status?.value] ?? {
+        colorScheme: "blue",
+        icon: InfoIcon,
+      }
 
       const css = computed(() =>
         // TODO: add text into type of useStyleConfig
