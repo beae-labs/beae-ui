@@ -13,8 +13,28 @@ const baseStyle = defineStyle({
   boxShadow: vars.shadow.reference,
 })
 
+const sizes: Record<string, SystemStyleObject> = {
+  lg: {
+    fontSize: "lg",
+    px: 6,
+  },
+  md: {
+    fontSize: "md",
+    px: 4,
+  },
+  sm: {
+    fontSize: "sm",
+    px: 3,
+  },
+  xs: {
+    fontSize: "xs",
+    px: 2,
+  },
+}
+
 export const codeTheme = defineStyleConfig({
   baseStyle,
   variants,
+  sizes,
   defaultProps,
 })
