@@ -14,9 +14,9 @@ export interface SpacerProps extends HTMLBeaeProps<"div"> {}
  *
  * @see Docs https://beae-ui.com/docs/layout/flex#using-the-spacer
  */
-export const LSpacer: ComponentWithProps<DeepPartial<SpacerProps>> =
+export const Spacer: ComponentWithProps<DeepPartial<SpacerProps>> =
   defineComponent({
-    name: "LSpacer",
+    name: "Spacer",
     setup(_, { slots }) {
       return () =>
         h(

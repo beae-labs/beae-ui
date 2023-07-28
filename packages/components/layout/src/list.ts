@@ -42,9 +42,9 @@ export interface ListProps
  *
  * @see Docs https://vue.beae-ui.com/docs/data-display/list
  */
-export const LList: ComponentWithProps<DeepPartial<ListProps>> =
-  defineComponent({
-    name: "LList",
+export const List: ComponentWithProps<DeepPartial<ListProps>> = defineComponent(
+  {
+    name: "List",
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,
@@ -87,7 +87,8 @@ export const LList: ComponentWithProps<DeepPartial<ListProps>> =
         )
       }
     },
-  })
+  },
+)
 
 export const LOrderedList: ComponentWithProps<DeepPartial<ListProps>> =
   defineComponent({
@@ -95,7 +96,7 @@ export const LOrderedList: ComponentWithProps<DeepPartial<ListProps>> =
     setup(props, { slots, attrs }) {
       return () =>
         h(
-          beae(LList, {
+          beae(List, {
             styleType: "decimal",
             marginStart: "1em",
             ...attrs,
@@ -112,7 +113,7 @@ export const LUnorderedList: ComponentWithProps<DeepPartial<ListProps>> =
     setup(props, { slots, attrs }) {
       return () =>
         h(
-          beae(LList, {
+          beae(List, {
             styleType: "initial",
             marginStart: "1em",
             ...attrs,
@@ -123,9 +124,9 @@ export const LUnorderedList: ComponentWithProps<DeepPartial<ListProps>> =
     },
   })
 
-export const LListItem: ComponentWithProps<DeepPartial<HTMLBeaeProps<"li">>> =
+export const ListItem: ComponentWithProps<DeepPartial<HTMLBeaeProps<"li">>> =
   defineComponent({
-    name: "LListItem",
+    name: "ListItem",
     setup(_, { slots, attrs }) {
       const styles = useStyles()
       return () =>
@@ -142,9 +143,9 @@ export const LListItem: ComponentWithProps<DeepPartial<HTMLBeaeProps<"li">>> =
     },
   })
 
-export const LListIcon: ComponentWithProps<DeepPartial<HTMLBeaeProps<"svg">>> =
+export const ListIcon: ComponentWithProps<DeepPartial<HTMLBeaeProps<"svg">>> =
   defineComponent({
-    name: "LListIcon",
+    name: "ListIcon",
     setup(_, { slots, attrs }) {
       const styles = useStyles()
       return () =>

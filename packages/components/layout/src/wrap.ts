@@ -37,7 +37,7 @@ export interface WrapProps extends HTMLBeaeProps<"div"> {
   shouldWrapChildren?: boolean
 }
 
-export const LWrapProps = {
+export const WrapProps = {
   spacing: SNAO as PropType<WrapProps["spacing"]>,
   justify: SNAO as PropType<WrapProps["justify"]>,
   align: SNAO as PropType<WrapProps["align"]>,
@@ -50,13 +50,13 @@ export const LWrapProps = {
  *
  * @see Docs https://vue.beae-ui.com/docs/typography/text
  */
-export const LWrap: ComponentWithProps<WrapProps> = defineComponent({
+export const Wrap: ComponentWithProps<WrapProps> = defineComponent({
   props: {
     as: {
       type: [Object, String] as PropType<DOMElements>,
       default: "div",
     },
-    ...LWrapProps,
+    ...WrapProps,
   },
   setup(props, { slots, attrs }) {
     const styles = computed(() => ({
@@ -80,7 +80,7 @@ export const LWrap: ComponentWithProps<WrapProps> = defineComponent({
 
     const childrenToRender = props.shouldWrapChildren
       ? getValidChildren(slots).map((child, index) =>
-          h(LWrapItem, { key: index }, child),
+          h(WrapItem, { key: index }, child),
         )
       : slots
 
@@ -104,7 +104,7 @@ export const LWrap: ComponentWithProps<WrapProps> = defineComponent({
 
 export interface WrapItemProps extends HTMLBeaeProps<"li"> {}
 
-export const LWrapItem = defineComponent({
+export const WrapItem = defineComponent({
   setup(_, { attrs, slots }) {
     return () => {
       return h(

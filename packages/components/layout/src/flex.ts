@@ -53,8 +53,8 @@ export interface FlexProps {
   shrink?: SystemStyleObject["flexShrink"]
 }
 
-export const LFlex: ComponentWithProps<DeepPartial<FlexProps>> =
-  defineComponent({
+export const Flex: ComponentWithProps<DeepPartial<FlexProps>> = defineComponent(
+  {
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,
@@ -97,4 +97,5 @@ export const LFlex: ComponentWithProps<DeepPartial<FlexProps>> =
           slots,
         )
     },
-  })
+  },
+)

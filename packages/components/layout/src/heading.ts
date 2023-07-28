@@ -15,9 +15,9 @@ export interface HeadingProps
   extends HTMLBeaeProps<"h2">,
     ThemingProps<"Heading"> {}
 
-export const LHeading: ComponentWithProps<DeepPartial<HeadingProps>> =
+export const Heading: ComponentWithProps<DeepPartial<HeadingProps>> =
   defineComponent({
-    name: "LHeading",
+    name: "Heading",
     props: {
       as: {
         type: [String, Object] as PropType<DOMElements>,

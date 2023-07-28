@@ -22,9 +22,9 @@ export interface DividerProps
  *
  * @see Docs https://vue.beae-ui.com/docs/data-display/divider
  */
-export const LDivider: ComponentWithProps<DeepPartial<DividerProps>> =
+export const Divider: ComponentWithProps<DeepPartial<DividerProps>> =
   defineComponent({
-    name: "LDivider",
+    name: "Divider",
     props: {
       orientation: {
         type: [String] as PropType<DividerProps["orientation"]>,

@@ -21,9 +21,9 @@ export interface BadgeProps
  *
  * @see Docs https://vue.beae-ui.com/docs/data-display/badge
  */
-export const LBadge: ComponentWithProps<DeepPartial<BadgeProps>> =
+export const Badge: ComponentWithProps<DeepPartial<BadgeProps>> =
   defineComponent({
-    name: "LBadge",
+    name: "Badge",
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,

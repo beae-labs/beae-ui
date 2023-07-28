@@ -35,9 +35,9 @@ export interface TextProps extends HTMLBeaeProps<"p">, ThemingProps<"Text"> {
  *
  * @see Docs https://vue.beae-ui.com/docs/typography/text
  */
-export const LText: ComponentWithProps<DeepPartial<TextProps>> =
-  defineComponent({
-    name: "LText",
+export const Text: ComponentWithProps<DeepPartial<TextProps>> = defineComponent(
+  {
+    name: "Text",
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,
@@ -82,4 +82,5 @@ export const LText: ComponentWithProps<DeepPartial<TextProps>> =
           slots,
         )
     },
-  })
+  },
+)

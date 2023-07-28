@@ -27,14 +27,14 @@ export interface LinkProps extends HTMLBeaeProps<"a">, ThemingProps<"Link"> {
  * @example
  *
  * ```vue
- * <LLink as="router-link" to="/home">Home</LLink>
+ * <Link as="router-link" to="/home">Home</Link>
  * ```
  *
  * @see Docs https://vue.beae-ui.com/docs/layout/link
  */
-export const LLink: ComponentWithProps<DeepPartial<LinkProps>> =
-  defineComponent({
-    name: "LLink",
+export const Link: ComponentWithProps<DeepPartial<LinkProps>> = defineComponent(
+  {
+    name: "Link",
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,
@@ -68,4 +68,5 @@ export const LLink: ComponentWithProps<DeepPartial<LinkProps>> =
           slots,
         )
     },
-  })
+  },
+)

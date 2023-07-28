@@ -29,9 +29,9 @@ export interface ContainerProps
  *
  * It also sets a default max-width of `60ch` (60 characters).
  */
-export const LContainer: ComponentWithProps<DeepPartial<ContainerProps>> =
+export const Container: ComponentWithProps<DeepPartial<ContainerProps>> =
   defineComponent({
-    name: "LContainer",
+    name: "Container",
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,

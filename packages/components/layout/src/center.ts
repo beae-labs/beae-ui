@@ -7,7 +7,7 @@ import {
   DOMElements,
 } from "@beae-ui/system"
 
-export interface CCenterProps extends HTMLBeaeProps<"div"> {}
+export interface CenterProps extends HTMLBeaeProps<"div"> {}
 
 /**
  * Vue component used to horizontally and vertically center its child.
@@ -15,9 +15,9 @@ export interface CCenterProps extends HTMLBeaeProps<"div"> {}
  *
  * @see Docs https://vue.beae-ui.com/docs/layout/center
  */
-export const LCenter: ComponentWithProps<DeepPartial<CCenterProps>> =
+export const Center: ComponentWithProps<DeepPartial<CenterProps>> =
   defineComponent({
-    name: "LCenter",
+    name: "Center",
     props: {
       as: {
         type: [String, Object] as PropType<DOMElements>,

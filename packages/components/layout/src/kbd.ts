@@ -25,8 +25,8 @@ export interface KbdProps extends HTMLBeaeProps<"kbd">, ThemingProps<"Kbd"> {}
  *
  * @see Docs https://vue.beae-ui.com/docs/data-display/kbd
  */
-export const LKbd: ComponentWithProps<DeepPartial<KbdProps>> = defineComponent({
-  name: "LKbd",
+export const Kbd: ComponentWithProps<DeepPartial<KbdProps>> = defineComponent({
+  name: "Kbd",
   props: {
     as: {
       type: [String, Object] as PropType<DOMElements>,

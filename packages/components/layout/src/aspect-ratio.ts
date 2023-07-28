@@ -27,9 +27,9 @@ export interface AspectRatioProps
  *
  * @see Docs https://vue.beae-ui.com/docs/layout/aspect-ratio
  */
-export const LAspectRatio: ComponentWithProps<DeepPartial<AspectRatioProps>> =
+export const AspectRatio: ComponentWithProps<DeepPartial<AspectRatioProps>> =
   defineComponent({
-    name: "LAspectRatio",
+    name: "AspectRatio",
     props: {
       ratio: {
         type: [Number] as PropType<AspectRatioProps["ratio"]>,

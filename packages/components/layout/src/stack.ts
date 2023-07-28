@@ -65,8 +65,8 @@ interface StackOptions {
 
 export interface StackDividerProps extends HTMLBeaeProps<"div"> {}
 
-export const LStackDivider = defineComponent({
-  name: "LStackDivider",
+export const StackDivider = defineComponent({
+  name: "StackDivider",
   inheritAttrs: false,
   setup(_, { attrs, slots }) {
     return () =>
@@ -86,8 +86,8 @@ export const LStackDivider = defineComponent({
   },
 })
 
-export const LStackItem = defineComponent({
-  name: "LStackItem",
+export const StackItem = defineComponent({
+  name: "StackItem",
   setup(_, { attrs, slots }) {
     return () =>
       h(
@@ -137,8 +137,8 @@ const stackProps = {
  * @see Docs https://vue.beae-ui.com/docs/layout/stack
  *
  */
-export const LStack: ComponentWithProps<StackProps> = defineComponent({
-  name: "LStack",
+export const Stack: ComponentWithProps<StackProps> = defineComponent({
+  name: "Stack",
   props: stackProps,
   setup(props, { slots, attrs }) {
     const direction = computed(() =>
@@ -165,13 +165,13 @@ export const LStack: ComponentWithProps<StackProps> = defineComponent({
         ? validChildren
         : validChildren.map((child, index) => {
             const isLast = index + 1 === validChildren.length
-            const wrappedChild = createVNode(LStackItem, { key: index }, child)
+            const wrappedChild = createVNode(StackItem, { key: index }, child)
             const _child = props.shouldWrapChildren ? wrappedChild : child
 
             if (!hasDivider.value) return _child
 
             // todo: temporary divider
-            const clonedDivider = createVNode(LStackDivider, {
+            const clonedDivider = createVNode(StackDivider, {
               borderColor: "blue.200",
               __css: dividerStyle.value,
             })
@@ -207,7 +207,7 @@ export const LHStack: ComponentWithProps<StackProps> = defineComponent({
   setup(props, { attrs, slots }) {
     return () =>
       h(
-        beae(LStack, {
+        beae(Stack, {
           __label: "stack-horizontal",
           ...props,
           ...attrs,
@@ -228,7 +228,7 @@ export const LVStack: ComponentWithProps<StackProps> = defineComponent({
   setup(props, { attrs, slots }) {
     return () =>
       h(
-        beae(LStack, {
+        beae(Stack, {
           __label: "stack-vertical",
           ...props,
           ...attrs,

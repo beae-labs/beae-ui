@@ -14,9 +14,9 @@ export interface LinkOverlayProps extends HTMLBeaeProps<"a"> {
   isExternal?: boolean
 }
 
-export const LLinkOverlay: ComponentWithProps<DeepPartial<LinkOverlayProps>> =
+export const LinkOverlay: ComponentWithProps<DeepPartial<LinkOverlayProps>> =
   defineComponent({
-    name: "LLinkOverlay",
+    name: "LinkOverlay",
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,
@@ -62,9 +62,9 @@ export interface LinkBoxProps extends HTMLBeaeProps<"div"> {}
  * @see Docs https://vue.beae-ui.com/docs/link-overlay
  * @see Resources https://www.sarasoueidan.com/blog/nested-links
  */
-export const LLinkBox: ComponentWithProps<DeepPartial<LinkBoxProps>> =
+export const LinkBox: ComponentWithProps<DeepPartial<LinkBoxProps>> =
   defineComponent({
-    name: "LLinkBox",
+    name: "LinkBox",
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,

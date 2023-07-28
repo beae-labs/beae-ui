@@ -16,8 +16,8 @@ export interface BoxProps extends HTMLBeaeProps<"div"> {}
  *
  * @see Docs https://beae-ui.beae.com/docs/layout/box
  */
-export const LBox: ComponentWithProps<DeepPartial<BoxProps>> = defineComponent({
-  name: "LBox",
+export const Box: ComponentWithProps<DeepPartial<BoxProps>> = defineComponent({
+  name: "Box",
   props: {
     as: {
       type: [String, Object] as PropType<DOMElements>,
@@ -56,7 +56,7 @@ export interface SquareProps extends Omit<BoxProps, Omitted> {
 }
 
 /**
- * LSquare is the `LBox` component implemented as a square
+ * LSquare is the `Box` component implemented as a square
  *
  * @see Docs https://beae-ui.beae.com/docs/layout/box
  */
@@ -79,7 +79,7 @@ export const LSquare: ComponentWithProps<DeepPartial<SquareProps>> =
 
       return () =>
         h(
-          beae(LBox, {
+          beae(Box, {
             boxSize: props.size,
             label: "square",
           }),
@@ -97,7 +97,7 @@ export const LSquare: ComponentWithProps<DeepPartial<SquareProps>> =
   })
 
 /**
- * LCircle is the `LBox` component implemented as a circle
+ * LCircle is the `Box` component implemented as a circle
  *
  * @see Docs https://beae-ui.beae.com/docs/layout/box
  */

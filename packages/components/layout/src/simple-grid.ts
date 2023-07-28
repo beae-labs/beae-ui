@@ -7,7 +7,7 @@ import {
 } from "@beae-ui/system"
 import { h, defineComponent, PropType, computed } from "vue"
 import { SNAO } from "@beae-ui/utils"
-import { LGrid, GridProps } from "./grid"
+import { Grid, GridProps } from "./grid"
 import { isNull, isNumber, mapResponsive } from "@beae-ui/utils"
 
 interface SimpleGridOptions {
@@ -43,9 +43,9 @@ export interface SimpleGridProps extends GridProps, SimpleGridOptions {}
  *
  * @see Docs https://vue.beae-ui.com/docs/layout/simple-grid
  */
-export const LSimpleGrid: ComponentWithProps<DeepPartial<SimpleGridProps>> =
+export const SimpleGrid: ComponentWithProps<DeepPartial<SimpleGridProps>> =
   defineComponent({
-    name: "LSimpleGrid",
+    name: "SimpleGrid",
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,
@@ -66,7 +66,7 @@ export const LSimpleGrid: ComponentWithProps<DeepPartial<SimpleGridProps>> =
 
       return () =>
         h(
-          beae(LGrid, {
+          beae(Grid, {
             as: props.as,
             __label: "simple-grid",
             gap: props.spacing,

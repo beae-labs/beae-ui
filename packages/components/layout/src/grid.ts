@@ -120,9 +120,9 @@ export interface GridItemProps extends BoxProps {
  *
  * @see Docs https://vue.beae-ui.com/docs/layout/grid
  */
-export const LGrid: ComponentWithProps<DeepPartial<GridProps>> =
-  defineComponent({
-    name: "LGrid",
+export const Grid: ComponentWithProps<DeepPartial<GridProps>> = defineComponent(
+  {
+    name: "Grid",
     props: {
       as: {
         type: [String, Object] as PropType<
@@ -174,7 +174,8 @@ export const LGrid: ComponentWithProps<DeepPartial<GridProps>> =
           slots,
         )
     },
-  })
+  },
+)
 
 function spanFn(span?: ResponsiveValue<number | "auto">) {
   return mapResponsive(span, (value) =>
@@ -182,9 +183,9 @@ function spanFn(span?: ResponsiveValue<number | "auto">) {
   )
 }
 
-export const LGridItem: ComponentWithProps<DeepPartial<GridItemProps>> =
+export const GridItem: ComponentWithProps<DeepPartial<GridItemProps>> =
   defineComponent({
-    name: "LGridItem",
+    name: "GridItem",
     props: {
       as: {
         type: [String, Object] as PropType<
