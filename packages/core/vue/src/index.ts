@@ -127,6 +127,7 @@ export type { ThemingProps }
 export * from "@beae-ui/button"
 
 // C
+export * from "@beae-ui/checkbox"
 export * from "@beae-ui/close-button"
 export * from "@beae-ui/css-reset"
 export * from "@beae-ui/color-mode"
@@ -140,6 +141,7 @@ export * from "@beae-ui/icon"
 export * from "@beae-ui/input"
 
 // L
+export * from "@beae-ui/layout"
 
 // M
 export * from "@beae-ui/modal"

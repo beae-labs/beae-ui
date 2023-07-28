@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@beae-ui/button": "workspace:^",
+    "@beae-ui/checkbox": "workspace:^",
     "@beae-ui/close-button": "workspace:^",
     "@beae-ui/color-mode": "workspace:^",
     "@beae-ui/composables": "workspace:^",
@@ -41,6 +42,7 @@
     "@beae-ui/form-control": "workspace:^",
     "@beae-ui/icon": "workspace:^",
     "@beae-ui/input": "workspace:^",
+    "@beae-ui/layout": "workspace:^",
     "@beae-ui/modal": "workspace:^",
     "@beae-ui/motion": "workspace:^",
     "@beae-ui/pin-input": "workspace:^",
