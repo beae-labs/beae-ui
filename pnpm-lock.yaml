@@ -140,6 +140,40 @@ importers:
         specifier: ^1.8.5
         version: 1.8.8(typescript@5.1.6)
 
+  packages/components/accordion:
+    dependencies:
+      '@beae-ui/composables':
+        specifier: workspace:^
+        version: link:../../core/composables
+      '@beae-ui/layout':
+        specifier: workspace:^
+        version: link:../layout
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/styled-system':
+        specifier: workspace:^
+        version: link:../../core/styled-system
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      '@zag-js/accordion':
+        specifier: ^0.13.0
+        version: 0.13.0
+      '@zag-js/vue':
+        specifier: ^0.13.0
+        version: 0.13.0(vue@3.3.4)
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
   packages/components/button:
     dependencies:
       '@beae-ui/icon':
@@ -5839,6 +5873,17 @@ packages:
       '@types/emscripten': 1.39.6
       tslib: 1.14.1
     dev: true
+
+  /@zag-js/accordion@0.13.0:
+    resolution: {integrity: sha512-q9obvzbEOfCK8sfaE1FfD5Xl7Rr9tv9duecmqicfinZFhsJtNRPKVLt7MhGzN/9D/9t9ZFizDb5PRycPXgfqzw==}
+    dependencies:
+      '@zag-js/anatomy': 0.13.0
+      '@zag-js/core': 0.13.0
+      '@zag-js/dom-event': 0.13.0
+      '@zag-js/dom-query': 0.13.0
+      '@zag-js/types': 0.13.0
+      '@zag-js/utils': 0.13.0
+    dev: false
 
   /@zag-js/anatomy@0.13.0:
     resolution: {integrity: sha512-rZuXK78u4FVYkwnkm4UONNE9o+eHIPzf5dJiWqYl5CvBg0Mfygc5nsJqCU00PLoXnGGUM3U+Avjg9OYBgi7MDw==}
