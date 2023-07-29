@@ -140,6 +140,28 @@ importers:
         specifier: ^1.8.5
         version: 1.8.8(typescript@5.1.6)
 
+  packages/components/breadcrumb:
+    dependencies:
+      '@beae-ui/layout':
+        specifier: workspace:^
+        version: link:../layout
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
   packages/components/button:
     dependencies:
       '@beae-ui/icon':
