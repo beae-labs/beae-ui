@@ -1,4 +1,4 @@
-# @beae-ui/close-button
+# @beae-ui/radio
 
 A Quick description of the component
 
@@ -7,11 +7,11 @@ A Quick description of the component
 ## Installation
 
 ```sh
-yarn add @beae-ui/close-button
+yarn add @beae-ui/radio
 # or
-npm i @beae-ui/close-button
+npm i @beae-ui/radio
 # or
-pnpm i @beae-ui/close-button
+pnpm i @beae-ui/radio
 ```
 
 ## Contribution

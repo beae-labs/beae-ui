@@ -17,10 +17,10 @@ pnpm i @beae-ui/portal
 ## Contribution
 
 Yes please! See the
-[contributing guidelines](https://github.com/beae-labs/chakra-ui/blob/main/CONTRIBUTING.md)
+[contributing guidelines](https://github.com/beae-labs/beae-ui/blob/main/CONTRIBUTING.md)
 for details.
 
 ## Licence
 
 This project is licensed under the terms of the
-[MIT license](https://github.com/beae-labs/chakra-ui/blob/main/LICENSE).
+[MIT license](https://github.com/beae-labs/beae-ui/blob/main/LICENSE).

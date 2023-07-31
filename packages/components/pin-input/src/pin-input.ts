@@ -95,14 +95,12 @@ export const PinInput = defineComponent({
     )
 
     PinInputProvider(api)
-    console.log("api", api)
     return () =>
       h(
         beae.div,
         { __label: "pin-input", ...api.value.rootProps, ...attrs },
         () => [
           getValidChildren(slots).map((child, index) => {
-            console.log(typeof index)
             return (child.type as any).name === "PinInputField"
               ? h(child, { index })
               : child
@@ -123,8 +121,6 @@ export const PinInputField = defineComponent({
   setup(props, { attrs }) {
     const styles = useStyles()
     const api = usePinInput()
-
-    console.log("props", props.index)
 
     return () =>
       h(Input, {

@@ -42,3 +42,20 @@ export type Omit<T, K> = Pick<T, Exclude<keyof T, K>>
 export const SNA = [Number, String, Array]
 export const SAO = [String, Array, Object]
 export const SNAO = [Number, String, Array, Object]
+
+export type AnyPointerEvent = MouseEvent | TouchEvent | PointerEvent
+
+export interface Point {
+  x: number
+  y: number
+}
+
+export interface PointerEventInfo {
+  point: Point
+}
+
+export interface MixedEventListener {
+  (e: AnyPointerEvent, info: PointerEventInfo): void
+}
+
+export type PointType = "page" | "client"

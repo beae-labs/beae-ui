@@ -4,7 +4,7 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chakra-ui/chakra-ui.git"
+    "url": "git+https://github.com/beae-ui/beae-ui.git"
   },
   "author": "Toan Tran (Albert) <trantoan.fox.97@gmail.com>",
   "license": "MIT",

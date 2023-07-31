@@ -152,6 +152,7 @@ export * from "@beae-ui/pin-input"
 export * from "@beae-ui/portal"
 
 // R
+export * from "@beae-ui/radio"
 
 // S
 export * from "@beae-ui/spinner"

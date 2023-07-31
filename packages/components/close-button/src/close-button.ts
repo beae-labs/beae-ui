@@ -89,8 +89,6 @@ export const CloseButton: ComponentWithProps<DeepPartial<CloseButtonProps>> =
 
         const styles = useStyleConfig("CloseButton", themingProps)
 
-        console.log("styles: ", slots.default)
-
         return h(
           beae(props.as, {
             label: "icon-button",

@@ -148,7 +148,6 @@ export const Image = defineComponent({
     },
   },
   setup(props, { attrs }) {
-    console.log(attrs)
     const {
       fallbackSrc,
       fallback,

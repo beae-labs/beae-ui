@@ -47,6 +47,7 @@
     "@beae-ui/motion": "workspace:^",
     "@beae-ui/pin-input": "workspace:^",
     "@beae-ui/portal": "workspace:^",
+    "@beae-ui/radio": "workspace:^",
     "@beae-ui/spinner": "workspace:^",
     "@beae-ui/styled": "workspace:^",
     "@beae-ui/styled-system": "workspace:^",

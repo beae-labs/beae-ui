@@ -11,8 +11,6 @@ function getStories({ dirname = "components" }) {
     .map((storyDirname) => `../${storyDirname}/*.stories.ts`)
 }
 
-console.log("Log: ", getStories({ dirname: "components" }))
-
 const config: StorybookConfig = {
   stories: [
     "../stories/**/*.mdx",

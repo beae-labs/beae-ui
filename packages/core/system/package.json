@@ -36,6 +36,7 @@
     "@beae-ui/color-mode": "workspace:^",
     "@beae-ui/styled": "workspace:^",
     "@beae-ui/styled-system": "workspace:^",
+    "@beae-ui/theme": "workspace:^",
     "@beae-ui/utils": "workspace:^",
     "@emotion/css": "^11.11.2",
     "@emotion/serialize": "^1.1.2",

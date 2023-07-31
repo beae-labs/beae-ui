@@ -158,12 +158,30 @@ importers:
 
   packages/components/checkbox:
     dependencies:
+      '@beae-ui/composables':
+        specifier: workspace:^
+        version: link:../../core/composables
+      '@beae-ui/form-control':
+        specifier: workspace:^
+        version: link:../form-control
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
       '@beae-ui/system':
         specifier: workspace:^
         version: link:../../core/system
       '@beae-ui/utils':
         specifier: workspace:^
         version: link:../../utilities/utils
+      '@beae-ui/visually-hidden':
+        specifier: workspace:^
+        version: link:../visually-hidden
+      '@vueuse/motion':
+        specifier: ^2.0.0
+        version: 2.0.0(vue@3.3.4)
+      '@zag-js/focus-visible':
+        specifier: ^0.13.0
+        version: 0.13.0
       vue:
         specifier: ^3.3.4
         version: 3.3.4
@@ -465,6 +483,31 @@ importers:
         specifier: 2.2.0
         version: 2.2.0
 
+  packages/components/radio:
+    dependencies:
+      '@beae-ui/composables':
+        specifier: workspace:^
+        version: link:../../core/composables
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      '@beae-ui/visually-hidden':
+        specifier: workspace:^
+        version: link:../visually-hidden
+      '@zag-js/focus-visible':
+        specifier: ^0.13.0
+        version: 0.13.0
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
   packages/components/spinner:
     dependencies:
       '@beae-ui/prop-utils':
@@ -553,6 +596,9 @@ importers:
       '@beae-ui/utils':
         specifier: workspace:^
         version: link:../../utilities/utils
+      framesync:
+        specifier: ^6.1.2
+        version: 6.1.2
       vue:
         specifier: ^3.3.4
         version: 3.3.4
@@ -643,6 +689,9 @@ importers:
       '@beae-ui/styled-system':
         specifier: workspace:^
         version: link:../styled-system
+      '@beae-ui/theme':
+        specifier: workspace:^
+        version: link:../theme
       '@beae-ui/utils':
         specifier: workspace:^
         version: link:../../utilities/utils
@@ -763,6 +812,9 @@ importers:
       '@beae-ui/portal':
         specifier: workspace:^
         version: link:../../components/portal
+      '@beae-ui/radio':
+        specifier: workspace:^
+        version: link:../../components/radio
       '@beae-ui/spinner':
         specifier: workspace:^
         version: link:../../components/spinner
@@ -5241,6 +5293,12 @@ packages:
 
   /@zag-js/dom-query@0.13.0:
     resolution: {integrity: sha512-lVT+0pZ8xDL1nus4pv3mrmNjck4bMloDwNBCF6sOK6onHx1vdmtq+V0GKUP4q4QnkPeK/JnhiCExqrW4h07cUQ==}
+    dev: false
+
+  /@zag-js/focus-visible@0.13.0:
+    resolution: {integrity: sha512-27Kj1XkqA56xJc+LCfwSDnAruw/7Cn47ecij87LPffbZ3y0GIhn+j4iqq9AVLeA0JO3dolZqxyjQDTjBzEjs6Q==}
+    dependencies:
+      '@zag-js/dom-query': 0.13.0
     dev: false
 
   /@zag-js/form-utils@0.13.0:

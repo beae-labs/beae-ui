@@ -36,6 +36,7 @@
     "@beae-ui/number-utils": "workspace:^",
     "@beae-ui/system": "workspace:^",
     "@beae-ui/utils": "workspace:^",
+    "framesync": "^6.1.2",
     "vue": "^3.3.4"
   },
   "devDependencies": {

@@ -19,7 +19,7 @@ let lockCount = 0
 export const hideOthers = (
   originalTarget: Element | Element[],
   parentNode = getDefaultParent(originalTarget),
-  markerName = "chakra-aria-hidden",
+  markerName = "beae-aria-hidden",
 ): Undo => {
   const targets = Array.isArray(originalTarget)
     ? originalTarget
