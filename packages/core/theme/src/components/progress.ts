@@ -1,18 +1,14 @@
 import { progressAnatomy as parts } from "@beae-ui/anatomy"
 import {
-  generateStripe,
-  getColor,
-  mode,
-  PartsStyleFunction,
-  PartsStyleObject,
-  StyleFunctionProps,
-} from "@beae-ui/theme-tools"
-import type {
-  SystemStyleObject,
-  SystemStyleFunction,
-} from "@beae-ui/theme-tools"
+  createMultiStyleConfigHelpers,
+  defineStyle,
+} from "@beae-ui/styled-system"
+import { generateStripe, getColor, mode } from "@beae-ui/theme-tools"
 
-function filledStyle(props: StyleFunctionProps): SystemStyleObject {
+const { defineMultiStyleConfig, definePartsStyle } =
+  createMultiStyleConfigHelpers(parts.keys)
+
+const filledStyle = defineStyle((props) => {
   const { colorScheme: c, theme: t, isIndeterminate, hasStripe } = props
 
   const stripeStyle = mode(
@@ -35,58 +31,55 @@ function filledStyle(props: StyleFunctionProps): SystemStyleObject {
     ...(addStripe && stripeStyle),
     ...(isIndeterminate ? { bgImage: gradient } : { bgColor }),
   }
-}
+})
 
-const baseStyleLabel: SystemStyleObject = {
+const baseStyleLabel = defineStyle({
   lineHeight: "1",
   fontSize: "0.25em",
   fontWeight: "bold",
   color: "white",
-}
+})
 
-const baseStyleTrack: SystemStyleFunction = (props) => {
+const baseStyleTrack = defineStyle((props) => {
   return {
     bg: mode("gray.100", "whiteAlpha.300")(props),
   }
-}
+})
 
-const baseStyleFilledTrack: SystemStyleFunction = (props) => {
+const baseStyleFilledTrack = defineStyle((props) => {
   return {
     transitionProperty: "common",
     transitionDuration: "slow",
     ...filledStyle(props),
   }
-}
+})
 
-const baseStyle: PartsStyleFunction<typeof parts> = (props) => ({
+const baseStyle = definePartsStyle((props) => ({
   label: baseStyleLabel,
   filledTrack: baseStyleFilledTrack(props),
   track: baseStyleTrack(props),
-})
+}))
 
-const sizes: Record<string, PartsStyleObject<typeof parts>> = {
-  xs: {
-    track: { h: "0.25rem" },
-  },
-  sm: {
-    track: { h: "0.5rem" },
-  },
-  md: {
-    track: { h: "0.75rem" },
-  },
-  lg: {
-    track: { h: "1rem" },
-  },
+const sizes = {
+  xs: definePartsStyle({
+    track: { h: "1" },
+  }),
+  sm: definePartsStyle({
+    track: { h: "2" },
+  }),
+  md: definePartsStyle({
+    track: { h: "3" },
+  }),
+  lg: definePartsStyle({
+    track: { h: "4" },
+  }),
 }
 
-const defaultProps = {
-  size: "md",
-  colorScheme: "blue",
-}
-
-export default {
-  parts: parts.keys,
+export const progressTheme = defineMultiStyleConfig({
   sizes,
   baseStyle,
-  defaultProps,
-}
+  defaultProps: {
+    size: "md",
+    colorScheme: "blue",
+  },
+})

@@ -1,9 +1,9 @@
-import type { SystemStyleObject } from "@beae-ui/theme-tools"
+import { defineStyle, defineStyleConfig } from "@beae-ui/styled-system"
 
-const baseStyle: SystemStyleObject = {
+const baseStyle = defineStyle({
   fontSize: "md",
-  marginEnd: 3,
-  mb: 2,
+  marginEnd: "3",
+  mb: "2",
   fontWeight: "medium",
   transitionProperty: "common",
   transitionDuration: "normal",
@@ -11,8 +11,8 @@ const baseStyle: SystemStyleObject = {
   _disabled: {
     opacity: 0.4,
   },
-}
+})
 
-export default {
+export const formLabelTheme = defineStyleConfig({
   baseStyle,
-}
+})

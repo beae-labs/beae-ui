@@ -1,36 +1,21 @@
-import { keyframes } from "@beae-ui/system"
-import type { SystemStyleFunction } from "@beae-ui/theme-tools"
-import { getColor, mode } from "@beae-ui/theme-tools"
+import { cssVar, defineStyle, defineStyleConfig } from "@beae-ui/styled-system"
 
-const fade = (startColor: string, endColor: string) =>
-  keyframes({
-    from: { borderColor: startColor, background: startColor },
-    to: { borderColor: endColor, background: endColor },
-  })
+const $startColor = cssVar("skeleton-start-color")
+const $endColor = cssVar("skeleton-end-color")
 
-const baseStyle: SystemStyleFunction = (props) => {
-  const defaultStartColor = mode("gray.100", "gray.800")(props)
-  const defaultEndColor = mode("gray.400", "gray.600")(props)
+const baseStyle = defineStyle({
+  [$startColor.variable]: "colors.gray.100",
+  [$endColor.variable]: "colors.gray.400",
+  _dark: {
+    [$startColor.variable]: "colors.gray.800",
+    [$endColor.variable]: "colors.gray.600",
+  },
+  background: $startColor.reference,
+  borderColor: $endColor.reference,
+  opacity: 0.7,
+  borderRadius: "sm",
+})
 
-  const {
-    startColor = defaultStartColor,
-    endColor = defaultEndColor,
-    speed,
-    theme,
-  } = props
-
-  const start = getColor(theme, startColor)
-  const end = getColor(theme, endColor)
-
-  return {
-    opacity: 0.7,
-    borderRadius: "2px",
-    borderColor: start,
-    background: end,
-    animation: `${speed}s linear infinite alternate ${fade(start, end)}`,
-  }
-}
-
-export default {
+export const skeletonTheme = defineStyleConfig({
   baseStyle,
-}
+})

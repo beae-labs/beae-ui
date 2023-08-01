@@ -1,18 +1,24 @@
 import { accordionAnatomy as parts } from "@beae-ui/anatomy"
-import type { PartsStyleObject, SystemStyleObject } from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  defineStyle,
+} from "@beae-ui/styled-system"
 
-const baseStyleContainer: SystemStyleObject = {
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(parts.keys)
+
+const baseStyleContainer = defineStyle({
   borderTopWidth: "1px",
   borderColor: "inherit",
   _last: {
     borderBottomWidth: "1px",
   },
-}
+})
 
-const baseStyleButton: SystemStyleObject = {
+const baseStyleButton = defineStyle({
   transitionProperty: "common",
   transitionDuration: "normal",
-  fontSize: "1rem",
+  fontSize: "md",
   _focusVisible: {
     boxShadow: "outline",
   },
@@ -23,29 +29,25 @@ const baseStyleButton: SystemStyleObject = {
     opacity: 0.4,
     cursor: "not-allowed",
   },
-  px: 4,
-  py: 2,
-}
+  px: "4",
+  py: "2",
+})
 
-const baseStylePanel: SystemStyleObject = {
-  pt: 2,
-  px: 4,
-  pb: 5,
-}
+const baseStylePanel = defineStyle({
+  pt: "2",
+  px: "4",
+  pb: "5",
+})
 
-const baseStyleIcon: SystemStyleObject = {
+const baseStyleIcon = defineStyle({
   fontSize: "1.25em",
-}
+})
 
-const baseStyle: PartsStyleObject<typeof parts> = {
-  root: {},
+const baseStyle = definePartsStyle({
   container: baseStyleContainer,
   button: baseStyleButton,
   panel: baseStylePanel,
   icon: baseStyleIcon,
-}
+})
 
-export default {
-  parts: parts.keys,
-  baseStyle,
-}
+export const accordionTheme = defineMultiStyleConfig({ baseStyle })

@@ -1,5 +1,4 @@
 import { UnionStringArray } from "@beae-ui/utils"
-import { keyframes, injectGlobal } from "@emotion/css"
 import { PropType } from "vue"
 
 /**
@@ -88,4 +87,4 @@ const filterClassesInherit = (str: string) =>
     .toString()
     .replace(",", " ")
 
-export { filterClassesInherit, keyframes, injectGlobal }
+export { filterClassesInherit }

@@ -10,6 +10,7 @@ export interface StorageManager {
   get(init?: ColorModeRef["value"]): MaybeColorMode
   set(value: ColorModeRef["value"]): void
   type: "cookie" | "localStorage"
+  ssr?: boolean
 }
 
 /**

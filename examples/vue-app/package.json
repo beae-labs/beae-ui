@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@beae-ui/theme-tools": "workspace:^",
     "@beae-ui/vue": "workspace:^",
     "vue": "^3.3.4"
   },

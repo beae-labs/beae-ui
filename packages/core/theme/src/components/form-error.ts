@@ -1,32 +1,40 @@
 import { formErrorAnatomy as parts } from "@beae-ui/anatomy"
-import type {
-  PartsStyleFunction,
-  SystemStyleFunction,
-} from "@beae-ui/theme-tools"
-import { mode } from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
+  defineStyle,
+} from "@beae-ui/styled-system"
 
-const baseStyleText: SystemStyleFunction = (props) => {
-  return {
-    color: mode("red.500", "red.300")(props),
-    mt: 2,
-    fontSize: "sm",
-    lineHeight: "normal",
-  }
-}
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(parts.keys)
 
-const baseStyleIcon: SystemStyleFunction = (props) => {
-  return {
-    marginEnd: "0.5em",
-    color: mode("red.500", "red.300")(props),
-  }
-}
+const $fg = cssVar("form-error-color")
 
-const baseStyle: PartsStyleFunction<typeof parts> = (props) => ({
-  text: baseStyleText(props),
-  icon: baseStyleIcon(props),
+const baseStyleText = defineStyle({
+  [$fg.variable]: `colors.red.500`,
+  _dark: {
+    [$fg.variable]: `colors.red.300`,
+  },
+  color: $fg.reference,
+  mt: "2",
+  fontSize: "sm",
+  lineHeight: "normal",
 })
 
-export default {
-  parts: parts.keys,
+const baseStyleIcon = defineStyle({
+  marginEnd: "0.5em",
+  [$fg.variable]: `colors.red.500`,
+  _dark: {
+    [$fg.variable]: `colors.red.300`,
+  },
+  color: $fg.reference,
+})
+
+const baseStyle = definePartsStyle({
+  text: baseStyleText,
+  icon: baseStyleIcon,
+})
+
+export const formErrorTheme = defineMultiStyleConfig({
   baseStyle,
-}
+})

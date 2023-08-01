@@ -1,36 +1,35 @@
-import { cssVar, SystemStyleObject } from "@beae-ui/theme-tools"
+import { defineStyle, defineStyleConfig } from "@beae-ui/styled-system"
+import { cssVar } from "@beae-ui/theme-tools"
 
 const $size = cssVar("spinner-size")
 
-const baseStyle: SystemStyleObject = {
+const baseStyle = defineStyle({
   width: [$size.reference],
   height: [$size.reference],
+})
+
+const sizes = {
+  xs: defineStyle({
+    [$size.variable]: "sizes.3",
+  }),
+  sm: defineStyle({
+    [$size.variable]: "sizes.4",
+  }),
+  md: defineStyle({
+    [$size.variable]: "sizes.6",
+  }),
+  lg: defineStyle({
+    [$size.variable]: "sizes.8",
+  }),
+  xl: defineStyle({
+    [$size.variable]: "sizes.12",
+  }),
 }
 
-const sizes: Record<string, SystemStyleObject> = {
-  xs: {
-    [$size.variable]: "0.75rem",
-  },
-  sm: {
-    [$size.variable]: "1rem",
-  },
-  md: {
-    [$size.variable]: "1.5rem",
-  },
-  lg: {
-    [$size.variable]: "2rem",
-  },
-  xl: {
-    [$size.variable]: "3rem",
-  },
-}
-
-const defaultProps = {
-  size: "md",
-}
-
-export default {
+export const spinnerTheme = defineStyleConfig({
   baseStyle,
   sizes,
-  defaultProps,
-}
+  defaultProps: {
+    size: "md",
+  },
+})

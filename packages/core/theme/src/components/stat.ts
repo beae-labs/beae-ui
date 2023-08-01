@@ -1,50 +1,53 @@
 import { statAnatomy as parts } from "@beae-ui/anatomy"
-import type { PartsStyleObject, SystemStyleObject } from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  defineStyle,
+} from "@beae-ui/styled-system"
 
-const baseStyleLabel: SystemStyleObject = {
+const { defineMultiStyleConfig, definePartsStyle } =
+  createMultiStyleConfigHelpers(parts.keys)
+
+const baseStyleLabel = defineStyle({
   fontWeight: "medium",
-}
+})
 
-const baseStyleHelpText: SystemStyleObject = {
+const baseStyleHelpText = defineStyle({
   opacity: 0.8,
-  marginBottom: 2,
-}
+  marginBottom: "2",
+})
 
-const baseStyleNumber: SystemStyleObject = {
+const baseStyleNumber = defineStyle({
   verticalAlign: "baseline",
   fontWeight: "semibold",
-}
+})
 
-const baseStyleIcon: SystemStyleObject = {
+const baseStyleIcon = defineStyle({
   marginEnd: 1,
-  w: "14px",
-  h: "14px",
+  w: "3.5",
+  h: "3.5",
   verticalAlign: "middle",
-}
+})
 
-const baseStyle: PartsStyleObject<typeof parts> = {
+const baseStyle = definePartsStyle({
   container: {},
   label: baseStyleLabel,
   helpText: baseStyleHelpText,
   number: baseStyleNumber,
   icon: baseStyleIcon,
-}
+})
 
-const sizes: Record<string, PartsStyleObject<typeof parts>> = {
-  md: {
+const sizes = {
+  md: definePartsStyle({
     label: { fontSize: "sm" },
     helpText: { fontSize: "sm" },
     number: { fontSize: "2xl" },
-  },
+  }),
 }
 
-const defaultProps = {
-  size: "md",
-}
-
-export default {
-  parts: parts.keys,
+export const statTheme = defineMultiStyleConfig({
   baseStyle,
   sizes,
-  defaultProps,
-}
+  defaultProps: {
+    size: "md",
+  },
+})

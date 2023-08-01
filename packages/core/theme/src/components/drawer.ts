@@ -1,85 +1,96 @@
 import { drawerAnatomy as parts } from "@beae-ui/anatomy"
-import type {
-  PartsStyleFunction,
-  PartsStyleObject,
-  SystemStyleFunction,
-  SystemStyleObject,
-} from "@beae-ui/theme-tools"
-import { mode } from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
+  defineStyle,
+} from "@beae-ui/styled-system"
+import { runIfFn } from "../utils/run-if-fn"
+
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(parts.keys)
+
+const $bg = cssVar("drawer-bg")
+const $bs = cssVar("drawer-box-shadow")
 
 /**
  * Since the `maxWidth` prop references theme.sizes internally,
  * we can leverage that to size our modals.
  */
-function getSize(value: string): PartsStyleObject<typeof parts> {
+function getSize(value: string) {
   if (value === "full") {
-    return {
+    return definePartsStyle({
       dialog: { maxW: "100vw", h: "100vh" },
-    }
+    })
   }
-  return {
+  return definePartsStyle({
     dialog: { maxW: value },
-  }
+  })
 }
 
-const baseStyleOverlay: SystemStyleObject = {
+const baseStyleOverlay = defineStyle({
   bg: "blackAlpha.600",
   zIndex: "overlay",
-}
+})
 
-const baseStyleDialogContainer: SystemStyleObject = {
+const baseStyleDialogContainer = defineStyle({
   display: "flex",
   zIndex: "modal",
   justifyContent: "center",
-}
+})
 
-const baseStyleDialog: SystemStyleFunction = (props) => {
+const baseStyleDialog = defineStyle((props) => {
   const { isFullHeight } = props
 
   return {
     ...(isFullHeight && { height: "100vh" }),
     zIndex: "modal",
     maxH: "100vh",
-    bg: mode("white", "gray.700")(props),
     color: "inherit",
-    boxShadow: mode("lg", "dark-lg")(props),
+    [$bg.variable]: "colors.white",
+    [$bs.variable]: "shadows.lg",
+    _dark: {
+      [$bg.variable]: "colors.gray.700",
+      [$bs.variable]: "shadows.dark-lg",
+    },
+    bg: $bg.reference,
+    boxShadow: $bs.reference,
   }
-}
+})
 
-const baseStyleHeader: SystemStyleObject = {
-  px: 6,
-  py: 4,
+const baseStyleHeader = defineStyle({
+  px: "6",
+  py: "4",
   fontSize: "xl",
   fontWeight: "semibold",
-}
+})
 
-const baseStyleCloseButton: SystemStyleObject = {
+const baseStyleCloseButton = defineStyle({
   position: "absolute",
-  top: 2,
-  insetEnd: 3,
-}
+  top: "2",
+  insetEnd: "3",
+})
 
-const baseStyleBody: SystemStyleObject = {
-  px: 6,
-  py: 2,
-  flex: 1,
+const baseStyleBody = defineStyle({
+  px: "6",
+  py: "2",
+  flex: "1",
   overflow: "auto",
-}
+})
 
-const baseStyleFooter: SystemStyleObject = {
-  px: 6,
-  py: 4,
-}
+const baseStyleFooter = defineStyle({
+  px: "6",
+  py: "4",
+})
 
-const baseStyle: PartsStyleFunction<typeof parts> = (props) => ({
+const baseStyle = definePartsStyle((props) => ({
   overlay: baseStyleOverlay,
   dialogContainer: baseStyleDialogContainer,
-  dialog: baseStyleDialog(props),
+  dialog: runIfFn(baseStyleDialog, props),
   header: baseStyleHeader,
   closeButton: baseStyleCloseButton,
   body: baseStyleBody,
   footer: baseStyleFooter,
-})
+}))
 
 const sizes = {
   xs: getSize("xs"),
@@ -90,13 +101,10 @@ const sizes = {
   full: getSize("full"),
 }
 
-const defaultProps = {
-  size: "xs",
-}
-
-export default {
-  parts: parts.keys,
+export const drawerTheme = defineMultiStyleConfig({
   baseStyle,
   sizes,
-  defaultProps,
-}
+  defaultProps: {
+    size: "xs",
+  },
+})

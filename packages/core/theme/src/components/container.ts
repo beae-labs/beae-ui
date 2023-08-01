@@ -1,12 +1,12 @@
-import type { SystemStyleObject } from "@beae-ui/theme-tools"
+import { defineStyle, defineStyleConfig } from "@beae-ui/styled-system"
 
-const baseStyle: SystemStyleObject = {
+const baseStyle = defineStyle({
   w: "100%",
   mx: "auto",
-  maxW: "60ch",
-  px: "1rem",
-}
+  maxW: "prose",
+  px: "4",
+})
 
-export default {
+export const containerTheme = defineStyleConfig({
   baseStyle,
-}
+})

@@ -1,19 +1,24 @@
-import type { SystemStyleFunction } from "@beae-ui/theme-tools"
-import { mode } from "@beae-ui/theme-tools"
+import { cssVar, defineStyle, defineStyleConfig } from "@beae-ui/styled-system"
 
-const baseStyle: SystemStyleFunction = (props) => ({
+const $bg = cssVar("skip-link-bg")
+
+const baseStyle = defineStyle({
   borderRadius: "md",
   fontWeight: "semibold",
   _focusVisible: {
     boxShadow: "outline",
-    padding: "1rem",
+    padding: "4",
     position: "fixed",
-    top: "1.5rem",
-    insetStart: "1.5rem",
-    bg: mode("white", "gray.700")(props),
+    top: "6",
+    insetStart: "6",
+    [$bg.variable]: "colors.white",
+    _dark: {
+      [$bg.variable]: "colors.gray.700",
+    },
+    bg: $bg.reference,
   },
 })
 
-export default {
+export const skipLinkTheme = defineStyleConfig({
   baseStyle,
-}
+})

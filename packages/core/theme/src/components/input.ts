@@ -1,70 +1,89 @@
 import { inputAnatomy as parts } from "@beae-ui/anatomy"
-import type {
-  PartsStyleFunction,
-  PartsStyleObject,
-  SystemStyleObject,
-} from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
+  defineStyle,
+} from "@beae-ui/styled-system"
 import { getColor, mode } from "@beae-ui/theme-tools"
 
-const baseStyle: PartsStyleObject<typeof parts> = {
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(parts.keys)
+
+const $height = cssVar("input-height")
+const $fontSize = cssVar("input-font-size")
+const $padding = cssVar("input-padding")
+const $borderRadius = cssVar("input-border-radius")
+
+const baseStyle = definePartsStyle({
+  addon: {
+    height: $height.reference,
+    fontSize: $fontSize.reference,
+    px: $padding.reference,
+    borderRadius: $borderRadius.reference,
+  },
   field: {
     width: "100%",
+    height: $height.reference,
+    fontSize: $fontSize.reference,
+    px: $padding.reference,
+    borderRadius: $borderRadius.reference,
     minWidth: 0,
     outline: 0,
     position: "relative",
     appearance: "none",
     transitionProperty: "common",
     transitionDuration: "normal",
+    _disabled: {
+      opacity: 0.4,
+      cursor: "not-allowed",
+    },
   },
+})
+
+const size = {
+  lg: defineStyle({
+    [$fontSize.variable]: "fontSizes.lg",
+    [$padding.variable]: "space.4",
+    [$borderRadius.variable]: "radii.md",
+    [$height.variable]: "sizes.12",
+  }),
+  md: defineStyle({
+    [$fontSize.variable]: "fontSizes.md",
+    [$padding.variable]: "space.4",
+    [$borderRadius.variable]: "radii.md",
+    [$height.variable]: "sizes.10",
+  }),
+  sm: defineStyle({
+    [$fontSize.variable]: "fontSizes.sm",
+    [$padding.variable]: "space.3",
+    [$borderRadius.variable]: "radii.sm",
+    [$height.variable]: "sizes.8",
+  }),
+  xs: defineStyle({
+    [$fontSize.variable]: "fontSizes.xs",
+    [$padding.variable]: "space.2",
+    [$borderRadius.variable]: "radii.sm",
+    [$height.variable]: "sizes.6",
+  }),
 }
 
-const size: Record<string, SystemStyleObject> = {
-  lg: {
-    fontSize: "lg",
-    px: 4,
-    h: 12,
-    borderRadius: "md",
-  },
-
-  md: {
-    fontSize: "md",
-    px: 4,
-    h: 10,
-    borderRadius: "md",
-  },
-
-  sm: {
-    fontSize: "sm",
-    px: 3,
-    h: 8,
-    borderRadius: "sm",
-  },
-
-  xs: {
-    fontSize: "xs",
-    px: 2,
-    h: 6,
-    borderRadius: "sm",
-  },
-}
-
-const sizes: Record<string, PartsStyleObject<typeof parts>> = {
-  lg: {
+const sizes = {
+  lg: definePartsStyle({
     field: size.lg,
-    addon: size.lg,
-  },
-  md: {
+    group: size.lg,
+  }),
+  md: definePartsStyle({
     field: size.md,
-    addon: size.md,
-  },
-  sm: {
+    group: size.md,
+  }),
+  sm: definePartsStyle({
     field: size.sm,
-    addon: size.sm,
-  },
-  xs: {
+    group: size.sm,
+  }),
+  xs: definePartsStyle({
     field: size.xs,
-    addon: size.xs,
-  },
+    group: size.xs,
+  }),
 }
 
 function getDefaults(props: Record<string, any>) {
@@ -75,7 +94,7 @@ function getDefaults(props: Record<string, any>) {
   }
 }
 
-const variantOutline: PartsStyleFunction<typeof parts> = (props) => {
+const variantOutline = definePartsStyle((props) => {
   const { theme } = props
   const { focusBorderColor: fc, errorBorderColor: ec } = getDefaults(props)
 
@@ -90,10 +109,6 @@ const variantOutline: PartsStyleFunction<typeof parts> = (props) => {
       _readOnly: {
         boxShadow: "none !important",
         userSelect: "all",
-      },
-      _disabled: {
-        opacity: 0.4,
-        cursor: "not-allowed",
       },
       _invalid: {
         borderColor: getColor(theme, ec),
@@ -111,9 +126,9 @@ const variantOutline: PartsStyleFunction<typeof parts> = (props) => {
       bg: mode("gray.100", "whiteAlpha.300")(props),
     },
   }
-}
+})
 
-const variantFilled: PartsStyleFunction<typeof parts> = (props) => {
+const variantFilled = definePartsStyle((props) => {
   const { theme } = props
   const { focusBorderColor: fc, errorBorderColor: ec } = getDefaults(props)
 
@@ -129,10 +144,6 @@ const variantFilled: PartsStyleFunction<typeof parts> = (props) => {
         boxShadow: "none !important",
         userSelect: "all",
       },
-      _disabled: {
-        opacity: 0.4,
-        cursor: "not-allowed",
-      },
       _invalid: {
         borderColor: getColor(theme, ec),
       },
@@ -147,9 +158,9 @@ const variantFilled: PartsStyleFunction<typeof parts> = (props) => {
       bg: mode("gray.100", "whiteAlpha.50")(props),
     },
   }
-}
+})
 
-const variantFlushed: PartsStyleFunction<typeof parts> = (props) => {
+const variantFlushed = definePartsStyle((props) => {
   const { theme } = props
   const { focusBorderColor: fc, errorBorderColor: ec } = getDefaults(props)
 
@@ -157,8 +168,8 @@ const variantFlushed: PartsStyleFunction<typeof parts> = (props) => {
     field: {
       borderBottom: "1px solid",
       borderColor: "inherit",
-      borderRadius: 0,
-      px: 0,
+      borderRadius: "0",
+      px: "0",
       bg: "transparent",
       _readOnly: {
         boxShadow: "none !important",
@@ -176,25 +187,25 @@ const variantFlushed: PartsStyleFunction<typeof parts> = (props) => {
     addon: {
       borderBottom: "2px solid",
       borderColor: "inherit",
-      borderRadius: 0,
-      px: 0,
+      borderRadius: "0",
+      px: "0",
       bg: "transparent",
     },
   }
-}
+})
 
-const variantUnstyled: PartsStyleObject<typeof parts> = {
+const variantUnstyled = definePartsStyle({
   field: {
     bg: "transparent",
-    px: 0,
+    px: "0",
     height: "auto",
   },
   addon: {
     bg: "transparent",
-    px: 0,
+    px: "0",
     height: "auto",
   },
-}
+})
 
 const variants = {
   outline: variantOutline,
@@ -203,15 +214,12 @@ const variants = {
   unstyled: variantUnstyled,
 }
 
-const defaultProps = {
-  size: "md",
-  variant: "outline",
-}
-
-export default {
-  parts: parts.keys,
+export const inputTheme = defineMultiStyleConfig({
   baseStyle,
   sizes,
   variants,
-  defaultProps,
-}
+  defaultProps: {
+    size: "md",
+    variant: "outline",
+  },
+})

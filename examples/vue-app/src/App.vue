@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Radio, RadioGroup, Stack } from "@beae-ui/vue"
+import { Radio, RadioGroup, Stack, Button } from "@beae-ui/vue"
 
 </script>
 
@@ -13,5 +13,6 @@ import { Radio, RadioGroup, Stack } from "@beae-ui/vue"
         <Radio value='3'>Third</Radio>
       </Stack>
     </RadioGroup>
+    <Button colorScheme='blue'>Button</Button>
   </div>
 </template>

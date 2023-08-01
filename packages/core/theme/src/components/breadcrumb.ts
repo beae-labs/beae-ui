@@ -1,27 +1,38 @@
 import { breadcrumbAnatomy as parts } from "@beae-ui/anatomy"
-import type { PartsStyleObject, SystemStyleObject } from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
+  defineStyle,
+} from "@beae-ui/styled-system"
 
-const baseStyleLink: SystemStyleObject = {
+const { defineMultiStyleConfig, definePartsStyle } =
+  createMultiStyleConfigHelpers(parts.keys)
+
+const $decor = cssVar("breadcrumb-link-decor")
+
+const baseStyleLink = defineStyle({
   transitionProperty: "common",
   transitionDuration: "fast",
   transitionTimingFunction: "ease-out",
-  cursor: "pointer",
-  textDecoration: "none",
   outline: "none",
   color: "inherit",
-  _hover: {
-    textDecoration: "underline",
+  textDecoration: $decor.reference,
+  [$decor.variable]: "none",
+  "&:not([aria-current=page])": {
+    cursor: "pointer",
+    _hover: {
+      [$decor.variable]: "underline",
+    },
+    _focusVisible: {
+      boxShadow: "outline",
+    },
   },
-  _focusVisible: {
-    boxShadow: "outline",
-  },
-}
+})
 
-const baseStyle: PartsStyleObject<typeof parts> = {
+const baseStyle = definePartsStyle({
   link: baseStyleLink,
-}
+})
 
-export default {
-  parts: parts.keys,
+export const breadcrumbTheme = defineMultiStyleConfig({
   baseStyle,
-}
+})

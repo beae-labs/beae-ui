@@ -1,8 +1,69 @@
+import { defineStyle, defineStyleConfig } from "@beae-ui/styled-system"
 import { mode, transparentize } from "@beae-ui/theme-tools"
-import type {
-  SystemStyleObject,
-  SystemStyleFunction,
-} from "@beae-ui/theme-tools"
+import { runIfFn } from "../utils/run-if-fn"
+
+const baseStyle = defineStyle({
+  lineHeight: "1.2",
+  borderRadius: "md",
+  fontWeight: "semibold",
+  transitionProperty: "common",
+  transitionDuration: "normal",
+  _focusVisible: {
+    boxShadow: "outline",
+  },
+  _disabled: {
+    opacity: 0.4,
+    cursor: "not-allowed",
+    boxShadow: "none",
+  },
+  _hover: {
+    _disabled: {
+      bg: "initial",
+    },
+  },
+})
+
+const variantGhost = defineStyle((props) => {
+  const { colorScheme: c, theme } = props
+
+  if (c === "gray") {
+    return {
+      color: mode(`gray.800`, `whiteAlpha.900`)(props),
+      _hover: {
+        bg: mode(`gray.100`, `whiteAlpha.200`)(props),
+      },
+      _active: { bg: mode(`gray.200`, `whiteAlpha.300`)(props) },
+    }
+  }
+
+  const darkHoverBg = transparentize(`${c}.200`, 0.12)(theme)
+  const darkActiveBg = transparentize(`${c}.200`, 0.24)(theme)
+
+  return {
+    color: mode(`${c}.600`, `${c}.200`)(props),
+    bg: "transparent",
+    _hover: {
+      bg: mode(`${c}.50`, darkHoverBg)(props),
+    },
+    _active: {
+      bg: mode(`${c}.100`, darkActiveBg)(props),
+    },
+  }
+})
+
+const variantOutline = defineStyle((props) => {
+  const { colorScheme: c } = props
+  const borderColor = mode(`gray.200`, `whiteAlpha.300`)(props)
+  return {
+    border: "1px solid",
+    borderColor: c === "gray" ? borderColor : "currentColor",
+    ".beae-button__group[data-attached][data-orientation=horizontal] > &:not(:last-of-type)":
+      { marginEnd: "-1px" },
+    ".beae-button__group[data-attached][data-orientation=vertical] > &:not(:last-of-type)":
+      { marginBottom: "-1px" },
+    ...runIfFn(variantGhost, props),
+  }
+})
 
 type AccessibleColor = {
   bg?: string
@@ -26,183 +87,119 @@ const accessibleColorMap: { [key: string]: AccessibleColor } = {
     activeBg: "cyan.600",
   },
 }
-const baseStyle: SystemStyleObject = {
-  lineHeight: "1",
-  borderRadius: "base",
-  fontWeight: "medium",
-  transitionProperty: "common",
-  transitionDuration: "normal",
-  _focusVisible: {
-    boxShadow: "outline",
-  },
-  _disabled: {
-    opacity: 0.4,
-    cursor: "not-allowed",
-    boxShadow: "none",
-  },
-  _hover: {
-    _disabled: {
-      bg: "initial",
-    },
-  },
-}
 
-const variantDefault: SystemStyleObject = {
-  bg: "white",
-  border: "1px solid",
-  borderColor: mode(`polaris.gray.600`, `whiteAlpha.300`),
-  boxShadow: "sm",
-  color: mode(`polaris.gray.900`, `whiteAlpha.900`),
-  _hover: {
-    bg: "polaris.gray.200",
-  },
-  _active: { bg: mode(`gray.200`, `whiteAlpha.300`) },
-}
+const variantSolid = defineStyle((props) => {
+  const { colorScheme: c } = props
 
-const variantOutline: SystemStyleObject = {
-  ...variantDefault,
-  bg: "transparent",
-}
+  if (c === "gray") {
+    const bg = mode(`gray.100`, `whiteAlpha.200`)(props)
 
-const variantOutlineMonochrome: SystemStyleObject = {
-  ...variantDefault,
-  bg: "transparent",
-  color: "#bf0711",
-  borderColor: "currentColor",
-  boxShadow: "0 0 0 0.0625rem currentColor",
-  position: "relative",
-  _before: {
-    content: '""',
-    position: "absolute",
-    top: "0px",
-    left: "0px",
-    right: "0px",
-    bottom: "0px",
-    bg: "currentColor",
-    opacity: "0",
-  },
-  _hover: {
-    _before: {
-      opacity: "0.05",
-    },
-  },
-}
-
-const variantPlain: SystemStyleObject = {
-  bg: "transparent",
-  border: "none",
-  color: "polaris.blue.600",
-  fontWeight: "normal",
-  _hover: {
-    textDecoration: "underline",
-    color: "polaris.blue.700",
-  },
-}
-
-const variantPlainMonochrome: SystemStyleFunction = (props) => {
-  return {
-    bg: "transparent",
-    border: "none",
-    fontWeight: "normal",
-    textDecoration: "underline",
-    minW: "8",
-    px: "3",
-    py: "2",
-    mx: "-3",
-    my: "-2",
-    lineHeight: "1",
-    height: "auto",
+    return {
+      bg,
+      color: mode(`gray.800`, `whiteAlpha.900`)(props),
+      _hover: {
+        bg: mode(`gray.200`, `whiteAlpha.300`)(props),
+        _disabled: {
+          bg,
+        },
+      },
+      _active: { bg: mode(`gray.300`, `whiteAlpha.400`)(props) },
+    }
   }
-}
 
-const variantPlainDestructive: SystemStyleFunction = () => {
+  const {
+    bg = `${c}.500`,
+    color = "white",
+    hoverBg = `${c}.600`,
+    activeBg = `${c}.700`,
+  } = accessibleColorMap[c] ?? {}
+
+  const background = mode(bg, `${c}.200`)(props)
+
   return {
-    ...variantPlain,
-    color: "polaris.red.600",
+    bg: background,
+    color: mode(color, `gray.800`)(props),
+    _hover: {
+      bg: mode(hoverBg, `${c}.300`)(props),
+      _disabled: {
+        bg: background,
+      },
+    },
+    _active: { bg: mode(activeBg, `${c}.400`)(props) },
+  }
+})
+
+const variantLink = defineStyle((props) => {
+  const { colorScheme: c } = props
+  return {
+    padding: 0,
+    height: "auto",
+    lineHeight: "normal",
+    verticalAlign: "baseline",
+    color: mode(`${c}.500`, `${c}.200`)(props),
     _hover: {
       textDecoration: "underline",
-      color: "polaris.red.700",
-    },
-  }
-}
-
-const variantPrimary: SystemStyleFunction = () => {
-  return {
-    color: "white",
-    bg: "polaris.green.700",
-    _hover: {
-      bg: "polaris.green.800",
+      _disabled: {
+        textDecoration: "none",
+      },
     },
     _active: {
-      bg: "polaris.green.900",
+      color: mode(`${c}.700`, `${c}.500`)(props),
     },
   }
-}
+})
 
-const variantDestructive: SystemStyleFunction = () => {
-  return {
-    color: "white",
-    bg: "polaris.red.600",
-    _hover: {
-      bg: "polaris.red.700",
-    },
-    _active: {
-      bg: "polaris.red.800",
-    },
-  }
-}
+const variantUnstyled = defineStyle({
+  bg: "none",
+  color: "inherit",
+  display: "inline",
+  lineHeight: "inherit",
+  m: "0",
+  p: "0",
+})
 
 const variants = {
-  default: variantDefault,
+  ghost: variantGhost,
   outline: variantOutline,
-  "outline-monochrome": variantOutlineMonochrome,
-  plain: variantPlain,
-  "plain-monochrome": variantPlainMonochrome,
-  "plain-destructive": variantPlainDestructive,
-  primary: variantPrimary,
-  destructive: variantDestructive,
+  solid: variantSolid,
+  link: variantLink,
+  unstyled: variantUnstyled,
 }
 
-const sizes: Record<string, SystemStyleObject> = {
-  large: {
+const sizes = {
+  lg: defineStyle({
+    h: "12",
     minW: "12",
-    minH: "11",
-    fontSize: "md",
-    px: "5",
-    py: "3",
-  },
-  medium: {
+    fontSize: "lg",
+    px: "6",
+  }),
+  md: defineStyle({
+    h: "10",
     minW: "10",
-    minH: "9",
-    fontSize: "sm",
+    fontSize: "md",
     px: "4",
-    py: "2",
-  },
-  slim: {
+  }),
+  sm: defineStyle({
+    h: "8",
     minW: "8",
-    minH: "7",
     fontSize: "sm",
     px: "3",
-    py: "3px",
-  },
-  micro: {
+  }),
+  xs: defineStyle({
+    h: "6",
     minW: "6",
-    minH: "5",
-    fontSize: "sm",
+    fontSize: "xs",
     px: "2",
-    py: "1px",
-  },
+  }),
 }
 
-const defaultProps = {
-  variant: "default",
-  size: "md",
-  colorScheme: "gray",
-}
-
-export default {
+export const buttonTheme = defineStyleConfig({
   baseStyle,
   variants,
   sizes,
-  defaultProps,
-}
+  defaultProps: {
+    variant: "solid",
+    size: "md",
+    colorScheme: "gray",
+  },
+})

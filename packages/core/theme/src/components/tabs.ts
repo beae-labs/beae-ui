@@ -1,21 +1,26 @@
 import { tabsAnatomy as parts } from "@beae-ui/anatomy"
-import type {
-  PartsStyleFunction,
-  PartsStyleInterpolation,
-  PartsStyleObject,
-  SystemStyleFunction,
-  SystemStyleObject,
-} from "@beae-ui/theme-tools"
-import { getColor, mode } from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
+  defineStyle,
+} from "@beae-ui/styled-system"
+import { getColor } from "@beae-ui/theme-tools"
 
-const baseStyleRoot: SystemStyleFunction = (props) => {
+const $fg = cssVar("tabs-color")
+const $bg = cssVar("tabs-bg")
+const $border = cssVar("tabs-border-color")
+
+const { defineMultiStyleConfig, definePartsStyle } =
+  createMultiStyleConfigHelpers(parts.keys)
+
+const baseStyleRoot = defineStyle((props) => {
   const { orientation } = props
   return {
     display: orientation === "vertical" ? "flex" : "block",
   }
-}
+})
 
-const baseStyleTab: SystemStyleFunction = (props) => {
+const baseStyleTab = defineStyle((props) => {
   const { isFitted } = props
 
   return {
@@ -31,9 +36,9 @@ const baseStyleTab: SystemStyleFunction = (props) => {
       opacity: 0.4,
     },
   }
-}
+})
 
-const baseStyleTablist: SystemStyleFunction = (props) => {
+const baseStyleTablist = defineStyle((props) => {
   const { align = "start", orientation } = props
 
   const alignments: Record<string, string> = {
@@ -46,47 +51,47 @@ const baseStyleTablist: SystemStyleFunction = (props) => {
     justifyContent: alignments[align],
     flexDirection: orientation === "vertical" ? "column" : "row",
   }
-}
+})
 
-const baseStyleTabpanel: SystemStyleObject = {
+const baseStyleTabpanel = defineStyle({
   p: 4,
-}
+})
 
-const baseStyle: PartsStyleFunction<typeof parts> = (props) => ({
+const baseStyle = definePartsStyle((props) => ({
   root: baseStyleRoot(props),
   tab: baseStyleTab(props),
   tablist: baseStyleTablist(props),
   tabpanel: baseStyleTabpanel,
-})
+}))
 
-const sizes: Record<string, PartsStyleObject<typeof parts>> = {
-  sm: {
+const sizes = {
+  sm: definePartsStyle({
     tab: {
       py: 1,
       px: 4,
       fontSize: "sm",
     },
-  },
-  md: {
+  }),
+  md: definePartsStyle({
     tab: {
       fontSize: "md",
       py: 2,
       px: 4,
     },
-  },
-  lg: {
+  }),
+  lg: definePartsStyle({
     tab: {
       fontSize: "lg",
       py: 3,
       px: 4,
     },
-  },
+  }),
 }
 
-const variantLine: PartsStyleFunction<typeof parts> = (props) => {
+const variantLine = definePartsStyle((props) => {
   const { colorScheme: c, orientation } = props
   const isVertical = orientation === "vertical"
-  const borderProp = orientation === "vertical" ? "borderStart" : "borderBottom"
+  const borderProp = isVertical ? "borderStart" : "borderBottom"
   const marginProp = isVertical ? "marginStart" : "marginBottom"
 
   return {
@@ -99,20 +104,28 @@ const variantLine: PartsStyleFunction<typeof parts> = (props) => {
       borderColor: "transparent",
       [marginProp]: "-2px",
       _selected: {
-        color: mode(`${c}.600`, `${c}.300`)(props),
+        [$fg.variable]: `colors.${c}.600`,
+        _dark: {
+          [$fg.variable]: `colors.${c}.300`,
+        },
         borderColor: "currentColor",
       },
       _active: {
-        bg: mode("gray.200", "whiteAlpha.300")(props),
+        [$bg.variable]: "colors.gray.200",
+        _dark: {
+          [$bg.variable]: "colors.whiteAlpha.300",
+        },
       },
       _disabled: {
         _active: { bg: "none" },
       },
+      color: $fg.reference,
+      bg: $bg.reference,
     },
   }
-}
+})
 
-const variantEnclosed: PartsStyleFunction<typeof parts> = (props) => {
+const variantEnclosed = definePartsStyle((props) => {
   const { colorScheme: c } = props
   return {
     tab: {
@@ -120,11 +133,18 @@ const variantEnclosed: PartsStyleFunction<typeof parts> = (props) => {
       border: "1px solid",
       borderColor: "transparent",
       mb: "-1px",
+      [$border.variable]: "transparent",
       _selected: {
-        color: mode(`${c}.600`, `${c}.300`)(props),
+        [$fg.variable]: `colors.${c}.600`,
+        [$border.variable]: `colors.white`,
+        _dark: {
+          [$fg.variable]: `colors.${c}.300`,
+          [$border.variable]: `colors.gray.800`,
+        },
         borderColor: "inherit",
-        borderBottomColor: mode(`white`, `gray.800`)(props),
+        borderBottomColor: $border.reference,
       },
+      color: $fg.reference,
     },
     tablist: {
       mb: "-1px",
@@ -132,26 +152,35 @@ const variantEnclosed: PartsStyleFunction<typeof parts> = (props) => {
       borderColor: "inherit",
     },
   }
-}
+})
 
-const variantEnclosedColored: PartsStyleFunction<typeof parts> = (props) => {
+const variantEnclosedColored = definePartsStyle((props) => {
   const { colorScheme: c } = props
   return {
     tab: {
       border: "1px solid",
       borderColor: "inherit",
-      bg: mode(`gray.50`, `whiteAlpha.50`)(props),
+      [$bg.variable]: "colors.gray.50",
+      _dark: {
+        [$bg.variable]: "colors.whiteAlpha.50",
+      },
       mb: "-1px",
       _notLast: {
         marginEnd: "-1px",
       },
       _selected: {
-        bg: mode("#fff", "gray.800")(props),
-        color: mode(`${c}.600`, `${c}.300`)(props),
+        [$bg.variable]: "colors.white",
+        [$fg.variable]: `colors.${c}.600`,
+        _dark: {
+          [$bg.variable]: "colors.gray.800",
+          [$fg.variable]: `colors.${c}.300`,
+        },
         borderColor: "inherit",
         borderTopColor: "currentColor",
         borderBottomColor: "transparent",
       },
+      color: $fg.reference,
+      bg: $bg.reference,
     },
     tablist: {
       mb: "-1px",
@@ -159,9 +188,9 @@ const variantEnclosedColored: PartsStyleFunction<typeof parts> = (props) => {
       borderColor: "inherit",
     },
   }
-}
+})
 
-const variantSoftRounded: PartsStyleFunction<typeof parts> = (props) => {
+const variantSoftRounded = definePartsStyle((props) => {
   const { colorScheme: c, theme } = props
   return {
     tab: {
@@ -174,26 +203,35 @@ const variantSoftRounded: PartsStyleFunction<typeof parts> = (props) => {
       },
     },
   }
-}
+})
 
-const variantSolidRounded: PartsStyleFunction<typeof parts> = (props) => {
+const variantSolidRounded = definePartsStyle((props) => {
   const { colorScheme: c } = props
   return {
     tab: {
       borderRadius: "full",
       fontWeight: "semibold",
-      color: mode("gray.600", "inherit")(props),
-      _selected: {
-        color: mode(`#fff`, "gray.800")(props),
-        bg: mode(`${c}.600`, `${c}.300`)(props),
+      [$fg.variable]: "colors.gray.600",
+      _dark: {
+        [$fg.variable]: "inherit",
       },
+      _selected: {
+        [$fg.variable]: "colors.white",
+        [$bg.variable]: `colors.${c}.600`,
+        _dark: {
+          [$fg.variable]: "colors.gray.800",
+          [$bg.variable]: `colors.${c}.300`,
+        },
+      },
+      color: $fg.reference,
+      bg: $bg.reference,
     },
   }
-}
+})
 
-const variantUnstyled: PartsStyleObject<typeof parts> = {}
+const variantUnstyled = definePartsStyle({})
 
-const variants: Record<string, PartsStyleInterpolation<typeof parts>> = {
+const variants = {
   line: variantLine,
   enclosed: variantEnclosed,
   "enclosed-colored": variantEnclosedColored,
@@ -202,16 +240,13 @@ const variants: Record<string, PartsStyleInterpolation<typeof parts>> = {
   unstyled: variantUnstyled,
 }
 
-const defaultProps = {
-  size: "md",
-  variant: "line",
-  colorScheme: "blue",
-}
-
-export default {
-  parts: parts.keys,
+export const tabsTheme = defineMultiStyleConfig({
   baseStyle,
   sizes,
   variants,
-  defaultProps,
-}
+  defaultProps: {
+    size: "md",
+    variant: "line",
+    colorScheme: "blue",
+  },
+})

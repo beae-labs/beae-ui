@@ -1,33 +1,19 @@
 import { sliderAnatomy as parts } from "@beae-ui/anatomy"
-import type {
-  PartsStyleFunction,
-  StyleFunctionProps,
-  SystemStyleFunction,
-  SystemStyleObject,
-} from "@beae-ui/theme-tools"
-import { mode, orient } from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
+  defineStyle,
+} from "@beae-ui/styled-system"
+import { orient } from "@beae-ui/theme-tools"
 
-function thumbOrientation(props: StyleFunctionProps): SystemStyleObject {
-  return orient({
-    orientation: props.orientation,
-    vertical: {
-      left: "50%",
-      transform: `translateX(-50%)`,
-      _active: {
-        transform: `translateX(-50%) scale(1.15)`,
-      },
-    },
-    horizontal: {
-      top: "50%",
-      transform: `translateY(-50%)`,
-      _active: {
-        transform: `translateY(-50%) scale(1.15)`,
-      },
-    },
-  })
-}
+const { defineMultiStyleConfig, definePartsStyle } =
+  createMultiStyleConfigHelpers(parts.keys)
 
-const baseStyleContainer: SystemStyleFunction = (props) => {
+const $thumbSize = cssVar("slider-thumb-size")
+const $trackSize = cssVar("slider-track-size")
+const $bg = cssVar("slider-bg")
+
+const baseStyleContainer = defineStyle((props) => {
   const { orientation } = props
 
   return {
@@ -45,21 +31,57 @@ const baseStyleContainer: SystemStyleFunction = (props) => {
       horizontal: { w: "100%" },
     }),
   }
-}
+})
 
-const baseStyleTrack: SystemStyleFunction = (props) => {
+const baseStyleTrack = defineStyle((props) => {
+  const orientationStyles = orient({
+    orientation: props.orientation,
+    horizontal: { h: $trackSize.reference },
+    vertical: { w: $trackSize.reference },
+  })
+
   return {
+    ...orientationStyles,
     overflow: "hidden",
     borderRadius: "sm",
-    bg: mode("gray.200", "whiteAlpha.200")(props),
-    _disabled: {
-      bg: mode("gray.300", "whiteAlpha.300")(props),
+    [$bg.variable]: "colors.gray.200",
+    _dark: {
+      [$bg.variable]: "colors.whiteAlpha.200",
     },
+    _disabled: {
+      [$bg.variable]: "colors.gray.300",
+      _dark: {
+        [$bg.variable]: "colors.whiteAlpha.300",
+      },
+    },
+    bg: $bg.reference,
   }
-}
+})
 
-const baseStyleThumb: SystemStyleFunction = (props) => {
+const baseStyleThumb = defineStyle((props) => {
+  const { orientation } = props
+  const orientationStyle = orient({
+    orientation,
+    vertical: {
+      left: "50%",
+      transform: `translateX(-50%)`,
+      _active: {
+        transform: `translateX(-50%) scale(1.15)`,
+      },
+    },
+    horizontal: {
+      top: "50%",
+      transform: `translateY(-50%)`,
+      _active: {
+        transform: `translateY(-50%) scale(1.15)`,
+      },
+    },
+  })
+
   return {
+    ...orientationStyle,
+    w: $thumbSize.reference,
+    h: $thumbSize.reference,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -73,61 +95,56 @@ const baseStyleThumb: SystemStyleFunction = (props) => {
     borderColor: "transparent",
     transitionProperty: "transform",
     transitionDuration: "normal",
-    _focusVisible: { boxShadow: "outline" },
-    _disabled: { bg: "gray.300" },
-    ...thumbOrientation(props),
+    _focusVisible: {
+      boxShadow: "outline",
+    },
+    _disabled: {
+      bg: "gray.300",
+    },
   }
-}
+})
 
-const baseStyleFilledTrack: SystemStyleFunction = (props) => {
+const baseStyleFilledTrack = defineStyle((props) => {
   const { colorScheme: c } = props
 
   return {
     width: "inherit",
     height: "inherit",
-    bg: mode(`${c}.500`, `${c}.200`)(props),
+    [$bg.variable]: `colors.${c}.500`,
+    _dark: {
+      [$bg.variable]: `colors.${c}.200`,
+    },
+    bg: $bg.reference,
   }
-}
+})
 
-const baseStyle: PartsStyleFunction<typeof parts> = (props) => ({
+const baseStyle = definePartsStyle((props) => ({
   container: baseStyleContainer(props),
   track: baseStyleTrack(props),
   thumb: baseStyleThumb(props),
   filledTrack: baseStyleFilledTrack(props),
+}))
+
+const sizeLg = definePartsStyle({
+  container: {
+    [$thumbSize.variable]: `sizes.4`,
+    [$trackSize.variable]: `sizes.1`,
+  },
 })
 
-const sizeLg: PartsStyleFunction<typeof parts> = (props) => {
-  return {
-    thumb: { w: "16px", h: "16px" },
-    track: orient({
-      orientation: props.orientation,
-      horizontal: { h: "4px" },
-      vertical: { w: "4px" },
-    }),
-  }
-}
+const sizeMd = definePartsStyle({
+  container: {
+    [$thumbSize.variable]: `sizes.3.5`,
+    [$trackSize.variable]: `sizes.1`,
+  },
+})
 
-const sizeMd: PartsStyleFunction<typeof parts> = (props) => {
-  return {
-    thumb: { w: "14px", h: "14px" },
-    track: orient({
-      orientation: props.orientation,
-      horizontal: { h: "4px" },
-      vertical: { w: "4px" },
-    }),
-  }
-}
-
-const sizeSm: PartsStyleFunction<typeof parts> = (props) => {
-  return {
-    thumb: { w: "10px", h: "10px" },
-    track: orient({
-      orientation: props.orientation,
-      horizontal: { h: "2px" },
-      vertical: { w: "2px" },
-    }),
-  }
-}
+const sizeSm = definePartsStyle({
+  container: {
+    [$thumbSize.variable]: `sizes.2.5`,
+    [$trackSize.variable]: `sizes.0.5`,
+  },
+})
 
 const sizes = {
   lg: sizeLg,
@@ -135,14 +152,11 @@ const sizes = {
   sm: sizeSm,
 }
 
-const defaultProps = {
-  size: "md",
-  colorScheme: "blue",
-}
-
-export default {
-  parts: parts.keys,
-  sizes,
+export const sliderTheme = defineMultiStyleConfig({
   baseStyle,
-  defaultProps,
-}
+  sizes,
+  defaultProps: {
+    size: "md",
+    colorScheme: "blue",
+  },
+})

@@ -1,138 +1,134 @@
 import { alertAnatomy as parts } from "@beae-ui/anatomy"
-import { getColor, mode, transparentize } from "@beae-ui/theme-tools"
-import type {
-  PartsStyleObject,
-  PartsStyleFunction,
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
   StyleFunctionProps,
-} from "@beae-ui/theme-tools"
+} from "@beae-ui/styled-system"
+import { transparentize } from "@beae-ui/theme-tools"
 
-const baseStyle: PartsStyleObject<typeof parts> = {
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(parts.keys)
+
+const $fg = cssVar("alert-fg")
+const $bg = cssVar("alert-bg")
+
+const baseStyle = definePartsStyle({
   container: {
-    px: 4,
-    py: 3,
+    bg: $bg.reference,
+    px: "4",
+    py: "3",
   },
   title: {
     fontWeight: "bold",
-    lineHeight: 6,
-    marginEnd: 2,
+    lineHeight: "6",
+    marginEnd: "2",
   },
   description: {
-    lineHeight: 6,
+    lineHeight: "6",
   },
   icon: {
+    color: $fg.reference,
     flexShrink: 0,
-    marginEnd: 3,
-    w: 5,
-    h: 6,
+    marginEnd: "3",
+    w: "5",
+    h: "6",
   },
   spinner: {
+    color: $fg.reference,
     flexShrink: 0,
-    marginEnd: 3,
-    w: 5,
-    h: 5,
+    marginEnd: "3",
+    w: "5",
+    h: "5",
   },
-}
+})
 
-function getBg(props: StyleFunctionProps): string {
+function getBg(props: StyleFunctionProps) {
   const { theme, colorScheme: c } = props
-  const lightBg = getColor(theme, `${c}.100`, c)
   const darkBg = transparentize(`${c}.200`, 0.16)(theme)
-  return mode(lightBg, darkBg)(props)
-}
-
-const variantSubtle: PartsStyleFunction<typeof parts> = (props) => {
-  const { colorScheme: c } = props
   return {
-    container: { bg: getBg(props) },
-    icon: { color: mode(`${c}.500`, `${c}.200`)(props) },
-    spinner: {
-      color: mode(`${c}.500`, `${c}.200`)(props),
-    },
+    light: `colors.${c}.100`,
+    dark: darkBg,
   }
 }
 
-const variantLeftAccent: PartsStyleFunction<typeof parts> = (props) => {
+const variantSubtle = definePartsStyle((props) => {
   const { colorScheme: c } = props
+  const bg = getBg(props)
   return {
     container: {
-      paddingStart: 3,
+      [$fg.variable]: `colors.${c}.500`,
+      [$bg.variable]: bg.light,
+      _dark: {
+        [$fg.variable]: `colors.${c}.200`,
+        [$bg.variable]: bg.dark,
+      },
+    },
+  }
+})
+
+const variantLeftAccent = definePartsStyle((props) => {
+  const { colorScheme: c } = props
+  const bg = getBg(props)
+  return {
+    container: {
+      [$fg.variable]: `colors.${c}.500`,
+      [$bg.variable]: bg.light,
+      _dark: {
+        [$fg.variable]: `colors.${c}.200`,
+        [$bg.variable]: bg.dark,
+      },
+      paddingStart: "3",
       borderStartWidth: "4px",
-      borderStartColor: mode(`${c}.500`, `${c}.200`)(props),
-      bg: getBg(props),
-    },
-    icon: {
-      color: mode(`${c}.500`, `${c}.200`)(props),
-    },
-    spinner: {
-      color: mode(`${c}.500`, `${c}.200`)(props),
+      borderStartColor: $fg.reference,
     },
   }
-}
+})
 
-const variantTopAccent: PartsStyleFunction<typeof parts> = (props) => {
+const variantTopAccent = definePartsStyle((props) => {
   const { colorScheme: c } = props
+  const bg = getBg(props)
   return {
     container: {
-      pt: 2,
+      [$fg.variable]: `colors.${c}.500`,
+      [$bg.variable]: bg.light,
+      _dark: {
+        [$fg.variable]: `colors.${c}.200`,
+        [$bg.variable]: bg.dark,
+      },
+      pt: "2",
       borderTopWidth: "4px",
-      borderTopColor: mode(`${c}.500`, `${c}.200`)(props),
-      bg: getBg(props),
-    },
-    icon: {
-      color: mode(`${c}.500`, `${c}.200`)(props),
-    },
-    spinner: {
-      color: mode(`${c}.500`, `${c}.200`)(props),
+      borderTopColor: $fg.reference,
     },
   }
-}
+})
 
-const variantSolid: PartsStyleFunction<typeof parts> = (props) => {
+const variantSolid = definePartsStyle((props) => {
   const { colorScheme: c } = props
   return {
     container: {
-      bg: mode(`${c}.500`, `${c}.200`)(props),
-      color: mode(`white`, `gray.900`)(props),
+      [$fg.variable]: `colors.white`,
+      [$bg.variable]: `colors.${c}.500`,
+      _dark: {
+        [$fg.variable]: `colors.gray.900`,
+        [$bg.variable]: `colors.${c}.200`,
+      },
+      color: $fg.reference,
     },
   }
-}
-
-const variantPolaris: PartsStyleFunction<typeof parts> = (props) => {
-  const { status: _status } = props
-  let color =
-    _status == "error" ? "colors.polaris.red.600" : "colors.polaris.gray.900"
-  return {
-    container: {
-      bg: color,
-      color: "white",
-      borderRadius: "base",
-      fontSize: "sm",
-    },
-    icon: {
-      color: "white",
-    },
-    spinner: {
-      color: "white",
-    },
-  }
-}
+})
 
 const variants = {
   subtle: variantSubtle,
   "left-accent": variantLeftAccent,
   "top-accent": variantTopAccent,
   solid: variantSolid,
-  polaris: variantPolaris,
 }
 
-const defaultProps = {
-  variant: "subtle",
-  colorScheme: "blue",
-}
-
-export default {
-  parts: parts.keys,
+export const alertTheme = defineMultiStyleConfig({
   baseStyle,
   variants,
-  defaultProps,
-}
+  defaultProps: {
+    variant: "subtle",
+    colorScheme: "blue",
+  },
+})

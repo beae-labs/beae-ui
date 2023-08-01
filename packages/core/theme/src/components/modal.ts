@@ -1,18 +1,23 @@
 import { modalAnatomy as parts } from "@beae-ui/anatomy"
-import type {
-  PartsStyleFunction,
-  PartsStyleObject,
-  SystemStyleFunction,
-  SystemStyleObject,
-} from "@beae-ui/theme-tools"
-import { mode } from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
+  defineStyle,
+} from "@beae-ui/styled-system"
+import { runIfFn } from "../utils/run-if-fn"
 
-const baseStyleOverlay: SystemStyleObject = {
+const { defineMultiStyleConfig, definePartsStyle } =
+  createMultiStyleConfigHelpers(parts.keys)
+
+const $bg = cssVar("modal-bg")
+const $shadow = cssVar("modal-shadow")
+
+const baseStyleOverlay = defineStyle({
   bg: "blackAlpha.600",
   zIndex: "modal",
-}
+})
 
-const baseStyleDialogContainer: SystemStyleFunction = (props) => {
+const baseStyleDialogContainer = defineStyle((props) => {
   const { isCentered, scrollBehavior } = props
 
   return {
@@ -21,82 +26,87 @@ const baseStyleDialogContainer: SystemStyleFunction = (props) => {
     justifyContent: "center",
     alignItems: isCentered ? "center" : "flex-start",
     overflow: scrollBehavior === "inside" ? "hidden" : "auto",
+    overscrollBehaviorY: "none",
   }
-}
+})
 
-const baseStyleDialog: SystemStyleFunction = (props) => {
-  const { scrollBehavior } = props
+const baseStyleDialog = defineStyle((props) => {
+  const { isCentered, scrollBehavior } = props
 
   return {
     borderRadius: "md",
-    bg: mode("white", "gray.700")(props),
     color: "inherit",
-    my: "3.75rem",
+    my: isCentered ? "auto" : "16",
+    mx: isCentered ? "auto" : undefined,
     zIndex: "modal",
     maxH: scrollBehavior === "inside" ? "calc(100% - 7.5rem)" : undefined,
-    boxShadow: mode("lg", "dark-lg")(props),
+    [$bg.variable]: "colors.white",
+    [$shadow.variable]: "shadows.lg",
+    _dark: {
+      [$bg.variable]: "colors.gray.700",
+      [$shadow.variable]: "shadows.dark-lg",
+    },
+    bg: $bg.reference,
+    boxShadow: $shadow.reference,
   }
-}
+})
 
-const baseStyleHeader: SystemStyleObject = {
-  px: 6,
-  py: 4,
+const baseStyleHeader = defineStyle({
+  px: "6",
+  py: "4",
   fontSize: "xl",
   fontWeight: "semibold",
-}
+})
 
-const baseStyleCloseButton: SystemStyleObject = {
+const baseStyleCloseButton = defineStyle({
   position: "absolute",
-  top: 2,
-  insetEnd: 3,
-}
+  top: "2",
+  insetEnd: "3",
+})
 
-const baseStyleBody: SystemStyleFunction = (props) => {
+const baseStyleBody = defineStyle((props) => {
   const { scrollBehavior } = props
   return {
-    px: 6,
-    py: 2,
-    flex: 1,
+    px: "6",
+    py: "2",
+    flex: "1",
     overflow: scrollBehavior === "inside" ? "auto" : undefined,
   }
-}
+})
 
-const baseStyleFooter: SystemStyleObject = {
-  px: 6,
-  py: 4,
-}
+const baseStyleFooter = defineStyle({
+  px: "6",
+  py: "4",
+})
 
-const baseStyle: PartsStyleFunction<typeof parts> = (props) => ({
+const baseStyle = definePartsStyle((props) => ({
   overlay: baseStyleOverlay,
-  dialogContainer: baseStyleDialogContainer(props),
-  dialog: baseStyleDialog(props),
+  dialogContainer: runIfFn(baseStyleDialogContainer, props),
+  dialog: runIfFn(baseStyleDialog, props),
   header: baseStyleHeader,
   closeButton: baseStyleCloseButton,
-  body: baseStyleBody(props),
+  body: runIfFn(baseStyleBody, props),
   footer: baseStyleFooter,
-})
+}))
 
 /**
  * Since the `maxWidth` prop references theme.sizes internally,
  * we can leverage that to size our modals.
  */
-function getSize(value: string): PartsStyleObject<typeof parts> {
+function getSize(value: string) {
   if (value === "full") {
-    return {
+    return definePartsStyle({
       dialog: {
         maxW: "100vw",
-        minH: "100vh",
-        "@supports(min-height: -webkit-fill-available)": {
-          minH: "-webkit-fill-available",
-        },
-        my: 0,
-        borderRadius: 0,
+        minH: "$100vh",
+        my: "0",
+        borderRadius: "0",
       },
-    }
+    })
   }
-  return {
+  return definePartsStyle({
     dialog: { maxW: value },
-  }
+  })
 }
 
 const sizes = {
@@ -113,13 +123,8 @@ const sizes = {
   full: getSize("full"),
 }
 
-const defaultProps = {
-  size: "md",
-}
-
-export default {
-  parts: parts.keys,
+export const modalTheme = defineMultiStyleConfig({
   baseStyle,
   sizes,
-  defaultProps,
-}
+  defaultProps: { size: "md" },
+})

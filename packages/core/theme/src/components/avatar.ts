@@ -1,79 +1,93 @@
 import { avatarAnatomy as parts } from "@beae-ui/anatomy"
-import { isDark, mode, randomColor } from "@beae-ui/theme-tools"
-import type {
-  PartsStyleFunction,
-  PartsStyleObject,
-  SystemStyleFunction,
-} from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
+  defineStyle,
+} from "@beae-ui/styled-system"
+import { isDark, randomColor } from "@beae-ui/theme-tools"
 import themeSizes from "../foundations/sizes"
+import { runIfFn } from "../utils/run-if-fn"
 
-const baseStyleBadge: SystemStyleFunction = (props) => {
-  return {
-    borderRadius: "full",
-    border: "0.2em solid",
-    borderColor: mode("white", "gray.800")(props),
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "absolute",
-  }
-}
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(parts.keys)
 
-const baseStyleExcessLabel: SystemStyleFunction = (props) => {
-  return {
-    bg: mode("gray.200", "whiteAlpha.400")(props),
-  }
-}
+const $border = cssVar("avatar-border-color")
+const $bg = cssVar("avatar-bg")
+const $fs = cssVar("avatar-font-size")
+const $size = cssVar("avatar-size")
 
-const baseStyleContainer: SystemStyleFunction = (props) => {
+const baseStyleBadge = defineStyle({
+  borderRadius: "full",
+  border: "0.2em solid",
+  borderColor: $border.reference,
+  [$border.variable]: "white",
+  _dark: {
+    [$border.variable]: "colors.gray.800",
+  },
+})
+
+const baseStyleExcessLabel = defineStyle({
+  bg: $bg.reference,
+  fontSize: $fs.reference,
+  width: $size.reference,
+  height: $size.reference,
+  lineHeight: "1",
+  [$bg.variable]: "colors.gray.200",
+  _dark: {
+    [$bg.variable]: "colors.whiteAlpha.400",
+  },
+})
+
+const baseStyleContainer = defineStyle((props) => {
   const { name, theme } = props
-  const bg = name ? randomColor({ string: name }) : "gray.400"
+  const bg = name ? randomColor({ string: name }) : "colors.gray.400"
   const isBgDark = isDark(bg)(theme)
 
   let color = "white"
   if (!isBgDark) color = "gray.800"
-  const outlineColor = mode("white", "gray.800")(props)
 
   return {
-    bg,
+    bg: $bg.reference,
+    fontSize: $fs.reference,
     color,
-    outline: "2px solid",
-    outlineColor,
-    borderRadius: "full",
+    borderColor: $border.reference,
     verticalAlign: "top",
-    position: "relative",
+    width: $size.reference,
+    height: $size.reference,
+    "&:not([data-loaded])": {
+      [$bg.variable]: bg,
+    },
+    [$border.variable]: "colors.white",
+    _dark: {
+      [$border.variable]: "colors.gray.800",
+    },
   }
-}
-
-const baseStyle: PartsStyleFunction<typeof parts> = (props) => ({
-  badge: baseStyleBadge(props),
-  excessLabel: baseStyleExcessLabel(props),
-  container: baseStyleContainer(props),
 })
 
-function getSize(
-  size: keyof typeof themeSizes | "100%",
-): PartsStyleObject<typeof parts> {
+const baseStyleLabel = defineStyle({
+  fontSize: $fs.reference,
+  lineHeight: "1",
+})
+
+const baseStyle = definePartsStyle((props) => ({
+  badge: runIfFn(baseStyleBadge, props),
+  excessLabel: runIfFn(baseStyleExcessLabel, props),
+  container: runIfFn(baseStyleContainer, props),
+  label: baseStyleLabel,
+}))
+
+function getSize(size: keyof typeof themeSizes | "100%") {
   const themeSize = size !== "100%" ? themeSizes[size] : undefined
-  return {
+  return definePartsStyle({
     container: {
-      width: size,
-      height: size,
-      fontSize: `calc(${themeSize ?? size} / 2.5)`,
+      [$size.variable]: themeSize ?? size,
+      [$fs.variable]: `calc(${themeSize ?? size} / 2.5)`,
     },
     excessLabel: {
-      width: size,
-      height: size,
+      [$size.variable]: themeSize ?? size,
+      [$fs.variable]: `calc(${themeSize ?? size} / 2.5)`,
     },
-    label: {
-      fontSize: `calc(${themeSize ?? size} / 2.5)`,
-      lineHeight: size !== "100%" ? themeSize ?? size : undefined,
-    },
-    badge: {
-      width: `calc(${themeSize ?? size} / 2.5)`,
-      height: `calc(${themeSize ?? size} / 2.5)`,
-    },
-  }
+  })
 }
 
 const sizes = {
@@ -87,13 +101,10 @@ const sizes = {
   full: getSize("100%"),
 }
 
-const defaultProps = {
-  size: "md",
-}
-
-export default {
-  parts: parts.keys,
+export const avatarTheme = defineMultiStyleConfig({
   baseStyle,
   sizes,
-  defaultProps,
-}
+  defaultProps: {
+    size: "md",
+  },
+})

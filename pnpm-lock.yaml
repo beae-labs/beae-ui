@@ -111,6 +111,9 @@ importers:
 
   examples/vue-app:
     dependencies:
+      '@beae-ui/theme-tools':
+        specifier: workspace:^
+        version: link:../../packages/core/theme-tools
       '@beae-ui/vue':
         specifier: workspace:^
         version: link:../../packages/core/vue
@@ -695,6 +698,9 @@ importers:
       '@beae-ui/utils':
         specifier: workspace:^
         version: link:../../utilities/utils
+      '@emotion/cache':
+        specifier: ^11.11.0
+        version: 11.11.0
       '@emotion/css':
         specifier: ^11.11.2
         version: 11.11.2

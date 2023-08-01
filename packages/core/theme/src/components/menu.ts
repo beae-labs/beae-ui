@@ -1,81 +1,105 @@
 import { menuAnatomy as parts } from "@beae-ui/anatomy"
-import type {
-  PartsStyleFunction,
-  SystemStyleFunction,
-  SystemStyleObject,
-} from "@beae-ui/theme-tools"
-import { mode } from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
+  defineStyle,
+} from "@beae-ui/styled-system"
 
-const baseStyleList: SystemStyleFunction = (props) => {
-  return {
-    bg: mode("#fff", "gray.700")(props),
-    boxShadow: mode("sm", "dark-lg")(props),
-    color: "inherit",
-    minW: "3xs",
-    py: "2",
-    zIndex: 1,
-    borderRadius: "md",
-    borderWidth: "1px",
-  }
-}
+const { defineMultiStyleConfig, definePartsStyle } =
+  createMultiStyleConfigHelpers(parts.keys)
 
-const baseStyleItem: SystemStyleFunction = (props) => {
-  return {
-    py: "0.4rem",
-    px: "0.8rem",
-    transitionProperty: "background",
-    transitionDuration: "ultra-fast",
-    transitionTimingFunction: "ease-in",
-    _focus: {
-      bg: mode("gray.100", "whiteAlpha.100")(props),
-    },
-    _active: {
-      bg: mode("gray.200", "whiteAlpha.200")(props),
-    },
-    _expanded: {
-      bg: mode("gray.100", "whiteAlpha.100")(props),
-    },
-    _disabled: {
-      opacity: 0.4,
-      cursor: "not-allowed",
-    },
-  }
-}
+const $bg = cssVar("menu-bg")
+const $shadow = cssVar("menu-shadow")
 
-const baseStyleGroupTitle: SystemStyleObject = {
+const baseStyleList = defineStyle({
+  [$bg.variable]: "#fff",
+  [$shadow.variable]: "shadows.sm",
+  _dark: {
+    [$bg.variable]: "colors.gray.700",
+    [$shadow.variable]: "shadows.dark-lg",
+  },
+  color: "inherit",
+  minW: "3xs",
+  py: "2",
+  zIndex: 1,
+  borderRadius: "md",
+  borderWidth: "1px",
+  bg: $bg.reference,
+  boxShadow: $shadow.reference,
+})
+
+const baseStyleItem = defineStyle({
+  py: "1.5",
+  px: "3",
+  transitionProperty: "background",
+  transitionDuration: "ultra-fast",
+  transitionTimingFunction: "ease-in",
+  _focus: {
+    [$bg.variable]: "colors.gray.100",
+    _dark: {
+      [$bg.variable]: "colors.whiteAlpha.100",
+    },
+  },
+  _active: {
+    [$bg.variable]: "colors.gray.200",
+    _dark: {
+      [$bg.variable]: "colors.whiteAlpha.200",
+    },
+  },
+  _expanded: {
+    [$bg.variable]: "colors.gray.100",
+    _dark: {
+      [$bg.variable]: "colors.whiteAlpha.100",
+    },
+  },
+  _disabled: {
+    opacity: 0.4,
+    cursor: "not-allowed",
+  },
+  bg: $bg.reference,
+})
+
+const baseStyleGroupTitle = defineStyle({
   mx: 4,
   my: 2,
   fontWeight: "semibold",
   fontSize: "sm",
-}
+})
 
-const baseStyleCommand: SystemStyleObject = {
+const baseStyleIcon = defineStyle({
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  flexShrink: 0,
+})
+
+const baseStyleCommand = defineStyle({
   opacity: 0.6,
-}
+})
 
-const baseStyleDivider: SystemStyleObject = {
+const baseStyleDivider = defineStyle({
   border: 0,
   borderBottom: "1px solid",
   borderColor: "inherit",
-  my: "0.5rem",
+  my: "2",
   opacity: 0.6,
-}
+})
 
-const baseStyleButton: SystemStyleObject = {
+const baseStyleButton = defineStyle({
   transitionProperty: "common",
   transitionDuration: "normal",
-}
+})
 
-const baseStyle: PartsStyleFunction<typeof parts> = (props) => ({
+const baseStyle = definePartsStyle({
   button: baseStyleButton,
-  list: baseStyleList(props),
-  item: baseStyleItem(props),
+  list: baseStyleList,
+  item: baseStyleItem,
   groupTitle: baseStyleGroupTitle,
+  icon: baseStyleIcon,
   command: baseStyleCommand,
   divider: baseStyleDivider,
 })
 
-export default {
-  parts: parts.keys,
+export const menuTheme = defineMultiStyleConfig({
   baseStyle,
-}
+})

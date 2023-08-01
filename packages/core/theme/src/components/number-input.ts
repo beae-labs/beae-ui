@@ -1,58 +1,73 @@
 import { numberInputAnatomy as parts } from "@beae-ui/anatomy"
-import type {
-  PartsStyleFunction,
-  PartsStyleObject,
-  SystemStyleFunction,
-  SystemStyleObject,
-} from "@beae-ui/theme-tools"
-import { calc, cssVar, mode } from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  defineStyle,
+} from "@beae-ui/styled-system"
+import { calc, cssVar } from "@beae-ui/theme-tools"
 import typography from "../foundations/typography"
-import Input from "./input"
+import { inputTheme } from "./input"
+import { runIfFn } from "../utils/run-if-fn"
 
-const { variants, defaultProps } = Input
+const { defineMultiStyleConfig, definePartsStyle } =
+  createMultiStyleConfigHelpers(parts.keys)
 
 const $stepperWidth = cssVar("number-input-stepper-width")
 
 const $inputPadding = cssVar("number-input-input-padding")
 const inputPaddingValue = calc($stepperWidth).add("0.5rem").toString()
 
-const baseStyleRoot: SystemStyleObject = {
-  [$stepperWidth.variable]: "24px",
+const $bg = cssVar("number-input-bg")
+const $fg = cssVar("number-input-color")
+const $border = cssVar("number-input-border-color")
+
+const baseStyleRoot = defineStyle({
+  [$stepperWidth.variable]: "sizes.6",
   [$inputPadding.variable]: inputPaddingValue,
-}
-
-const baseStyleField: SystemStyleObject = Input.baseStyle?.field ?? {}
-
-const baseStyleStepperGroup: SystemStyleObject = {
-  width: [$stepperWidth.reference],
-}
-
-const baseStyleStepper: SystemStyleFunction = (props) => {
-  return {
-    borderStart: "1px solid",
-    borderStartColor: mode("inherit", "whiteAlpha.300")(props),
-    color: mode("inherit", "whiteAlpha.800")(props),
-    _active: {
-      bg: mode("gray.200", "whiteAlpha.300")(props),
-    },
-    _disabled: {
-      opacity: 0.4,
-      cursor: "not-allowed",
-    },
-  }
-}
-
-const baseStyle: PartsStyleFunction<typeof parts> = (props) => ({
-  root: baseStyleRoot,
-  field: baseStyleField,
-  stepperGroup: baseStyleStepperGroup,
-  stepper: baseStyleStepper(props),
 })
+
+const baseStyleField = defineStyle(
+  (props) => runIfFn(inputTheme.baseStyle, props)?.field ?? {},
+)
+
+const baseStyleStepperGroup = defineStyle({
+  width: $stepperWidth.reference,
+})
+
+const baseStyleStepper = defineStyle({
+  borderStart: "1px solid",
+  borderStartColor: $border.reference,
+  color: $fg.reference,
+  bg: $bg.reference,
+  [$fg.variable]: "colors.beae-body-text",
+  [$border.variable]: "colors.beae-border-color",
+  _dark: {
+    [$fg.variable]: "colors.whiteAlpha.800",
+    [$border.variable]: "colors.whiteAlpha.300",
+  },
+  _active: {
+    [$bg.variable]: "colors.gray.200",
+    _dark: {
+      [$bg.variable]: "colors.whiteAlpha.300",
+    },
+  },
+  _disabled: {
+    opacity: 0.4,
+    cursor: "not-allowed",
+  },
+})
+
+const baseStyle = definePartsStyle((props) => ({
+  root: baseStyleRoot,
+  field: runIfFn(baseStyleField, props) ?? {},
+  stepperGroup: baseStyleStepperGroup,
+  stepper: baseStyleStepper,
+}))
 
 type FontSize = keyof typeof typography.fontSizes
 
-function getSize(size: FontSize): PartsStyleObject<typeof parts> {
-  const sizeStyle = Input.sizes[size]
+function getSize(size: FontSize) {
+  //@ts-expect-error
+  const sizeStyle = inputTheme.sizes?.[size]
 
   const radius: Partial<Record<FontSize, string>> = {
     lg: "md",
@@ -64,7 +79,7 @@ function getSize(size: FontSize): PartsStyleObject<typeof parts> {
   const _fontSize = (sizeStyle.field?.fontSize ?? "md") as FontSize
   const fontSize = typography.fontSizes[_fontSize]
 
-  return {
+  return definePartsStyle({
     field: {
       ...sizeStyle.field,
       paddingInlineEnd: $inputPadding.reference,
@@ -81,7 +96,7 @@ function getSize(size: FontSize): PartsStyleObject<typeof parts> {
         borderTopWidth: 1,
       },
     },
-  }
+  })
 }
 
 const sizes = {
@@ -91,10 +106,9 @@ const sizes = {
   lg: getSize("lg"),
 }
 
-export default {
-  parts: parts.keys,
+export const numberInputTheme = defineMultiStyleConfig({
   baseStyle,
   sizes,
-  variants,
-  defaultProps,
-}
+  variants: inputTheme.variants,
+  defaultProps: inputTheme.defaultProps,
+})

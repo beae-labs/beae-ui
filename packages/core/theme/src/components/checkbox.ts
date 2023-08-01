@@ -1,17 +1,23 @@
 import { checkboxAnatomy as parts } from "@beae-ui/anatomy"
-import type {
-  PartsStyleFunction,
-  PartsStyleObject,
-  SystemStyleFunction,
-  SystemStyleObject,
-} from "@beae-ui/theme-tools"
+import {
+  createMultiStyleConfigHelpers,
+  cssVar,
+  defineStyle,
+} from "@beae-ui/styled-system"
 import { mode } from "@beae-ui/theme-tools"
+import { runIfFn } from "../utils/run-if-fn"
 
-const baseStyleControl: SystemStyleFunction = (props) => {
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(parts.keys)
+
+const $size = cssVar("checkbox-size")
+
+const baseStyleControl = defineStyle((props) => {
   const { colorScheme: c } = props
 
   return {
-    w: "100%",
+    w: $size.reference,
+    h: $size.reference,
     transitionProperty: "box-shadow",
     transitionDuration: "normal",
     border: "2px solid",
@@ -55,55 +61,52 @@ const baseStyleControl: SystemStyleFunction = (props) => {
       borderColor: mode("red.500", "red.300")(props),
     },
   }
-}
-
-const baseStyleContainer: SystemStyleObject = {
-  _disabled: { cursor: "not-allowed" },
-}
-
-const baseStyleLabel: SystemStyleObject = {
-  userSelect: "none",
-  _disabled: { opacity: 0.4 },
-}
-
-const baseStyleIcon: SystemStyleObject = {
-  transitionProperty: "transform",
-  transitionDuration: "normal",
-}
-
-const baseStyle: PartsStyleFunction<typeof parts> = (props) => ({
-  icon: baseStyleIcon,
-  container: baseStyleContainer,
-  control: baseStyleControl(props),
-  label: baseStyleLabel,
 })
 
-const sizes: Record<string, PartsStyleObject<typeof parts>> = {
-  sm: {
-    control: { h: 3, w: 3 },
+const baseStyleContainer = defineStyle({
+  _disabled: { cursor: "not-allowed" },
+})
+
+const baseStyleLabel = defineStyle({
+  userSelect: "none",
+  _disabled: { opacity: 0.4 },
+})
+
+const baseStyleIcon = defineStyle({
+  transitionProperty: "transform",
+  transitionDuration: "normal",
+})
+
+const baseStyle = definePartsStyle((props) => ({
+  icon: baseStyleIcon,
+  container: baseStyleContainer,
+  control: runIfFn(baseStyleControl, props),
+  label: baseStyleLabel,
+}))
+
+const sizes = {
+  sm: definePartsStyle({
+    control: { [$size.variable]: "sizes.3" },
     label: { fontSize: "sm" },
-    icon: { fontSize: "0.45rem" },
-  },
-  md: {
-    control: { w: 4, h: 4 },
+    icon: { fontSize: "3xs" },
+  }),
+  md: definePartsStyle({
+    control: { [$size.variable]: "sizes.4" },
     label: { fontSize: "md" },
-    icon: { fontSize: "0.625rem" },
-  },
-  lg: {
-    control: { w: 5, h: 5 },
+    icon: { fontSize: "2xs" },
+  }),
+  lg: definePartsStyle({
+    control: { [$size.variable]: "sizes.5" },
     label: { fontSize: "lg" },
-    icon: { fontSize: "0.625rem" },
-  },
+    icon: { fontSize: "2xs" },
+  }),
 }
 
-const defaultProps = {
-  size: "md",
-  colorScheme: "blue",
-}
-
-export default {
-  parts: parts.keys,
+export const checkboxTheme = defineMultiStyleConfig({
   baseStyle,
   sizes,
-  defaultProps,
-}
+  defaultProps: {
+    size: "md",
+    colorScheme: "blue",
+  },
+})

@@ -1,55 +1,57 @@
-import type {
-  SystemStyleFunction,
-  SystemStyleObject,
-} from "@beae-ui/theme-tools"
-import { cssVar, mode } from "@beae-ui/theme-tools"
+import { defineStyle, defineStyleConfig } from "@beae-ui/styled-system"
+import { cssVar } from "@beae-ui/theme-tools"
 
 const $size = cssVar("close-button-size")
+const $bg = cssVar("close-button-bg")
 
-const baseStyle: SystemStyleFunction = (props) => {
-  const hoverBg = mode(`blackAlpha.100`, `whiteAlpha.100`)(props)
-  const activeBg = mode(`blackAlpha.200`, `whiteAlpha.200`)(props)
-
-  return {
-    w: [$size.reference],
-    h: [$size.reference],
-    borderRadius: "md",
-    transitionProperty: "common",
-    transitionDuration: "normal",
-    _disabled: {
-      opacity: 0.4,
-      cursor: "not-allowed",
-      boxShadow: "none",
+const baseStyle = defineStyle({
+  w: [$size.reference],
+  h: [$size.reference],
+  borderRadius: "md",
+  transitionProperty: "common",
+  transitionDuration: "normal",
+  _disabled: {
+    opacity: 0.4,
+    cursor: "not-allowed",
+    boxShadow: "none",
+  },
+  _hover: {
+    [$bg.variable]: "colors.blackAlpha.100",
+    _dark: {
+      [$bg.variable]: "colors.whiteAlpha.100",
     },
-    _hover: { bg: hoverBg },
-    _active: { bg: activeBg },
-    _focusVisible: {
-      boxShadow: "outline",
+  },
+  _active: {
+    [$bg.variable]: "colors.blackAlpha.200",
+    _dark: {
+      [$bg.variable]: "colors.whiteAlpha.200",
     },
-  }
+  },
+  _focusVisible: {
+    boxShadow: "outline",
+  },
+  bg: $bg.reference,
+})
+
+const sizes = {
+  lg: defineStyle({
+    [$size.variable]: "sizes.10",
+    fontSize: "md",
+  }),
+  md: defineStyle({
+    [$size.variable]: "sizes.8",
+    fontSize: "xs",
+  }),
+  sm: defineStyle({
+    [$size.variable]: "sizes.6",
+    fontSize: "2xs",
+  }),
 }
 
-const sizes: Record<string, SystemStyleObject> = {
-  lg: {
-    [$size.variable]: "40px",
-    fontSize: "16px",
-  },
-  md: {
-    [$size.variable]: "32px",
-    fontSize: "12px",
-  },
-  sm: {
-    [$size.variable]: "24px",
-    fontSize: "10px",
-  },
-}
-
-const defaultProps = {
-  size: "md",
-}
-
-export default {
+export const closeButtonTheme = defineStyleConfig({
   baseStyle,
   sizes,
-  defaultProps,
-}
+  defaultProps: {
+    size: "md",
+  },
+})

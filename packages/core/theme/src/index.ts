@@ -1,6 +1,10 @@
-import components from "./components"
+import { components } from "./components"
 import foundations, { ColorHues } from "./foundations"
+import { semanticTokens } from "./semantic-tokens"
 import styles from "./styles"
+import { ThemeDirection } from "./theme.types"
+
+const direction: ThemeDirection = "ltr"
 
 export type ColorMode = "light" | "dark"
 
@@ -27,6 +31,17 @@ export const theme = {
 }
 
 export type Theme = typeof theme
+export * from "./theme.types"
+export * from "./utils/is-beae-theme"
 export type { ColorHues }
 
 export default theme
+
+export const baseTheme = {
+  semanticTokens,
+  direction,
+  components: {},
+  ...foundations,
+  styles,
+  config,
+}
