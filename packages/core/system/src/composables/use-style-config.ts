@@ -1,8 +1,10 @@
-import { computed, ComputedRef, Ref } from "vue"
-import { SystemStyleObject, ThemingProps } from "@beae-ui/styled-system"
+import type { ComputedRef, Ref } from "vue"
+import type { Theme } from "@beae-ui/theme"
+import type { SystemStyleObject, ThemingProps } from "@beae-ui/styled-system"
+
+import { computed } from "vue"
 import { filterUndefined, get, mergeWith, runIfFn } from "@beae-ui/utils"
 import { useBeae } from "./use-beae"
-import type { Theme } from "@beae-ui/theme"
 
 export function useStyleConfig<Component extends keyof Theme["components"]>(
   themeKey: Component,
@@ -37,11 +39,9 @@ export function useStyleConfig<Component extends keyof Theme["components"]>(
     const { styleConfig: styleConfigProp, ...rest } =
       themingProps.value || themingProps
     const { theme, colorMode } = useBeae()
-    // @ts-ignore
     const themeStyleConfig = get(theme, `components.${themeKey}`)
 
     const styleConfig = styleConfigProp || themeStyleConfig
-
     const mergedProps = mergeWith(
       { theme: theme, colorMode: colorMode.value },
       styleConfig?.defaultProps ?? {},
@@ -63,8 +63,8 @@ export function useStyleConfig<Component extends keyof Theme["components"]>(
     const styles = mergeWith({}, baseStyles, sizes, variants) as ComponentStyles
 
     if (options.isMultiPart && styleConfig?.parts) {
-      styleConfig?.parts?.forEach((part: string) => {
-        // @ts-ignore
+      styleConfig?.parts?.forEach((part: keyof ComponentStyles) => {
+        //@ts-ignore
         styles[part] = styles[part] ?? {}
       })
     }
@@ -74,7 +74,12 @@ export function useStyleConfig<Component extends keyof Theme["components"]>(
 }
 
 export function useMultiStyleConfig<
-  Component extends keyof Theme["components"],
+  AnatomyParts extends readonly string[],
+  Component extends keyof Theme["components"] = any,
 >(themeKey: Component, themingProps: any) {
-  return useStyleConfig(themeKey, themingProps, { isMultiPart: true })
+  return useStyleConfig(themeKey, themingProps, {
+    isMultiPart: true,
+  }) as ComputedRef<{
+    [K in AnatomyParts[number]]: SystemStyleObject
+  }>
 }

@@ -41,8 +41,10 @@
     "@beae-ui/focus-lock": "workspace:^",
     "@beae-ui/form-control": "workspace:^",
     "@beae-ui/icon": "workspace:^",
+    "@beae-ui/image": "workspace:^",
     "@beae-ui/input": "workspace:^",
     "@beae-ui/layout": "workspace:^",
+    "@beae-ui/media-query": "workspace:^",
     "@beae-ui/modal": "workspace:^",
     "@beae-ui/motion": "workspace:^",
     "@beae-ui/pin-input": "workspace:^",
@@ -55,16 +57,18 @@
     "@beae-ui/theme": "workspace:^",
     "@beae-ui/theme-provider": "workspace:^",
     "@beae-ui/theme-tools": "workspace:^",
+    "@beae-ui/theme-utils": "workspace:^",
     "@beae-ui/utils": "workspace:^",
     "@beae-ui/visually-hidden": "workspace:^",
-    "@beae-ui/vue-a11y": "workspace:^",
+    "@beae-ui/vue-utils": "workspace:^",
     "@emotion/cache": "^11.11.0",
     "@emotion/serialize": "^1.1.2",
     "@emotion/sheet": "^1.2.2",
     "@emotion/utils": "^1.2.1",
-    "vue": "^3.3.4"
+    "lodash.mergewith": "^4.6.2"
   },
   "devDependencies": {
+    "@types/lodash.mergewith": "^4.6.7",
     "clean-package": "2.2.0"
   },
   "clean-package": "../../../clean-package.config.json",

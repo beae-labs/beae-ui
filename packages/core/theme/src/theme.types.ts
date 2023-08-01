@@ -1,21 +1,27 @@
-import type { ThemingProps } from "@beae-ui/system"
-import type { Breakpoints, Styles } from "@beae-ui/theme-tools"
-import type { Dict } from "@beae-ui/utils"
-import type { StyleObjectOrFn, SystemStyleObject } from "@beae-ui/styled-system"
+import type { Styles } from "@beae-ui/theme-tools"
 
-export type ColorMode = "light" | "dark"
+import type {
+  PartsStyleInterpolation,
+  Pseudos,
+  SemanticValue,
+  StyleObjectOrFn,
+  SystemStyleInterpolation,
+  ThemingProps,
+} from "@beae-ui/styled-system"
 
-export interface ColorModeOptions {
-  initialColorMode?: ColorMode
+type ColorMode = "light" | "dark"
+type Dict = Record<string, any>
+
+type ColorModeOptions = {
+  initialColorMode?: "light" | "dark" | "system"
   useSystemColorMode?: boolean
+  disableTransitionOnChange?: boolean
 }
 
-export type RecursiveProperty<Nested = string | number> =
-  | RecursiveObject<Nested>
-  | Nested
+export type RecursiveProperty<T = string | number> = RecursiveObject<T> | T
 
-export interface RecursiveObject<Nested = string | number> {
-  [property: string]: RecursiveProperty<Nested>
+export interface RecursiveObject<T = string | number> {
+  [property: string]: RecursiveProperty<T>
 }
 
 export interface ThemeConfig extends ColorModeOptions {
@@ -40,41 +46,50 @@ export interface ColorHues {
   800: string
   900: string
 }
+
 export type Colors = RecursiveObject<
   Record<string, Partial<ColorHues>> | string
 >
+
 export type ThemeDirection = "ltr" | "rtl"
 
 export interface ComponentDefaultProps
   extends Omit<ThemingProps, "styleConfig">,
     Dict {}
 
-export type ThemingPropsThunk<T> =
-  | T
-  | ((
-      props: Dict &
-        Omit<ThemingProps, "styleConfig"> & {
-          colorMode: ColorMode
-        },
-    ) => T)
+export interface ThemeComponentProps<T extends BeaeTheme = BeaeTheme>
+  extends Omit<ThemingProps, "styleConfig"> {
+  colorMode: ColorMode
+  theme: T
+  [x: string]: any
+}
+
+export type ThemeComponentFunction<S, T extends BeaeTheme = BeaeTheme> = (
+  props: ThemeComponentProps<T>,
+) => S
+
+export type ThemingPropsThunk<S, T extends BeaeTheme = BeaeTheme> =
+  | S
+  | ThemeComponentFunction<S, T>
 
 export interface SystemStyleObjectRecord {
   [key: string]: StyleObjectOrFn
 }
 
 export interface ComponentSingleStyleConfig {
-  baseStyle?: ThemingPropsThunk<SystemStyleObject>
-  sizes?: Record<string, ThemingPropsThunk<SystemStyleObject>>
-  variants?: Record<string, ThemingPropsThunk<SystemStyleObject>>
-  defaultProps?: ComponentDefaultProps
+  parts?: never
+  baseStyle?: SystemStyleInterpolation
+  sizes?: Record<string, SystemStyleInterpolation>
+  variants?: Record<string, SystemStyleInterpolation>
+  defaultProps?: any
 }
 
 export interface ComponentMultiStyleConfig {
   parts: string[]
-  baseStyle?: ThemingPropsThunk<SystemStyleObjectRecord>
-  sizes?: Record<string, ThemingPropsThunk<SystemStyleObjectRecord>>
-  variants?: Record<string, ThemingPropsThunk<SystemStyleObjectRecord>>
-  defaultProps?: ComponentDefaultProps
+  baseStyle?: PartsStyleInterpolation
+  sizes?: Record<string, PartsStyleInterpolation>
+  variants?: Record<string, PartsStyleInterpolation>
+  defaultProps?: any
 }
 
 export type ComponentStyleConfig =
@@ -95,7 +110,7 @@ interface Typography {
 
 interface Foundations extends Typography {
   borders: RecursiveObject
-  breakpoints: Breakpoints<Dict>
+  breakpoints: Dict
   colors: Colors
   radii: RecursiveObject
   shadows: RecursiveObject<string>
@@ -106,6 +121,9 @@ interface Foundations extends Typography {
 }
 
 export interface BeaeTheme extends Foundations {
+  semanticTokens?: Partial<
+    Record<keyof Foundations, Record<string, SemanticValue<keyof Pseudos>>>
+  >
   components: ThemeComponents
   config: ThemeConfig
   direction: ThemeDirection

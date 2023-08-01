@@ -1,4 +1,4 @@
-import { isObject, runIfFn } from "@beae-ui/utils"
+import { isObject, runIfFn } from "@beae-ui/shared-utils"
 
 /**
  * Expands an array or object syntax responsive style.

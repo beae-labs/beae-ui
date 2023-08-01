@@ -1,14 +1,17 @@
-import { Dict, mapResponsive } from "@beae-ui/utils"
-import {
-  beae,
+import type { SystemProps } from "@beae-ui/styled-system"
+import type {
   HTMLBeaeProps,
-  SystemProps,
   DOMElements,
-  tokenToCSSVar,
   ComponentWithProps,
+  DeepPartial,
 } from "@beae-ui/system"
+import { PropType } from "vue"
+
+import { tokenToCSSVar } from "@beae-ui/styled-system"
+import { Dict, mapResponsive } from "@beae-ui/utils"
+import { beae } from "@beae-ui/system"
 import { getValidChildren, SNAO } from "@beae-ui/utils"
-import { computed, defineComponent, h, PropType } from "vue"
+import { computed, defineComponent, h } from "vue"
 
 export interface WrapProps extends HTMLBeaeProps<"div"> {
   /**
@@ -50,57 +53,59 @@ export const WrapProps = {
  *
  * @see Docs https://vue.beae-ui.com/docs/typography/text
  */
-export const Wrap: ComponentWithProps<WrapProps> = defineComponent({
-  props: {
-    as: {
-      type: [Object, String] as PropType<DOMElements>,
-      default: "div",
-    },
-    ...WrapProps,
-  },
-  setup(props, { slots, attrs }) {
-    const styles = computed(() => ({
-      "--beae-wrap-spacing": (theme: Dict) =>
-        mapResponsive(props.spacing, (value) =>
-          tokenToCSSVar("space", value)(theme),
-        ),
-      "--wrap-spacing": "calc(var(--beae-wrap-spacing) / 2)",
-      display: "flex",
-      flexWrap: "wrap",
-      justifyContent: props.justify,
-      alignItems: props.align,
-      flexDirection: props.direction,
-      listStyleType: "none",
-      padding: "0",
-      margin: "calc(var(--wrap-spacing) * -1)",
-      "& > *:not(style)": {
-        margin: "var(--wrap-spacing)",
+export const Wrap: ComponentWithProps<DeepPartial<WrapProps>> = defineComponent(
+  {
+    props: {
+      as: {
+        type: [Object, String] as PropType<DOMElements>,
+        default: "div",
       },
-    }))
-
-    const childrenToRender = props.shouldWrapChildren
-      ? getValidChildren(slots).map((child, index) =>
-          h(WrapItem, { key: index }, child),
-        )
-      : slots
-
-    return () => {
-      return h(
-        beae(props.as, {
-          label: "wrap",
-          ...attrs,
-        }),
-        {},
-        () =>
-          h(
-            beae("ul", { label: "wrap__list", __css: styles.value }),
-            {},
-            childrenToRender,
+      ...WrapProps,
+    },
+    setup(props, { slots, attrs }) {
+      const styles = computed(() => ({
+        "--beae-wrap-spacing": (theme: Dict) =>
+          mapResponsive(props.spacing, (value) =>
+            tokenToCSSVar("space", value)(theme),
           ),
-      )
-    }
+        "--wrap-spacing": "calc(var(--beae-wrap-spacing) / 2)",
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: props.justify,
+        alignItems: props.align,
+        flexDirection: props.direction,
+        listStyleType: "none",
+        padding: "0",
+        margin: "calc(var(--wrap-spacing) * -1)",
+        "& > *:not(style)": {
+          margin: "var(--wrap-spacing)",
+        },
+      }))
+
+      const childrenToRender = props.shouldWrapChildren
+        ? getValidChildren(slots).map((child, index) =>
+            h(WrapItem, { key: index }, child),
+          )
+        : slots
+
+      return () => {
+        return h(
+          beae(props.as, {
+            label: "wrap",
+            ...attrs,
+          }),
+          {},
+          () =>
+            h(
+              beae("ul", { label: "wrap__list", __css: styles.value }),
+              {},
+              childrenToRender,
+            ),
+        )
+      }
+    },
   },
-})
+)
 
 export interface WrapItemProps extends HTMLBeaeProps<"li"> {}
 

@@ -1,29 +1,32 @@
-import { computed, UnwrapRef, type Plugin, ref } from "vue"
-
-import { Dict, mergeWith } from "@beae-ui/utils"
+import { computed, ref, UnwrapRef } from "vue"
+import { localStorageManager } from "@beae-ui/color-mode"
+import mergeWith from "lodash.mergewith"
+import { theme as defaultTheme, baseTheme, Theme } from "@beae-ui/theme"
+import { toCSSVar } from "@beae-ui/styled-system"
+import { mode } from "@beae-ui/theme-tools"
 import {
-  ColorModeRef,
-  localStorageManager,
-  setupColorModeContext,
-} from "@beae-ui/color-mode"
-import { Theme, baseTheme, theme as defaultTheme } from "@beae-ui/theme"
-import { toCSSVar, WithCSSVar } from "@beae-ui/styled-system"
-import {
+  injectGlobal,
   beae,
+  createCache,
   beaeEmotionCache,
   domElements,
-  injectGlobal,
 } from "@beae-ui/system"
-import { EmotionCache } from "@emotion/utils"
-import createCache from "@emotion/cache"
+
+import { setupColorModeContext } from "@beae-ui/color-mode"
+import { injectResetStyles, injectThemeGlobalStyles } from "./helpers/css-reset"
 import { EmotionCacheInjectionSymbol } from "@beae-ui/styled"
 
-import { MergedIcons, parseIcons } from "./parse-icons"
-import { injectResetStyles, injectThemeGlobalStyles } from "./helpers/css-reset"
 import internalIcons from "./icon.internals"
-import { BeaePluginOptions } from "./helpers/plugin.types"
-import { ThemeOverride } from "./extend-theme"
-import { mode } from "@beae-ui/theme-tools"
+import { MergedIcons, parseIcons } from "./parse-icons"
+
+// Type imports
+import type { Plugin } from "vue"
+import type { Dict } from "@beae-ui/utils"
+import type { EmotionCache } from "@emotion/cache"
+import type { WithCSSVar } from "@beae-ui/styled-system"
+import type { ThemeOverride } from "@beae-ui/theme-utils"
+import type { ColorModeRef } from "@beae-ui/color-mode"
+import type { BeaePluginOptions } from "./helpers/plugin.types"
 
 const defaultPluginOptions: BeaePluginOptions = {
   cssReset: true,
@@ -32,6 +35,14 @@ const defaultPluginOptions: BeaePluginOptions = {
   experimental: {
     disableFactoryComponents: false,
   },
+}
+
+/**
+ * Helper function to extend Beae plugin with options
+ * It just returns its arguments with typescript types added
+ */
+export function extendBeae(options = defaultPluginOptions) {
+  return options
 }
 
 export function createBeae(_options: BeaePluginOptions = {}) {
@@ -72,8 +83,6 @@ export function createBeae(_options: BeaePluginOptions = {}) {
         useSystemColorMode: theme.config?.useSystemColorMode || false,
         initialColorMode: colorMode,
         disableTransitionOnChange:
-          // TODO: Make this function on later
-          // @ts-ignore
           theme.config?.disableTransitionOnChange || false,
       })
 
@@ -121,25 +130,6 @@ export function createBeae(_options: BeaePluginOptions = {}) {
 
       // Set color mode property
       app.config.globalProperties.$mode = mode
-
-      // app.provide(ToastContextSymbol, toastContext)
-
-      // Setup toast container component
-      // if (canUseDOM()) {
-      //   const toastContainer =
-      //     document.getElementById(ToastContainerId) ||
-      //     document.createElement("div")
-      //   toastContainer.id = ToastContainerId
-      //   toastContainer.setAttribute("data-beae-toast-container", "")
-
-      //   if (!document.body.contains(toastContainer)) {
-      //     document.body.insertAdjacentElement("afterend", toastContainer)
-      //   }
-
-      //   const vnode = createVNode(CToastContainer)
-      //   vnode.appContext = app._context
-      //   render(vnode, toastContainer)
-      // }
     },
   }
 

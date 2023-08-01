@@ -1,7 +1,7 @@
 /**
- * Thank you @albert for this piece of art!
+ * Thank you @markdalgleish for this piece of art!
  */
-import { isObject } from "@beae-ui/utils"
+import { isObject } from "@beae-ui/shared-utils"
 
 export type Operand = string | number | { reference: string }
 type Operator = "+" | "-" | "*" | "/"

@@ -15,7 +15,7 @@ export interface ThemeProviderProps {
 }
 
 const ThemeProvider: ComponentWithProps<ThemeProviderProps> = defineComponent({
-  name: "BeaeThemeProvider",
+  name: "ThemeProvider",
   props: {
     value: {
       type: [Object] as PropType<Theme>,

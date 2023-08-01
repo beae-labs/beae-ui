@@ -1,6 +1,8 @@
-import { runIfFn, isObject, toMediaQueryString } from "@beae-ui/utils"
+import type { ResponsiveValue, WithCSSVar } from "./utils"
+
+import { runIfFn, isObject } from "@beae-ui/shared-utils"
 import mergeWith from "lodash.mergewith"
-import { ResponsiveValue, WithCSSVar } from "./utils"
+import { toMediaQueryString } from "@beae-ui/breakpoint-utils"
 
 type Theme = WithCSSVar<Record<string, any>>
 
@@ -52,7 +54,6 @@ function createResolver(theme: Theme) {
     for (let i = 0; i < len; i++) {
       const key = breakpointUtil.details[i]
       const nextKey = breakpointUtil.details[getNextIndex(normalized, i)]
-      // @ts-ignore
       const query = toMediaQueryString(key.minW, nextKey?._minW)
 
       const styles = runIfFn(config[prop]?.[normalized[i]], props)

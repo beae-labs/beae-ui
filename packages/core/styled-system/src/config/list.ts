@@ -1,6 +1,8 @@
-import * as CSS from "csstype"
-import { Config } from "../utils/prop-config"
-import { ResponsiveValue, t } from "../utils"
+import type * as CSS from "csstype"
+import type { Config } from "../utils/prop-config"
+import type { ResponsiveValue } from "../utils"
+
+import { t } from "../utils"
 
 export const list: Config = {
   listStyleType: true,

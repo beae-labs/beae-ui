@@ -1,7 +1,21 @@
-import { TinyColor, readability, isReadable, random } from "@ctrl/tinycolor"
-import type { WCAG2Parms } from "@ctrl/tinycolor"
-import { memoizedGet as get, isEmptyObject } from "@beae-ui/utils"
-import type { Dict } from "@beae-ui/utils"
+import { getCSSVar } from "@beae-ui/styled-system"
+import {
+  toHex,
+  parseToRgba,
+  transparentize as setTransparency,
+  mix,
+  darken as reduceLightness,
+  lighten as increaseLightness,
+  getContrast,
+  parseToHsla,
+  hsla,
+  getLuminance,
+} from "color2k"
+
+import get from "dlv"
+
+type Dict = { [key: string]: any }
+const isEmptyObject = (obj: any) => Object.keys(obj).length === 0
 
 /**
  * Get the color raw value from theme
@@ -13,8 +27,26 @@ import type { Dict } from "@beae-ui/utils"
  */
 export const getColor = (theme: Dict, color: string, fallback?: string) => {
   const hex = get(theme, `colors.${color}`, color)
-  const { isValid } = new TinyColor(hex)
-  return isValid ? hex : fallback
+  try {
+    toHex(hex)
+    return hex
+  } catch {
+    // returning black to stay consistent with TinyColor behaviour so as to prevent breaking change
+    return fallback ?? "#000000"
+  }
+}
+
+/**
+ * Get the color css variable from theme
+ */
+export const getColorVar = (theme: Dict, color: string, fallback?: string) => {
+  return getCSSVar(theme, "colors", color) ?? fallback
+}
+
+const getBrightness = (color: string) => {
+  const [r, g, b] = parseToRgba(color)
+  // http://www.w3.org/TR/AERT#color-contrast
+  return (r * 299 + g * 587 + b * 114) / 1000
 }
 
 /**
@@ -25,7 +57,8 @@ export const getColor = (theme: Dict, color: string, fallback?: string) => {
  */
 export const tone = (color: string) => (theme: Dict) => {
   const hex = getColor(theme, color)
-  const isDark = new TinyColor(hex).isDark()
+  const brightness = getBrightness(hex)
+  const isDark = brightness < 128
   return isDark ? "dark" : "light"
 }
 
@@ -57,7 +90,7 @@ export const isLight = (color: string) => (theme: Dict) =>
 export const transparentize =
   (color: string, opacity: number) => (theme: Dict) => {
     const raw = getColor(theme, color)
-    return new TinyColor(raw).setAlpha(opacity).toRgbString()
+    return setTransparency(raw, 1 - opacity)
   }
 
 /**
@@ -69,7 +102,7 @@ export const transparentize =
  */
 export const whiten = (color: string, amount: number) => (theme: Dict) => {
   const raw = getColor(theme, color)
-  return new TinyColor(raw).mix("#fff", amount).toHexString()
+  return toHex(mix(raw, "#fff", amount))
 }
 
 /**
@@ -81,7 +114,7 @@ export const whiten = (color: string, amount: number) => (theme: Dict) => {
  */
 export const blacken = (color: string, amount: number) => (theme: Dict) => {
   const raw = getColor(theme, color)
-  return new TinyColor(raw).mix("#000", amount).toHexString()
+  return toHex(mix(raw, "#000", amount / 100))
 }
 
 /**
@@ -93,7 +126,7 @@ export const blacken = (color: string, amount: number) => (theme: Dict) => {
  */
 export const darken = (color: string, amount: number) => (theme: Dict) => {
   const raw = getColor(theme, color)
-  return new TinyColor(raw).darken(amount).toHexString()
+  return toHex(reduceLightness(raw, amount / 100))
 }
 
 /**
@@ -103,8 +136,10 @@ export const darken = (color: string, amount: number) => (theme: Dict) => {
  *
  * @deprecated This will be removed in the next major release.
  */
-export const lighten = (color: string, amount: number) => (theme: Dict) =>
-  new TinyColor(getColor(theme, color)).lighten(amount).toHexString()
+export const lighten = (color: string, amount: number) => (theme: Dict) => {
+  const raw = getColor(theme, color)
+  toHex(increaseLightness(raw, amount / 100))
+}
 
 /**
  * Checks the contract ratio of between 2 colors,
@@ -116,7 +151,12 @@ export const lighten = (color: string, amount: number) => (theme: Dict) =>
  * @deprecated This will be removed in the next major release.
  */
 export const contrast = (fg: string, bg: string) => (theme: Dict) =>
-  readability(getColor(theme, bg), getColor(theme, fg))
+  getContrast(getColor(theme, bg), getColor(theme, fg))
+
+interface WCAG2Params {
+  level?: "AA" | "AAA"
+  size?: "large" | "small"
+}
 
 /**
  * Checks if a color meets the Web Content Accessibility
@@ -129,15 +169,47 @@ export const contrast = (fg: string, bg: string) => (theme: Dict) =>
  * @deprecated This will be removed in the next major release.
  */
 export const isAccessible =
-  (textColor: string, bgColor: string, options?: WCAG2Parms) => (theme: Dict) =>
+  (textColor: string, bgColor: string, options?: WCAG2Params) =>
+  (theme: Dict) =>
     isReadable(getColor(theme, bgColor), getColor(theme, textColor), options)
 
+export function isReadable(
+  color1: string,
+  color2: string,
+  wcag2: WCAG2Params = { level: "AA", size: "small" },
+): boolean {
+  const readabilityLevel = readability(color1, color2)
+  switch ((wcag2.level ?? "AA") + (wcag2.size ?? "small")) {
+    case "AAsmall":
+    case "AAAlarge":
+      return readabilityLevel >= 4.5
+    case "AAlarge":
+      return readabilityLevel >= 3
+    case "AAAsmall":
+      return readabilityLevel >= 7
+    default:
+      return false
+  }
+}
+
+export function readability(color1: string, color2: string): number {
+  return (
+    (Math.max(getLuminance(color1), getLuminance(color2)) + 0.05) /
+    (Math.min(getLuminance(color1), getLuminance(color2)) + 0.05)
+  )
+}
 /**
  *
  * @deprecated This will be removed in the next major release.
  */
-export const complementary = (color: string) => (theme: Dict) =>
-  new TinyColor(getColor(theme, color)).complement().toHexString()
+export const complementary = (color: string) => (theme: Dict) => {
+  const raw = getColor(theme, color)
+  const hsl = parseToHsla(raw)
+  const complementHsl: [number, number, number, number] = Object.assign(hsl, [
+    (hsl[0] + 180) % 360,
+  ])
+  return toHex(hsla(...complementHsl))
+}
 
 export function generateStripe(
   size = "1rem",
@@ -170,8 +242,13 @@ interface RandomColorOptions {
   colors?: string[]
 }
 
+const randomHex = () =>
+  `#${Math.floor(Math.random() * 0xffffff)
+    .toString(16)
+    .padEnd(6, "0")}`
+
 export function randomColor(opts?: RandomColorOptions) {
-  const fallback = random().toHexString()
+  const fallback = randomHex()
 
   if (!opts || isEmptyObject(opts)) {
     return fallback

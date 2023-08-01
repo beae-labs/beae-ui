@@ -1,6 +1,8 @@
 import { spacing } from "./spacing"
 
 const largeSizes = {
+  max: "max-content",
+  min: "min-content",
   full: "100%",
   "3xs": "14rem",
   "2xs": "16rem",
@@ -16,6 +18,7 @@ const largeSizes = {
   "6xl": "72rem",
   "7xl": "80rem",
   "8xl": "90rem",
+  prose: "60ch",
 }
 
 const container = {
@@ -30,8 +33,5 @@ const sizes = {
   ...largeSizes,
   container,
 }
-
-export type Sizes = typeof spacing &
-  typeof largeSizes & { container: typeof container }
 
 export default sizes

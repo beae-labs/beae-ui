@@ -1,13 +1,14 @@
-import { isObject, runIfFn } from "@beae-ui/utils"
+import type { StyleObjectOrFn } from "./system.types"
+import type { Config, PropConfig } from "./utils/prop-config"
+import type { CssTheme } from "./utils/types"
+
+import { isObject, runIfFn } from "@beae-ui/shared-utils"
 import * as CSS from "csstype"
 import mergeWith from "lodash.mergewith"
 import { pseudoSelectors } from "./pseudos"
 import { systemProps as systemPropConfigs } from "./system"
-import { StyleObjectOrFn } from "./system.types"
 import { expandResponsive } from "./utils/expand-responsive"
-import { Config, PropConfig } from "./utils/prop-config"
 import { splitByComma } from "./utils/split-by-comma"
-import { CssTheme } from "./utils/types"
 
 function isCssVar(value: string): boolean {
   return /^var\(--.+\)$/.test(value)

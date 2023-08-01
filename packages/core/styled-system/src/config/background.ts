@@ -1,11 +1,13 @@
-import * as CSS from "csstype"
+import type * as CSS from "csstype"
 import type { Config } from "../utils/prop-config"
-import { t, Token, transforms } from "../utils"
+import type { Token } from "../utils"
+
+import { t, transforms } from "../utils"
 
 export const background: Config = {
   background: t.colors("background"),
   backgroundColor: t.colors("backgroundColor"),
-  backgroundImage: t.propT("backgroundImage", transforms.bgImage),
+  backgroundImage: t.gradients("backgroundImage"),
   backgroundSize: true,
   backgroundPosition: true,
   backgroundRepeat: true,
@@ -18,7 +20,7 @@ export const background: Config = {
   bgPos: t.prop("backgroundPosition"),
   bgRepeat: t.prop("backgroundRepeat"),
   bgAttachment: t.prop("backgroundAttachment"),
-  bgGradient: t.propT("backgroundImage", transforms.gradient),
+  bgGradient: t.gradients("backgroundImage"),
   bgClip: { transform: transforms.bgClip },
 }
 
@@ -55,11 +57,11 @@ export interface BackgroundProps {
   /**
    * The CSS `background-image` property
    */
-  backgroundImage?: Token<CSS.Property.BackgroundImage>
+  backgroundImage?: Token<CSS.Property.BackgroundImage, "gradients">
   /**
    * The background-gradient shorthand
    */
-  bgGradient?: Token<CSS.Property.BackgroundImage>
+  bgGradient?: Token<CSS.Property.BackgroundImage, "gradients">
   /**
    * The CSS `background-size` property
    */
@@ -75,11 +77,11 @@ export interface BackgroundProps {
   /**
    * The CSS `background-image` property
    */
-  bgImage?: Token<CSS.Property.BackgroundImage>
+  bgImage?: Token<CSS.Property.BackgroundImage, "gradients">
   /**
    * The CSS `background-image` property
    */
-  bgImg?: Token<CSS.Property.BackgroundImage>
+  bgImg?: Token<CSS.Property.BackgroundImage, "gradients">
   /**
    * The CSS `background-repeat` property
    */

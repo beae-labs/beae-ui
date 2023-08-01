@@ -1,7 +1,6 @@
+import { dirname, join } from "path"
 import type { StorybookConfig } from "@storybook/vue3-vite"
-
 import { existsSync, readdirSync } from "fs"
-
 function getStories({ dirname = "components" }) {
   const dirName = `packages/${dirname}`
   const scope = readdirSync(dirName)
@@ -10,20 +9,22 @@ function getStories({ dirname = "components" }) {
     .filter((storyDirname) => existsSync(storyDirname))
     .map((storyDirname) => `../${storyDirname}/*.stories.ts`)
 }
-
 const config: StorybookConfig = {
   stories: [
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    ...getStories({ dirname: "components" }),
+    ...getStories({
+      dirname: "components",
+    }),
   ],
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
+    getAbsolutePath("@storybook/addon-links"),
+    getAbsolutePath("@storybook/addon-essentials"),
+    getAbsolutePath("@storybook/addon-interactions"),
+    getAbsolutePath("@storybook/addon-mdx-gfm"),
   ],
   framework: {
-    name: "@storybook/vue3-vite",
+    name: getAbsolutePath("@storybook/vue3-vite"),
     options: {},
   },
   docs: {
@@ -31,3 +32,10 @@ const config: StorybookConfig = {
   },
 }
 export default config
+/**
+ * This function is used to resolve the absolute path of a package.
+ * It is needed in projects that use Yarn PnP or are set up within a monorepo.
+ */
+function getAbsolutePath(value: string): any {
+  return dirname(require.resolve(join(value, "package.json")))
+}

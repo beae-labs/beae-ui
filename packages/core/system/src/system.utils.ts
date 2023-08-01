@@ -1,5 +1,5 @@
-import { UnionStringArray } from "@beae-ui/utils"
-import { PropType } from "vue"
+import type { UnionStringArray } from "@beae-ui/utils"
+import type { PropType } from "vue"
 
 /**
  * Carefully selected html elements for beae components.
@@ -79,12 +79,3 @@ export type DeepPartial<T> = {
 export type ToPropType<T> = {
   [P in keyof T]?: PropType<T[P]>
 }
-
-const filterClassesInherit = (str: string) =>
-  str
-    .split(" ")
-    .filter((cls, clsIndex) => !(clsIndex > 0 && cls.includes("beae-")))
-    .toString()
-    .replace(",", " ")
-
-export { filterClassesInherit }

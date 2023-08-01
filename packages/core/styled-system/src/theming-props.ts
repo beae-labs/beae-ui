@@ -1,4 +1,4 @@
-import { omit } from "@beae-ui/utils"
+import { omit } from "@beae-ui/object-utils"
 import { ThemeTypings } from "./theme.types"
 import { ResponsiveValue } from "./utils"
 

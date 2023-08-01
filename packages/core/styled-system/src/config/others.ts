@@ -1,6 +1,7 @@
+import type { Config } from "../utils/prop-config"
+import type { ResponsiveValue, Token } from "../utils"
+
 import { memoizedGet as get } from "../get"
-import { Config } from "../utils/prop-config"
-import { ResponsiveValue, Token } from "../utils/types"
 
 const srOnly = {
   border: "0px",

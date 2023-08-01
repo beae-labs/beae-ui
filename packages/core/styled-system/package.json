@@ -32,10 +32,11 @@
     "postpack": "clean-package restore"
   },
   "dependencies": {
-    "@beae-ui/utils": "workspace:^",
+    "@beae-ui/breakpoint-utils": "workspace:^",
+    "@beae-ui/object-utils": "workspace:^",
+    "@beae-ui/shared-utils": "workspace:^",
     "csstype": "^3.1.2",
-    "lodash.mergewith": "^4.6.2",
-    "vue": "^3.3.4"
+    "lodash.mergewith": "^4.6.2"
   },
   "devDependencies": {
     "@types/lodash.mergewith": "^4.6.7",

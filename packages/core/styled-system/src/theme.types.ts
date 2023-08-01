@@ -1,4 +1,4 @@
-import { BaseThemeTypings } from "./shared.types"
+import type { BaseThemeTypings } from "./shared.types"
 import type { ThemeTypings as GeneratedThemeTypings } from "./theming.types"
 
 /**

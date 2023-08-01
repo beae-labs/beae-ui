@@ -1,29 +1,21 @@
+import type { ThemeConfig, ThemeDirection } from "./theme.types"
+
 import { components } from "./components"
-import foundations, { ColorHues } from "./foundations"
+import { foundations } from "./foundations"
 import { semanticTokens } from "./semantic-tokens"
-import styles from "./styles"
-import { ThemeDirection } from "./theme.types"
+import { styles } from "./styles"
 
 const direction: ThemeDirection = "ltr"
 
-export type ColorMode = "light" | "dark"
-
-export interface ColorModeOptions {
-  initialColorMode?: ColorMode
-  useSystemColorMode?: boolean
-  cssVarPrefix?: string
-}
-
-/**
- * Color mode config
- */
-const config: ColorModeOptions = {
+const config: ThemeConfig = {
   useSystemColorMode: false,
   initialColorMode: "light",
   cssVarPrefix: "beae",
 }
 
 export const theme = {
+  semanticTokens,
+  direction,
   ...foundations,
   components,
   styles,
@@ -31,9 +23,9 @@ export const theme = {
 }
 
 export type Theme = typeof theme
+
 export * from "./theme.types"
 export * from "./utils/is-beae-theme"
-export type { ColorHues }
 
 export default theme
 

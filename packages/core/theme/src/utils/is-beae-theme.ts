@@ -1,5 +1,6 @@
-import { isObject } from "@beae-ui/utils"
 import type { BeaeTheme } from "../theme.types"
+
+import { isObject } from "@beae-ui/shared-utils"
 
 export const requiredBeaeThemeKeys: (keyof BeaeTheme)[] = [
   "borders",

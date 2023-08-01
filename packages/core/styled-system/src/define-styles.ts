@@ -1,4 +1,4 @@
-import { SystemStyleObject } from "./system.types"
+import type { SystemStyleObject } from "./system.types"
 
 type Dict<T = any> = { [key: string]: T }
 

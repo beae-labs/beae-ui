@@ -57,7 +57,7 @@ export interface FocusLockProps {
   autoFocus?: boolean
 }
 
-export const LFocusLock: ComponentWithProps<DeepPartial<FocusLockProps>> =
+export const FocusLock: ComponentWithProps<DeepPartial<FocusLockProps>> =
   defineComponent({
     name: "LFocusLock",
     emits: ["activate", "deactivate"],

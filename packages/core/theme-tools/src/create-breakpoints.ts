@@ -1,4 +1,4 @@
-import { warn } from "@beae-ui/utils"
+import { warn } from "@beae-ui/shared-utils"
 
 export interface BaseBreakpointConfig {
   sm: string

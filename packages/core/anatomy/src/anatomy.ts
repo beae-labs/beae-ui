@@ -1,183 +1,119 @@
 /**
- * Hey! Welcome to @beae-ui/vue-next Anatomy
- *
- * The anatomy of all beae components
- *
- * @see Docs     https://vue.beae-ui.com/anatomy
- * @see Source   https://github.com/rhp-island/beae-ui/blob/master/packages/anatomy/src/anatomy/anatomy.ts
- * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2
+ * Used to define the anatomy/parts of a component in a way that provides
+ * a consistent API for `className`, css selector and `theming`.
  */
+export function anatomy<T extends string = string>(
+  name: string,
+  map = {} as Record<T, Part>,
+): Anatomy<T> {
+  let called = false
 
-import { anatomy } from "@beae-ui/theme-tools"
+  /**
+   * Prevents user from calling `.parts` multiple times.
+   * It should only be called once.
+   */
+  function assert() {
+    if (!called) {
+      called = true
+      return
+    }
 
-/**
- * **Accordion anatomy**
- * - Root: the root container of the accordion
- * - Container: the accordion item contains the button and panel
- * - Button: the button is the trigger for the panel
- * - Panel: the panel is the content of the accordion item
- * - Icon: the expanded/collapsed icon
- */
-export const accordionAnatomy = anatomy("accordion")
-  .parts("root", "container", "button", "panel")
-  .extend("icon")
+    throw new Error(
+      "[anatomy] .part(...) should only be called once. Did you mean to use .extend(...) ?",
+    )
+  }
 
-/**
- * **Alert anatomy**
- * - Title: the alert's title
- * - Description: the alert's description
- * - Icon: the alert's icon
- */
-export const alertAnatomy = anatomy("alert")
-  .parts("title", "description", "container")
-  .extend("icon", "spinner")
+  /**
+   * Add the core parts of the components
+   */
+  function parts<V extends string>(...values: V[]) {
+    assert()
+    for (const part of values) {
+      ;(map as any)[part] = toPart(part)
+    }
+    return anatomy(name, map) as unknown as Omit<Anatomy<V>, "parts">
+  }
 
-/**
- * **Avatar anatomy**
- * - Container: the container for the avatar
- * - Label: the avatar initials text
- * - Excess Label: the label or text that represents excess avatar count.
- * Typically used in avatar groups.
- * - Group: the container for the avatar group
- */
-export const avatarAnatomy = anatomy("avatar")
-  .parts("label", "badge", "container")
-  .extend("excessLabel", "group")
+  /**
+   * Extend the component anatomy to includes new parts
+   */
+  function extend<U extends string>(...parts: U[]) {
+    for (const part of parts) {
+      if (part in map) continue
+      ;(map as any)[part] = toPart(part)
+    }
+    return anatomy(name, map) as unknown as Omit<Anatomy<T | U>, "parts">
+  }
 
-/**
- * **Breadcrumb anatomy**
- * - Item: the container for a breadcrumb item
- * - Link: the element that represents the breadcrumb link
- * - Container: the container for the breadcrumb items
- * - Separator: the separator between breadcrumb items
- */
-export const breadcrumbAnatomy = anatomy("breadcrumb")
-  .parts("link", "item", "container")
-  .extend("separator")
+  /**
+   * Get all selectors for the component anatomy
+   */
+  function selectors() {
+    const value = Object.fromEntries(
+      Object.entries(map).map(([key, part]) => [key, (part as any).selector]),
+    )
+    return value as Record<T, string>
+  }
 
-export const buttonAnatomy = anatomy("button").parts()
+  /**
+   * Get all classNames for the component anatomy
+   */
+  function classnames() {
+    const value = Object.fromEntries(
+      Object.entries(map).map(([key, part]) => [key, (part as any).className]),
+    )
+    return value as Record<T, string>
+  }
 
-export const checkboxAnatomy = anatomy("checkbox")
-  .parts("control", "icon", "container")
-  .extend("label")
+  /**
+   * Creates the part object for the given part
+   */
+  function toPart(part: string) {
+    const el = ["container", "root"].includes(part ?? "")
+      ? [name]
+      : [name, part]
+    const attr = el.filter(Boolean).join("__")
+    const className = `beae-${attr}`
 
-export const circularProgressAnatomy = anatomy("progress")
-  .parts("track", "filledTrack")
-  .extend("label")
+    const partObj = {
+      className,
+      selector: `.${className}`,
+      toString: () => part,
+    }
 
-export const drawerAnatomy = anatomy("drawer")
-  .parts("overlay", "dialogContainer", "dialog")
-  .extend("header", "closeButton", "body", "footer")
+    return partObj as typeof partObj & string
+  }
 
-export const editableAnatomy = anatomy("editable").parts(
-  "preview",
-  "input",
-  "textarea",
-)
+  /**
+   * Used to get the derived type of the anatomy
+   */
+  const __type = {} as T
 
-export const formAnatomy = anatomy("form").parts(
-  "container",
-  "requiredIndicator",
-  "helperText",
-)
+  return {
+    parts,
+    toPart,
+    extend,
+    selectors,
+    classnames,
+    get keys(): T[] {
+      return Object.keys(map) as T[]
+    },
+    __type,
+  }
+}
 
-export const formErrorAnatomy = anatomy("formError").parts("text", "icon")
+type Part = {
+  className: string
+  selector: string
+  toString: () => string
+}
 
-export const inputAnatomy = anatomy("input").parts("addon", "field", "element")
-
-export const listAnatomy = anatomy("list").parts("container", "item", "icon")
-
-export const menuAnatomy = anatomy("menu")
-  .parts("button", "list", "item")
-  .extend("groupTitle", "command", "divider")
-
-export const modalAnatomy = anatomy("modal")
-  .parts("overlay", "dialogContainer", "dialog")
-  .extend("header", "closeButton", "body", "footer")
-
-export const numberInputAnatomy = anatomy("numberinput").parts(
-  "root",
-  "field",
-  "stepperGroup",
-  "stepper",
-)
-
-export const pinInputAnatomy = anatomy("pininput").parts("field")
-
-export const popoverAnatomy = anatomy("popover")
-  .parts("content", "header", "body", "footer")
-  .extend("popper", "arrow", "closeButton")
-
-export const progressAnatomy = anatomy("progress").parts(
-  "label",
-  "filledTrack",
-  "track",
-)
-
-export const radioAnatomy = anatomy("radio").parts(
-  "container",
-  "control",
-  "label",
-)
-
-export const selectAnatomy = anatomy("select").parts("field", "icon")
-
-export const sliderAnatomy = anatomy("slider").parts(
-  "container",
-  "track",
-  "thumb",
-  "filledTrack",
-)
-
-export const statAnatomy = anatomy("stat").parts(
-  "container",
-  "label",
-  "helpText",
-  "number",
-  "icon",
-)
-
-export const switchAnatomy = anatomy("switch").parts(
-  "container",
-  "track",
-  "thumb",
-)
-
-export const tableAnatomy = anatomy("table").parts(
-  "table",
-  "thead",
-  "tbody",
-  "tr",
-  "th",
-  "td",
-  "tfoot",
-  "caption",
-)
-
-export const tabsAnatomy = anatomy("tabs").parts(
-  "root",
-  "tab",
-  "tablist",
-  "tabpanel",
-  "tabpanels",
-  "indicator",
-)
-
-/**
- * **Tag anatomy**
- * - Container: the container for the tag
- * - Label: the text content of the tag
- * - closeButton: the close button for the tag
- */
-export const tagAnatomy = anatomy("tag").parts(
-  "container",
-  "label",
-  "closeButton",
-)
-
-export const cardAnatomy = anatomy("card").parts(
-  "container",
-  "header",
-  "body",
-  "footer",
-)
+type Anatomy<T extends string> = {
+  parts: <V extends string>(...values: V[]) => Omit<Anatomy<V>, "parts">
+  toPart: (part: string) => Part
+  extend: <U extends string>(...parts: U[]) => Omit<Anatomy<T | U>, "parts">
+  selectors: () => Record<T, string>
+  classnames: () => Record<T, string>
+  keys: T[]
+  __type: T
+}

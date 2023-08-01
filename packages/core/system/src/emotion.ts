@@ -33,7 +33,7 @@ export const {
   getRegisteredStyles,
   injectGlobal,
   keyframes,
-  css: cssEmotion,
+  css,
   sheet,
   cache,
 } = createEmotion({

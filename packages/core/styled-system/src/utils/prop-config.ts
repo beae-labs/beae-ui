@@ -1,7 +1,8 @@
+import type { ThemeScale } from "../create-theme-vars"
+import type { CssTheme, Transform } from "./types"
+
 import * as CSS from "csstype"
 import { createTransform } from "./create-transform"
-import { ThemeScale } from "../create-theme-vars"
-import type { CssTheme, Transform } from "./types"
 
 type CSSProp = keyof CSS.Properties | (string & {})
 type MaybeArray<T> = T | T[]
@@ -50,7 +51,6 @@ export function toConfig(scale: ThemeScale, transform?: Transform) {
 
 interface Opts {
   scale?: ThemeScale
-  // eslint-disable-next-line @typescript-eslint/member-delimiter-style
   property: { ltr: MaybeArray<CSSProp>; rtl: MaybeArray<CSSProp> }
   transform?: Transform
 }

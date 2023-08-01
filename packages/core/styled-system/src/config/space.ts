@@ -1,6 +1,8 @@
-import * as CSS from "csstype"
-import { Config } from "../utils/prop-config"
-import { t, Token } from "../utils"
+import type * as CSS from "csstype"
+import type { Config } from "../utils/prop-config"
+import type { Token } from "../utils"
+
+import { t } from "../utils"
 
 export const space: Config = {
   margin: t.spaceT("margin"),

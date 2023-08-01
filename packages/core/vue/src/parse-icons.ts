@@ -18,7 +18,7 @@ export type MergedIcons = {
  * Currently the parseIcon function only supports icon parsing
  * from the following libraries:
  * - Feather icons: feathericons.com (feather-icons-paths)
- * - FontAwesome: fontawesome.com (@fontawesome/free-solid-icons)
+ * - FontAwesome: fontawesome.com (@fortawesome/free-solid-icons)
  *
  * The reason for this is that the above packages follow a given signature/convention.
  * Any ideas around how to improve this are welcome. Please send in a PR or open an issue

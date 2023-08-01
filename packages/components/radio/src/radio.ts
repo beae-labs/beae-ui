@@ -34,7 +34,6 @@ import {
   omitThemingProps,
   SystemStyleObject,
   beae,
-  layoutPropNames,
 } from "@beae-ui/system"
 import { UseRadioProps, useRadio } from "./use-radio"
 import { vueThemingProps } from "../../../utilities/prop-utils/src"
@@ -156,7 +155,7 @@ export const Radio: ComponentWithProps<DeepPartial<RadioProps>> =
         ...styles.value?.label,
       }
 
-      const [layoutProps, otherProps] = split(htmlProps, layoutPropNames as any)
+      const [layoutProps, otherProps] = split(htmlProps, {} as any)
 
       return () => {
         const children = getValidChildren(slots)

@@ -1,5 +1,5 @@
 import { StorageManager } from "@beae-ui/color-mode"
-import { ThemeOverride } from "../extend-theme"
+import { ThemeOverride } from "@beae-ui/theme-utils"
 import { Options } from "@emotion/cache"
 
 interface ExtendIconsPath {
@@ -16,13 +16,12 @@ interface IconsOptions {
 export interface ExperimentalOptions {
   disableFactoryComponents?: boolean
 }
-
 export interface BeaePluginOptions {
   cssReset?: boolean
   extendTheme?: ThemeOverride
   icons?: IconsOptions
-  isBaseTheme?: boolean
-  emotionCacheOptions?: Options
   colorModeManager?: StorageManager
+  emotionCacheOptions?: Options
+  isBaseTheme?: boolean
   experimental?: ExperimentalOptions
 }

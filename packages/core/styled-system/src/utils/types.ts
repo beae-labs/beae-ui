@@ -1,5 +1,5 @@
-import { AnalyzeBreakpointsReturn } from "@beae-ui/utils"
-import { ThemeTypings } from "../theme.types"
+import type { AnalyzeBreakpointsReturn } from "@beae-ui/breakpoint-utils"
+import type { ThemeTypings } from "../theme.types"
 
 export type ResponsiveArray<T> = Array<T | null>
 
@@ -17,12 +17,11 @@ export type Token<
   CSSType,
   ThemeKey = unknown,
 > = ThemeKey extends keyof ThemeTypings
-  ? ResponsiveValue<Union<CSSType | ThemeTypings[ThemeKey]>>
+  ? ResponsiveValue<CSSType | ThemeTypings[ThemeKey]>
   : ResponsiveValue<CSSType>
 
 export type CSSMap = Record<
   string,
-  // eslint-disable-next-line @typescript-eslint/member-delimiter-style
   { value: string; var: string; varRef: string }
 >
 

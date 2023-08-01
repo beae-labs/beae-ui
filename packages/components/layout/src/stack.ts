@@ -201,8 +201,8 @@ export const Stack: ComponentWithProps<StackProps> = defineComponent({
 /**
  * A view that arranges its children in a horizontal line.
  */
-export const LHStack: ComponentWithProps<StackProps> = defineComponent({
-  name: "LHStack",
+export const HStack: ComponentWithProps<StackProps> = defineComponent({
+  name: "HStack",
   props: stackProps,
   setup(props, { attrs, slots }) {
     return () =>
@@ -222,8 +222,8 @@ export const LHStack: ComponentWithProps<StackProps> = defineComponent({
 /**
  * A view that arranges its children in a vertical line.
  */
-export const LVStack: ComponentWithProps<StackProps> = defineComponent({
-  name: "LVStack",
+export const VStack: ComponentWithProps<StackProps> = defineComponent({
+  name: "VStack",
   props: stackProps,
   setup(props, { attrs, slots }) {
     return () =>

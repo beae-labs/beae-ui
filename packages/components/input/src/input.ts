@@ -20,8 +20,8 @@
  *
  * Input component is a component that is used to get user input in a text field
  *
- * @see Docs     https://next.vue.beae-ui.com/c-input
- * @see Source   https://github.com/beae-ui/beae-ui-vue-next/blob/master/packages/c-input/src/c-input/c-input.ts
+ * @see Docs     https://next.vue.beae-ui.com/input
+ * @see Source   https://github.com/beae-ui/beae-ui-vue-next/blob/master/packages/input/src/input/input.ts
  * @see WAI-ARIA https://www.w3.org/TR/wai-aria-practices-1.2
  */
 

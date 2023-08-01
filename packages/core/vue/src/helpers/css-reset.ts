@@ -1,12 +1,13 @@
-import { injectGlobal, css } from "@beae-ui/system"
+import { injectGlobal, createCache } from "@beae-ui/system"
+import { css } from "@beae-ui/styled-system"
 import { cssResetStyles } from "@beae-ui/css-reset"
-import { ThemeOverride } from "../extend-theme"
+import { ThemeOverride } from "@beae-ui/theme-utils"
 import { get, runIfFn } from "@beae-ui/utils"
 import { ColorModeRef } from "@beae-ui/color-mode"
+import { computed, ref, watch, watchEffect } from "vue"
+import type { EmotionCache } from "@emotion/cache"
 import { serializeStyles } from "@emotion/serialize"
 import { StyleSheet } from "@emotion/sheet"
-import { computed, ref, watch, watchEffect } from "vue"
-import createCache, { EmotionCache } from "@emotion/cache"
 import { insertStyles, SerializedStyles } from "@emotion/utils"
 
 /** Injects CSS reset styles */
@@ -29,10 +30,12 @@ export function injectThemeGlobalStyles(
   )
   if (!globalStyles.value) return undefined
 
-  const cache = createCache({
-    key: "beae-global",
-    nonce: "__beae__",
-  })
+  const cache =
+    _cache ||
+    createCache({
+      key: "beae-global",
+      nonce: "__beae__",
+    })
 
   const _globalStyles = computed(() => css(globalStyles.value)(theme))
 
@@ -51,14 +54,17 @@ export function injectThemeGlobalStyles(
         key: `${key} ${serializedStyles.value.name}`,
         nonce: cache.sheet.nonce,
         container: cache.sheet.container,
-        // @ts-expect-error `isSpeedy` is not typed
+        // @ts-ignore
         speedy: cache.sheet.isSpeedy,
       })
 
       let rehydrating = false
-      let node: HTMLStyleElement | null = document.querySelector(
-        `style[data-emotion="${key} ${serializedStyles.value.name}"]`,
-      )
+      let node: HTMLStyleElement | null =
+        typeof document !== "undefined"
+          ? document.querySelector(
+              `style[data-emotion="${key} ${serializedStyles.value.name}"]`,
+            )
+          : null
 
       if (cache.sheet.tags.length) {
         sheet.before = cache.sheet.tags[0]
@@ -101,7 +107,7 @@ export function injectThemeGlobalStyles(
       sheet.flush()
     }
 
-    /* @ts-expect-error Sheet type not correctly assigned*/
+    // @ts-ignore
     cache.insert(``, serializedStyles.value, sheet, false)
   })
 }

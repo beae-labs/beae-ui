@@ -32,22 +32,19 @@
     "postpack": "clean-package restore"
   },
   "dependencies": {
-    "@beae-ui/attr-utils": "workspace:^",
     "@beae-ui/color-mode": "workspace:^",
-    "@beae-ui/styled": "workspace:^",
     "@beae-ui/styled-system": "workspace:^",
-    "@beae-ui/theme": "workspace:^",
     "@beae-ui/utils": "workspace:^",
+    "@beae-ui/vue-utils": "workspace:^",
     "@emotion/cache": "^11.11.0",
     "@emotion/css": "^11.11.2",
-    "@emotion/serialize": "^1.1.2",
-    "lodash.camelcase": "^4.3.0",
-    "lodash.kebabcase": "^4.1.1",
-    "lodash.memoize": "^4.1.2",
-    "vue": "^3.3.4"
+    "@emotion/serialize": "^1.1.2"
   },
   "devDependencies": {
-    "clean-package": "2.2.0"
+    "@beae-ui/theme": "workspace:^",
+    "@beae-ui/theme-utils": "workspace:^",
+    "clean-package": "2.2.0",
+    "vue": "^3.3.4"
   },
   "clean-package": "../../../clean-package.config.json",
   "tsup": {

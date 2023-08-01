@@ -1,6 +1,7 @@
-import { isObject } from "@beae-ui/utils"
 import type { ThemeScale } from "../create-theme-vars"
 import type { Transform } from "./types"
+
+import { isObject } from "@beae-ui/shared-utils"
 
 interface CreateTransformOptions {
   scale: ThemeScale

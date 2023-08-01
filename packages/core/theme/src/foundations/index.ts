@@ -1,6 +1,6 @@
 import borders from "./borders"
 import breakpoints from "./breakpoints"
-import colors, { ColorHues } from "./colors"
+import colors from "./colors"
 import radii from "./radius"
 import shadows from "./shadows"
 import sizes from "./sizes"
@@ -8,11 +8,13 @@ import { spacing } from "./spacing"
 import transition from "./transition"
 import typography from "./typography"
 import zIndices from "./z-index"
+import blur from "./blur"
 
-const theme = {
+export const foundations = {
   breakpoints,
   zIndices,
   radii,
+  blur,
   colors,
   ...typography,
   sizes,
@@ -21,8 +23,3 @@ const theme = {
   borders,
   transition,
 }
-
-export type Theme = typeof theme
-export type { ColorHues }
-
-export default theme

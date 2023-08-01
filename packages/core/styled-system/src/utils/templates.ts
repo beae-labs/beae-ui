@@ -96,21 +96,3 @@ export const flexDirectionTemplate = {
     divide: "--beae-divide-y-reverse",
   },
 }
-
-const owlSelector = "& > :not(style) ~ :not(style)"
-
-export const spaceXTemplate = {
-  [owlSelector]: {
-    marginInlineStart:
-      "calc(var(--beae-space-x) * calc(1 - var(--beae-space-x-reverse)))",
-    marginInlineEnd: "calc(var(--beae-space-x) * var(--beae-space-x-reverse))",
-  },
-}
-
-export const spaceYTemplate = {
-  [owlSelector]: {
-    marginTop:
-      "calc(var(--beae-space-y) * calc(1 - var(--beae-space-y-reverse)))",
-    marginBottom: "calc(var(--beae-space-y) * var(--beae-space-y-reverse))",
-  },
-}

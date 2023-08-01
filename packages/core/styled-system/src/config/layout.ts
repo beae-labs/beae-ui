@@ -1,6 +1,8 @@
-import * as CSS from "csstype"
-import { Config } from "../utils/prop-config"
-import { Length, t, Token, transforms } from "../utils"
+import type * as CSS from "csstype"
+import type { Config } from "../utils/prop-config"
+import type { Length, Token } from "../utils"
+
+import { t, transforms } from "../utils"
 
 export const layout: Config = {
   width: t.sizesT("width"),
@@ -23,6 +25,23 @@ export const layout: Config = {
   overscrollBehaviorX: true,
   overscrollBehaviorY: true,
   display: true,
+  aspectRatio: true,
+  hideFrom: {
+    scale: "breakpoints",
+    transform: (value: string, theme) => {
+      const breakpoint = theme.__breakpoints?.get(value)?.minW ?? value
+      const mq = `@media screen and (min-width: ${breakpoint})`
+      return { [mq]: { display: "none" } }
+    },
+  },
+  hideBelow: {
+    scale: "breakpoints",
+    transform: (value: string, theme) => {
+      const breakpoint = theme.__breakpoints?.get(value)?._minW ?? value
+      const mq = `@media screen and (max-width: ${breakpoint})`
+      return { [mq]: { display: "none" } }
+    },
+  },
   verticalAlign: true,
   boxSizing: true,
   boxDecorationBreak: true,
@@ -53,6 +72,14 @@ export interface LayoutProps {
    * The CSS `display` property
    */
   display?: Token<CSS.Property.Display>
+  /**
+   * Hides an element from the specified breakpoint and up
+   */
+  hideFrom?: Token<string & {}, "breakpoints">
+  /**
+   * Hides an element below the specified breakpoint
+   */
+  hideBelow?: Token<string & {}, "breakpoints">
   /**
    * The CSS `width` property
    */
@@ -179,4 +206,8 @@ export interface LayoutProps {
    * The CSS `isolation` property
    */
   isolation?: Token<CSS.Property.Isolation>
+  /**
+   * The CSS `aspect-ratio` property
+   */
+  aspectRatio?: Token<CSS.Property.AspectRatio>
 }

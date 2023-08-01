@@ -1,4 +1,4 @@
-import { isObject } from "@beae-ui/utils"
+import { isObject } from "@beae-ui/shared-utils"
 import { CSSVar } from "./css-var"
 
 export type Operand = string | number | CSSVar

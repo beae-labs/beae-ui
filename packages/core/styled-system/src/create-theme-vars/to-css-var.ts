@@ -1,5 +1,6 @@
-import { analyzeBreakpoints } from "@beae-ui/utils"
 import type { WithCSSVar } from "../utils"
+
+import { analyzeBreakpoints } from "@beae-ui/breakpoint-utils"
 import { createThemeVars } from "./create-theme-vars"
 import { extractSemanticTokens, extractTokens, omitVars } from "./theme-tokens"
 import { flattenTokens } from "./flatten-tokens"

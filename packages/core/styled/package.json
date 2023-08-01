@@ -40,14 +40,14 @@
     "@emotion/weak-memoize": "^0.3.1",
     "clsx": "^2.0.0",
     "lodash.camelcase": "^4.3.0",
-    "lodash.memoize": "^4.1.2",
-    "vue": "^3.3.4"
+    "lodash.memoize": "^4.1.2"
   },
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.7",
     "@types/lodash.memoize": "^4.1.7",
     "@types/react": "^18.2.16",
-    "clean-package": "2.2.0"
+    "clean-package": "2.2.0",
+    "vue": "^3.3.4"
   },
   "clean-package": "../../../clean-package.config.json",
   "tsup": {

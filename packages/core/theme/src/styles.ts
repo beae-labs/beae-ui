@@ -1,23 +1,20 @@
-import { mode, Styles } from "@beae-ui/theme-tools"
+import type { Styles } from "@beae-ui/theme-tools"
 
-// @ts-ignore
-const styles: Styles = {
-  global: (props: any) => ({
+export const styles: Styles = {
+  global: {
     body: {
       fontFamily: "body",
-      color: mode("gray.800", "whiteAlpha.900")(props),
-      bg: mode("white", "gray.800")(props),
-      transition: "background-color 0.2s",
+      color: "beae-body-text",
+      bg: "beae-body-bg",
+      transitionProperty: "background-color",
+      transitionDuration: "normal",
       lineHeight: "base",
     },
     "*::placeholder": {
-      color: mode("gray.400", "whiteAlpha.400")(props),
+      color: "beae-placeholder-color",
     },
     "*, *::before, &::after": {
-      borderColor: mode("gray.200", "whiteAlpha.300")(props),
-      wordWrap: "break-word",
+      borderColor: "beae-border-color",
     },
-  }),
+  },
 }
-
-export default styles

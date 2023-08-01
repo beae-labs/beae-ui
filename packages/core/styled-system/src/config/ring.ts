@@ -1,6 +1,8 @@
-import * as CSS from "csstype"
-import { Length, t, Token, transforms } from "../utils"
-import { Config } from "../utils/prop-config"
+import type * as CSS from "csstype"
+import type { Config } from "../utils/prop-config"
+import type { Length, Token } from "../utils"
+
+import { t, transforms } from "../utils"
 
 /**
  * The parser configuration for common outline properties

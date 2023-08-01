@@ -1,11 +1,7 @@
-import {
-  PropType,
-  SetupContext,
-  computed,
-  getCurrentInstance,
-  ComponentInternalInstance,
-} from "vue"
-import { UnionStringArray } from "@beae-ui/utils"
+import type { PropType, SetupContext } from "vue"
+import type { UnionStringArray } from "@beae-ui/utils"
+
+import { computed } from "vue"
 
 const inputTypes = [
   "button",
@@ -58,10 +54,14 @@ export const formElements: Record<string, FormElementProps> = {
           }),
           onChange: (event: Event) => {
             if (type === "checkbox") {
-              emit("change", !(event?.target as HTMInputElement).checked, event)
+              emit(
+                "change",
+                !(event?.target as HTMLInputElement).checked,
+                event,
+              )
               emit(
                 "update:modelValue",
-                !(event?.target as HTMInputElement).checked,
+                !(event?.target as HTMLInputElement).checked,
                 event,
               )
               return
@@ -70,12 +70,12 @@ export const formElements: Record<string, FormElementProps> = {
           onInput: (event: any) => {
             emit(
               "input",
-              (event?.currentTarget as HTMInputElement).value,
+              (event?.currentTarget as HTMLInputElement).value,
               event,
             )
             emit(
               "update:modelValue",
-              (event?.currentTarget as HTMInputElement).value,
+              (event?.currentTarget as HTMLInputElement).value,
               event,
             )
           },
@@ -94,12 +94,12 @@ export const formElements: Record<string, FormElementProps> = {
           onInput: (event: any) => {
             emit(
               "input",
-              (event?.currentTarget as HTMInputElement).value,
+              (event?.currentTarget as HTMLInputElement).value,
               event,
             )
             emit(
               "update:modelValue",
-              (event?.currentTarget as HTMInputElement).value,
+              (event?.currentTarget as HTMLInputElement).value,
               event,
             )
           },
@@ -118,12 +118,12 @@ export const formElements: Record<string, FormElementProps> = {
           onChange: (event: any) => {
             emit(
               "input",
-              (event?.currentTarget as HTMInputElement).value,
+              (event?.currentTarget as HTMLInputElement).value,
               event,
             )
             emit(
               "update:modelValue",
-              (event?.currentTarget as HTMInputElement).value,
+              (event?.currentTarget as HTMLInputElement).value,
               event,
             )
           },
@@ -135,20 +135,7 @@ export const formElements: Record<string, FormElementProps> = {
 
 export type BeaeFactoryElements = "input" | "select" | "textarea"
 
-interface BeaeFactoryElementHandlers {
-  onChange?: Function[]
-  onInput?: Function[]
-}
-
-const events = new Map<
-  ComponentInternalInstance["uid"],
-  BeaeFactoryElementHandlers
->()
-
 export function useFormElement(element: BeaeFactoryElements, props: any) {
-  const instance = getCurrentInstance()
-  const uid = computed(() => instance?.uid || Date.now())
-
   const elProps = computed(() => ({
     checked: props.modelValue,
     value: props.modelValue,
@@ -156,7 +143,5 @@ export function useFormElement(element: BeaeFactoryElements, props: any) {
 
   return {
     elProps,
-    events,
-    uid,
   }
 }

@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@beae-ui/composables": "workspace:^",
+    "@beae-ui/form-control": "workspace:^",
     "@beae-ui/system": "workspace:^",
     "@beae-ui/utils": "workspace:^",
     "@beae-ui/visually-hidden": "workspace:^",

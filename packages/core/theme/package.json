@@ -33,12 +33,11 @@
   },
   "dependencies": {
     "@beae-ui/anatomy": "workspace:^",
-    "@beae-ui/styled-system": "workspace:^",
-    "@beae-ui/system": "workspace:^",
-    "@beae-ui/theme-tools": "workspace:^",
-    "@beae-ui/utils": "workspace:^"
+    "@beae-ui/shared-utils": "workspace:^",
+    "@beae-ui/theme-tools": "workspace:^"
   },
   "devDependencies": {
+    "@beae-ui/styled-system": "workspace:^",
     "clean-package": "2.2.0"
   },
   "clean-package": "../../../clean-package.config.json",

@@ -19,10 +19,11 @@ import {
   watch,
   watchEffect,
 } from "vue"
+import { useFormControlContext } from "@beae-ui/form-control"
 import { trackFocusVisible } from "@zag-js/focus-visible"
 import { visuallyHiddenStyle } from "@beae-ui/visually-hidden"
 import { ariaAttr, callAllHandlers, dataAttr } from "@beae-ui/utils"
-import { useFormControlContext, useRadioGroupContext } from "@beae-ui/vue"
+import { useRadioGroupContext } from "./radio-group"
 
 export interface UseRadioProps {
   /**
