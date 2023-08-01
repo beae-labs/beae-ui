@@ -1,7 +1,7 @@
 import type { App } from "vue"
 
 import { Preview, setup } from "@storybook/vue3"
-import Beae from "@beae-ui/vue"
+import { createBeae } from "@beae-ui/vue"
 
 const preview: Preview = {
   parameters: {
@@ -16,7 +16,7 @@ const preview: Preview = {
 }
 
 setup((app: App) => {
-  app.use(Beae)
+  app.use(createBeae())
 })
 
 export default preview
