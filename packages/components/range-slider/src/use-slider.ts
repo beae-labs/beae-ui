@@ -9,7 +9,14 @@ import {
 } from "../number-utils"
 import { ariaAttr, callAllHandlers, dataAttr } from "@beae-ui/utils"
 import { getIsReversed, getStyles } from "./slider-utils"
-import { CSSProperties, ComputedRef, computed, reactive, ref, watch } from "vue"
+import {
+  CSSProperties,
+  ComputedRef,
+  onMounted,
+  computed,
+  ref,
+  watch,
+} from "vue"
 
 export interface UseSliderProps {
   /**
@@ -121,7 +128,6 @@ export interface SliderActions {
 }
 
 /**
- * React hook that implements an accessible range slider.
  *
  * It is an alternative to `<input type="range" />`, and returns
  * prop getters for the component parts
@@ -179,25 +185,34 @@ export function useSlider(props: UseSliderProps) {
    * Constrain the value because it can't be less than min
    * or greater than max
    */
-  const value = clampValue(computedValue.value, min, max)
-  const reversedValue = max - value + min
-  const trackValue = isReversed ? reversedValue : value
-  const thumbPercent = valueToPercent(trackValue, min, max)
+  const value = computed<number>(() =>
+    clampValue(computedValue.value, min, max),
+  )
 
-  const isVertical = orientation === "vertical"
+  const thumbPercent = computed(() => {
+    const reversedValue = max - value.value + min
+    const trackValue = isReversed ? reversedValue : value.value
+    return valueToPercent(trackValue, min, max)
+  })
 
-  const stateRef = reactive({
-    min,
-    max,
-    step,
-    isDisabled,
-    value,
-    isInteractive,
-    isReversed,
-    isVertical,
-    eventSource: null as "pointer" | "keyboard" | null,
-    focusThumbOnChange,
-    orientation,
+  const isVertical = computed(() => orientation === "vertical")
+
+  const eventSource = ref<"pointer" | "keyboard" | null>(null)
+
+  const stateRef = computed(() => {
+    return {
+      min,
+      max,
+      step,
+      isDisabled,
+      value: value.value,
+      isInteractive,
+      isReversed,
+      isVertical: isVertical.value,
+      eventSource: eventSource.value,
+      focusThumbOnChange,
+      orientation,
+    }
   })
 
   /**
@@ -224,50 +239,54 @@ export function useSlider(props: UseSliderProps) {
   const getValueFromPointer = (event: any) => {
     if (!trackRef.value) return
 
-    const state = stateRef
-    state.eventSource = "pointer"
+    eventSource.value = "pointer"
 
-    const trackRect = trackRef.value.getBoundingClientRect()
+    const trackRect = trackRef.value.$el.getBoundingClientRect()
     const { clientX, clientY } = event.touches?.[0] ?? event
 
-    const diff = isVertical
+    const diff = isVertical.value
       ? trackRect.bottom - clientY
       : clientX - trackRect.left
 
-    const length = isVertical ? trackRect.height : trackRect.width
+    const length = isVertical.value ? trackRect.height : trackRect.width
     let percent = diff / length
 
     if (isReversed) {
       percent = 1 - percent
     }
 
-    let nextValue = percentToValue(percent, state.min, state.max)
+    let nextValue = percentToValue(
+      percent,
+      stateRef.value.min,
+      stateRef.value.max,
+    )
 
-    if (state.step) {
-      nextValue = parseFloat(roundValueToStep(nextValue, state.min, state.step))
+    if (stateRef.value.step) {
+      nextValue = parseFloat(
+        roundValueToStep(nextValue, stateRef.value.min, stateRef.value.step),
+      )
     }
 
-    nextValue = clampValue(nextValue, state.min, state.max)
+    nextValue = clampValue(nextValue, stateRef.value.min, stateRef.value.max)
 
     return nextValue
   }
 
   const constrain = (value: number) => {
-    const state = stateRef
-    if (!state.isInteractive) return
-    value = parseFloat(roundValueToStep(value, state.min, oneStep))
-    value = clampValue(value, state.min, state.max)
+    if (!stateRef.value.isInteractive) return
+    value = parseFloat(roundValueToStep(value, stateRef.value.min, oneStep))
+    value = clampValue(value, stateRef.value.min, stateRef.value.max)
     computedValue.value = value
     onChange?.(value)
   }
 
   const actions = computed<SliderActions>(() => ({
     stepUp(step = oneStep) {
-      const next = isReversed ? value - step : value + step
+      const next = isReversed ? value.value - step : value.value + step
       constrain(next)
     },
     stepDown(step = oneStep) {
-      const next = isReversed ? value + step : value - step
+      const next = isReversed ? value.value + step : value.value - step
       constrain(next)
     },
     reset() {
@@ -283,8 +302,6 @@ export function useSlider(props: UseSliderProps) {
    * the slider using only their keyboard.
    */
   const onKeyDown = (event: KeyboardEvent) => {
-    const state = stateRef
-
     const keyMap: Record<string, KeyboardEvent> = {
       ArrowRight: () => actions.stepUp(),
       ArrowUp: () => actions.stepUp(),
@@ -292,8 +309,8 @@ export function useSlider(props: UseSliderProps) {
       ArrowDown: () => actions.stepDown(),
       PageUp: () => actions.stepUp(tenSteps),
       PageDown: () => actions.stepDown(tenSteps),
-      Home: () => constrain(state.min),
-      End: () => constrain(state.max),
+      Home: () => constrain(stateRef.value.min),
+      End: () => constrain(stateRef.value.max),
     }
 
     const action = keyMap[event.key]
@@ -302,7 +319,7 @@ export function useSlider(props: UseSliderProps) {
       event.preventDefault()
       event.stopPropagation()
       action(event)
-      state.eventSource = "keyboard"
+      eventSource.value = "keyboard"
     }
   }
 
@@ -310,7 +327,7 @@ export function useSlider(props: UseSliderProps) {
    * ARIA (Optional): To define a human-readable representation of the value,
    * we allow users pass aria-valuetext.
    */
-  const valueText = getAriaValueTextProp?.(value) ?? ariaValueText
+  const valueText = getAriaValueTextProp?.(value.value) ?? ariaValueText
 
   /**
    * Measure the dimensions of the thumb, so
@@ -321,96 +338,75 @@ export function useSlider(props: UseSliderProps) {
   /**
    * Compute styles for all component parts.
    */
-  let getThumbStyle: (i: number) => CSSProperties,
-    rootStyle: CSSProperties = {},
-    trackStyle: CSSProperties = {},
-    innerTrackStyle: CSSProperties = {}
   const computedStyle: ComputedRef<{
     trackStyle: CSSProperties
     innerTrackStyle: CSSProperties
     rootStyle: CSSProperties
     getThumbStyle: (i: number) => CSSProperties
   }> = computed(() => {
-    const state = stateRef
-
     const thumbRect = thumbSize ?? { width: 0, height: 0 }
     return getStyles({
       isReversed,
-      orientation: state.orientation,
+      orientation: stateRef.value.orientation,
       thumbRects: [thumbRect],
-      thumbPercents: [thumbPercent],
+      thumbPercents: [thumbPercent.value],
     })
   })
-  watch(
-    computedStyle,
-    (val: {
-      trackStyle: CSSProperties
-      innerTrackStyle: CSSProperties
-      rootStyle: CSSProperties
-      getThumbStyle: (i: number) => CSSProperties
-    }) => {
-      getThumbStyle = val.getThumbStyle
-      ;(rootStyle = val.rootStyle),
-        (trackStyle = val.trackStyle),
-        (innerTrackStyle = val.innerTrackStyle)
-    },
-  )
 
   const focusThumb = () => {
-    const state = stateRef
-    if (state.focusThumbOnChange) {
+    if (stateRef.value.focusThumbOnChange) {
       setTimeout(() => thumbRef.value?.focus())
     }
   }
 
   watch(value, () => {
-    const state = stateRef
-    focusThumb()
-    if (state.eventSource === "keyboard") {
-      onChangeEndProp?.(state.value)
+    if (stateRef.value.eventSource === "keyboard") {
+      focusThumb()
+      onChangeEndProp?.(stateRef.value.value)
     }
   })
 
   function setValueFromPointer(event: MouseEvent | TouchEvent | PointerEvent) {
     const nextValue = getValueFromPointer(event)
-    if (nextValue != null && nextValue !== stateRef.value) {
+    if (nextValue != null && nextValue !== stateRef.value.value) {
       computedValue.value = nextValue
       onChange?.(nextValue)
     }
   }
-
-  usePanEvent(rootRef, {
-    onPanSessionStart(event) {
-      const state = stateRef
-      if (!state.isInteractive) return
-      isDragging.value = true
-      focusThumb()
-      setValueFromPointer(event)
-      onChangeStartProp?.(state.value)
-    },
-    onPanSessionEnd() {
-      const state = stateRef
-      if (!state.isInteractive) return
-      isDragging.value = false
-      onChangeEndProp?.(state.value)
-    },
-    onPan(event) {
-      const state = stateRef
-      if (!state.isInteractive) return
-      setValueFromPointer(event)
-    },
+  onMounted(() => {
+    if (rootRef.value) {
+      usePanEvent(rootRef, {
+        onPanSessionStart(event) {
+          if (!stateRef.value.isInteractive) return
+          isDragging.value = true
+          focusThumb()
+          setValueFromPointer(event)
+          onChangeStartProp?.(stateRef.value.value)
+        },
+        onPanSessionEnd() {
+          if (!stateRef.value.isInteractive) return
+          isDragging.value = false
+          onChangeEndProp?.(stateRef.value.value)
+        },
+        onPan(event) {
+          if (!stateRef.value.isInteractive) return
+          setValueFromPointer(event)
+        },
+      })
+    }
   })
 
   const getRootProps: PropGetter = (props = {}) => {
     return {
       ...props,
+      ref: rootRef,
       ...htmlProps,
       tabIndex: -1,
       "aria-disabled": ariaAttr(isDisabled),
       "data-focused": dataAttr(isFocused.value),
       style: {
         ...props.style,
-        ...rootStyle,
+        ...computedStyle.value.rootStyle,
       },
     }
   }
@@ -419,10 +415,11 @@ export function useSlider(props: UseSliderProps) {
     return {
       ...props,
       id: trackId,
+      ref: trackRef,
       "data-disabled": dataAttr(isDisabled),
       style: {
         ...props.style,
-        ...trackStyle,
+        ...computedStyle.value.trackStyle,
       },
     }
   }
@@ -430,10 +427,9 @@ export function useSlider(props: UseSliderProps) {
   const getInnerTrackProps: PropGetter = (props = {}) => {
     return {
       ...props,
-      ref,
       style: {
         ...props.style,
-        ...innerTrackStyle,
+        ...computedStyle.value.innerTrackStyle,
       },
     }
   }
@@ -442,6 +438,7 @@ export function useSlider(props: UseSliderProps) {
     return {
       ...props,
       role: "slider",
+      ref: thumbRef,
       tabIndex: isInteractive ? 0 : undefined,
       id: thumbId,
       "data-active": dataAttr(isDragging.value),
@@ -456,7 +453,7 @@ export function useSlider(props: UseSliderProps) {
       "aria-labelledby": ariaLabel ? undefined : ariaLabelledBy,
       style: {
         ...props.style,
-        ...getThumbStyle(0),
+        ...computedStyle.value.getThumbStyle(0),
       },
       onKeyDown: callAllHandlers(props.onKeyDown, onKeyDown),
       onFocus: callAllHandlers(props.onFocus, () => (isFocused.value = true)),
@@ -464,15 +461,12 @@ export function useSlider(props: UseSliderProps) {
     }
   }
 
-  const getMarkerProps: RequiredPropGetter<{ value: number }> = (
-    props,
-    ref = null,
-  ) => {
+  const getMarkerProps: RequiredPropGetter<{ value: number }> = (props) => {
     const isInRange = !(props.value < min || props.value > max)
-    const isHighlighted = value >= props.value
+    const isHighlighted = value.value >= props.value
     const markerPercent = valueToPercent(props.value, min, max)
 
-    const markerStyle: React.CSSProperties = {
+    const markerStyle: CSSProperties = {
       position: "absolute",
       pointerEvents: "none",
       ...orient({
@@ -488,7 +482,6 @@ export function useSlider(props: UseSliderProps) {
 
     return {
       ...props,
-      ref,
       role: "presentation",
       "aria-hidden": true,
       "data-disabled": dataAttr(isDisabled),
@@ -501,21 +494,22 @@ export function useSlider(props: UseSliderProps) {
     }
   }
 
-  const getInputProps: PropGetter = computed(() => (props = {}, ref = null) => {
+  const getInputProps: PropGetter = computed(() => (props = {}) => {
     return {
       ...props,
-      ref,
       type: "hidden",
       value,
       name,
     }
   })
 
-  const state: SliderState = {
-    value,
-    isFocused: isFocused.value,
-    isDragging: isDragging.value,
-  }
+  const state: SliderState = computed(() => {
+    return {
+      value: value.value,
+      isFocused: isFocused.value,
+      isDragging: isDragging.value,
+    }
+  })
 
   return {
     state,
@@ -533,8 +527,8 @@ export type UseSliderReturn = ReturnType<typeof useSlider>
 
 function orient(options: {
   orientation: UseSliderProps["orientation"]
-  vertical: React.CSSProperties
-  horizontal: React.CSSProperties
+  vertical: CSSProperties
+  horizontal: CSSProperties
 }) {
   const { orientation, vertical, horizontal } = options
   return orientation === "vertical" ? vertical : horizontal

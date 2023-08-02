@@ -34,6 +34,7 @@ const baseStyleContainer = defineStyle((props) => {
 })
 
 const baseStyleTrack = defineStyle((props) => {
+  console.log(props?.orientation, "xxxx")
   const orientationStyles = orient({
     orientation: props.orientation,
     horizontal: { h: $trackSize.reference },

@@ -8,8 +8,8 @@ import {
 } from "../src"
 import { ref } from "vue"
 
-const meta = {
-  title: "Example/Range slider",
+const slider = {
+  title: "Example/Slider",
   component: {
     Slider,
     SliderMark,
@@ -26,8 +26,9 @@ const meta = {
   | typeof SliderTrack
   | typeof SliderFilledTrack
 >
-
-export const HorizontalSlider: StoryObj = {
+export default slider
+type SliderType = StoryObj<typeof slider>
+export const HorizontalSlider: SliderType = {
   render: (args) => ({
     components: {
       Slider,
@@ -54,7 +55,7 @@ export const HorizontalSlider: StoryObj = {
   args: {},
 }
 
-export const VerticalSlider: StoryObj = {
+export const VerticalSlider: SliderType = {
   render: (args) => ({
     components: {
       Slider,
@@ -68,17 +69,17 @@ export const VerticalSlider: StoryObj = {
         args,
       }
     },
-    template: ` <Slider colorScheme="red" isReversed orientation="vertical">
-      <SliderTrack>
-        <SliderFilledTrack />
-      </SliderTrack>
-      <SliderThumb />
-      <SliderMark :value="90" children="90%" left="40px" />
-    </Slider>`,
+    template: `<div style="height: 200px"><Slider colorScheme="red" isReversed orientation="vertical">
+    <SliderTrack>
+      <SliderFilledTrack />
+    </SliderTrack>
+    <SliderThumb />
+    <SliderMark :value="90" left="40px"></SliderMark>
+  </Slider></div>`,
   }),
   args: {},
 }
-export const BeaeHorizontalSlider: StoryObj = {
+export const BeaeHorizontalSlider: SliderType = {
   render: (args) => ({
     components: {
       Slider,
@@ -96,13 +97,13 @@ export const BeaeHorizontalSlider: StoryObj = {
       <SliderTrack>
         <SliderFilledTrack />
       </SliderTrack>
-      <SliderThumb children="#" boxSize="30px" color="black" />
+      <SliderThumb boxSize="30px" color="black">#</SliderThumb>
     </Slider>`,
   }),
   args: {},
 }
 
-export const SteppedHorizontalSlider: StoryObj = {
+export const SteppedHorizontalSlider: SliderType = {
   render: (args) => ({
     components: {
       Slider,
@@ -118,13 +119,15 @@ export const SteppedHorizontalSlider: StoryObj = {
       }
       return {
         args,
+        value,
+        setValue,
       }
     },
     template: `<Slider :value="value" :onChange="setValue" :min="1" :max="7" :step="2">
       <SliderTrack>
         <SliderFilledTrack />
       </SliderTrack>
-      <SliderThumb :children="value" boxSize="30px" color="black" />
+      <SliderThumb boxSize="30px" color="black">{{value}}</SliderThumb>
     </Slider>`,
   }),
   args: {},

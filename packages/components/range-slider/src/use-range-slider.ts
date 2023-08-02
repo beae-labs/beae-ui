@@ -7,7 +7,17 @@ import {
 } from "../number-utils" // TODO: need to add to the package
 import { useSizes } from "../utils" // TODO: need to add to the package
 import { getIds, getIsReversed, getStyles, orient } from "./slider-utils"
-import { CSSProperties, ComputedRef, computed, reactive, ref, watch } from "vue"
+import {
+  CSSProperties,
+  ComputedRef,
+  Ref,
+  ToRef,
+  computed,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue"
 import type { RequiredPropGetter, PropGetter } from "../types" // TODO: need to add to the package
 import { usePanEvent } from "@beae-ui/composables"
 
@@ -49,6 +59,7 @@ export interface UseRangeSliderProps {
   /**
    * Function called when the user starts selecting a new value (by dragging or clicking)
    */
+  // TODO: need convert to all event vue => @onChangeStart
   onChangeStart?(value: number[]): void
 
   /**
@@ -155,7 +166,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
     defaultValue,
     isReversed: isReversedProp,
     direction = "ltr",
-    orientation = "horizontal",
+    orientation,
     id: idProp,
     isDisabled,
     isReadOnly,
@@ -171,7 +182,6 @@ export function useRangeSlider(props: UseRangeSliderProps) {
     minStepsBetweenThumbs = 0,
     ...htmlProps
   } = props
-
   const isReversed = getIsReversed({
     isReversed: isReversedProp,
     direction,
@@ -191,30 +201,34 @@ export function useRangeSlider(props: UseRangeSliderProps) {
 
   const isInteractive = !(isDisabled || isReadOnly)
 
-  const initialValue = ref(valueState.value)
-  const value = valueState.value?.map((val) => clampValue(val, min, max))
+  const initialValue = valueState.value
+  const valueComputed = computed<number[]>(() => valueState.value)
 
   const spacing = minStepsBetweenThumbs * step
-  const valueBounds = getValueBounds(value, min, max, spacing)
+  const valueBounds = computed(() =>
+    getValueBounds(valueComputed.value, min, max, spacing),
+  )
+  const eventSource = ref<"pointer" | "keyboard" | null>(null)
 
-  const stateRef = reactive<{
+  const stateRef = computed<{
     eventSource: "pointer" | "keyboard" | null
     value: number[]
     valueBounds: Array<{ min: number; max: number }>
-  }>({
-    eventSource: null,
-    value: [],
-    valueBounds: [],
+  }>(() => {
+    return {
+      eventSource: eventSource.value,
+      value: valueState.value,
+      valueBounds: getValueBounds(valueComputed.value, min, max, spacing),
+    }
   })
 
-  stateRef.value = value
-  stateRef.valueBounds = valueBounds
+  const thumbPercents = computed(() => {
+    const reversedValue = valueComputed.value.map((val) => max - val + min)
+    const thumbValues = isReversed ? reversedValue : valueComputed.value
+    return thumbValues.map((val) => valueToPercent(val, min, max))
+  })
 
-  const reversedValue = value.map((val) => max - val + min)
-  const thumbValues = isReversed ? reversedValue : value
-  const thumbPercents = thumbValues.map((val) => valueToPercent(val, min, max))
-
-  const isVertical = orientation === "vertical"
+  const isVertical = computed(() => orientation === "vertical")
 
   const trackRef = ref<HTMLElement>()
   const rootRef = ref<HTMLElement>()
@@ -236,12 +250,12 @@ export function useRangeSlider(props: UseRangeSliderProps) {
 
   const getValueFromPointer = (event: any) => {
     if (!trackRef.value) return
-    stateRef.eventSource = "pointer"
-    const rect = trackRef.value.getBoundingClientRect()
+    eventSource.value = "pointer"
+    const rect = trackRef.value.$el.getBoundingClientRect()
     const { clientX, clientY } = event.touches?.[0] ?? event
 
-    const diff = isVertical ? rect.bottom - clientY : clientX - rect.left
-    const length = isVertical ? rect.height : rect.width
+    const diff = isVertical.value ? rect.bottom - clientY : clientX - rect.left
+    const length = isVertical.value ? rect.height : rect.width
 
     let percent = diff / length
     if (isReversed) percent = 1 - percent
@@ -251,26 +265,25 @@ export function useRangeSlider(props: UseRangeSliderProps) {
 
   const tenSteps = (max - min) / 10
   const oneStep = step || (max - min) / 100
-
   const actions: RangeSliderActions = reactive({
     setValueAtIndex(index: number, val: number) {
       if (!isInteractive) return
-      const bounds = stateRef.valueBounds[index]
+      const bounds = valueBounds.value[index]
       val = parseFloat(roundValueToStep(val, bounds.min, oneStep))
       val = clampValue(val, bounds.min, bounds.max)
-      const next = [...stateRef.value]
+      const next = [...stateRef.value.value]
       next[index] = val
       valueState.value = next
       onChange?.(next)
     },
     setActiveIndex: (val: number) => (activeIndex.value = val),
     stepUp(index: number, step = oneStep) {
-      const valueAtIndex = stateRef.value[index]
+      const valueAtIndex = stateRef.value.value[index]
       const next = isReversed ? valueAtIndex - step : valueAtIndex + step
       actions.setValueAtIndex(index, next)
     },
     stepDown(index: number, step = oneStep) {
-      const valueAtIndex = stateRef.value[index]
+      const valueAtIndex = stateRef.value.value[index]
       const next = isReversed ? valueAtIndex + step : valueAtIndex - step
       actions.setValueAtIndex(index, next)
     },
@@ -294,11 +307,11 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       PageUp: () => actions.stepUp(activeIndex.value, tenSteps),
       PageDown: () => actions.stepDown(activeIndex.value, tenSteps),
       Home: () => {
-        const { min: value } = valueBounds[activeIndex.value]
+        const { min: value } = valueBounds.value[activeIndex.value]
         actions.setValueAtIndex(activeIndex.value, value)
       },
       End: () => {
-        const { max: value } = valueBounds[activeIndex.value]
+        const { max: value } = valueBounds.value[activeIndex.value]
         actions.setValueAtIndex(activeIndex.value, value)
       },
     }
@@ -309,17 +322,13 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       event.preventDefault()
       event.stopPropagation()
       action(event)
-      stateRef.eventSource = "keyboard"
+      eventSource.value = "keyboard"
     }
   }
 
   /**
    * Compute styles for all component parts.
    */
-  let getThumbStyle: (i: number) => CSSProperties,
-    rootStyle: CSSProperties = {},
-    trackStyle: CSSProperties = {},
-    innerTrackStyle: CSSProperties = {}
   const computedStyle: ComputedRef<{
     trackStyle: CSSProperties
     innerTrackStyle: CSSProperties
@@ -331,22 +340,8 @@ export function useRangeSlider(props: UseRangeSliderProps) {
         isReversed,
         orientation,
         thumbRects,
-        thumbPercents,
+        thumbPercents: thumbPercents.value,
       }) ?? {},
-  )
-  watch(
-    computedStyle,
-    (val: {
-      trackStyle: CSSProperties
-      innerTrackStyle: CSSProperties
-      rootStyle: CSSProperties
-      getThumbStyle: (i: number) => CSSProperties
-    }) => {
-      getThumbStyle = val.getThumbStyle
-      ;(rootStyle = val.rootStyle),
-        (trackStyle = val.trackStyle),
-        (innerTrackStyle = val.innerTrackStyle)
-    },
   )
 
   const focusThumb = (index?: number) => {
@@ -360,15 +355,16 @@ export function useRangeSlider(props: UseRangeSliderProps) {
     }
   }
 
-  watch(value, () => {
-    if (stateRef.eventSource === "keyboard") {
-      onChangeEndProp?.(stateRef.value)
+  watch(valueComputed, () => {
+    if (stateRef.value.eventSource === "keyboard") {
+      onChangeEndProp?.(stateRef.value.value)
     }
   })
 
   const onPanSessionStart = (event: MouseEvent | TouchEvent | PointerEvent) => {
     const pointValue = getValueFromPointer(event) || 0
-    const distances = stateRef.value.map((val) => Math.abs(val - pointValue))
+    const distances = valueState.value.map((val) => Math.abs(val - pointValue))
+
     const closest = Math.min(...distances)
     let index = distances.indexOf(closest)
 
@@ -381,7 +377,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
 
     // when two thumbs are stacked and the user clicks at a point larger than
     // their values, pick the last thumb with the greatest index
-    if (isThumbStacked && pointValue > stateRef.value[index]) {
+    if (isThumbStacked && pointValue > valueState.value[index]) {
       index = index + thumbsAtPosition.length - 1
     }
 
@@ -397,23 +393,26 @@ export function useRangeSlider(props: UseRangeSliderProps) {
     actions.setValueAtIndex(activeIndex.value, pointValue)
     focusThumb(activeIndex.value)
   }
-
-  usePanEvent(rootRef, {
-    onPanSessionStart(event) {
-      if (!isInteractive) return
-      isDragging.value = true
-      onPanSessionStart(event)
-      onChangeStartProp?.(stateRef.value)
-    },
-    onPanSessionEnd() {
-      if (!isInteractive) return
-      isDragging.value = false
-      onChangeEndProp?.(stateRef.value)
-    },
-    onPan(event) {
-      if (!isInteractive) return
-      onPan(event)
-    },
+  onMounted(() => {
+    if (rootRef.value) {
+      usePanEvent(rootRef, {
+        onPanSessionStart(event) {
+          if (!isInteractive) return
+          isDragging.value = true
+          onPanSessionStart(event)
+          onChangeStartProp?.(stateRef.value.value)
+        },
+        onPanSessionEnd() {
+          if (!isInteractive) return
+          isDragging.value = false
+          onChangeEndProp?.(stateRef.value.value)
+        },
+        onPan(event) {
+          if (!isInteractive) return
+          onPan(event)
+        },
+      })
+    }
   })
 
   const getRootProps: PropGetter = (props = {}) => {
@@ -424,7 +423,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       tabIndex: -1,
       "aria-disabled": ariaAttr(isDisabled),
       "data-focused": dataAttr(isFocused.value),
-      style: { ...props.style, ...rootStyle },
+      style: { ...props.style, ...computedStyle.value.rootStyle },
     }
   }
 
@@ -432,19 +431,19 @@ export function useRangeSlider(props: UseRangeSliderProps) {
     return {
       ...props,
       id: ids.track,
+      ref: trackRef,
       "data-disabled": dataAttr(isDisabled),
-      style: { ...props.style, ...trackStyle },
+      style: { ...props.style, ...computedStyle.value.trackStyle },
     }
   }
 
   const getInnerTrackProps: PropGetter = (props = {}) => {
     return {
       ...props,
-      ref,
       id: ids.innerTrack,
       style: {
         ...props.style,
-        ...innerTrackStyle,
+        ...computedStyle.value.innerTrackStyle,
       },
     }
   }
@@ -452,22 +451,21 @@ export function useRangeSlider(props: UseRangeSliderProps) {
   const getThumbProps: RequiredPropGetter<{ index: number }> = (props) => {
     const { index, ...rest } = props
 
-    const valueAtIndex = value[index]
+    const valueAtIndex = valueComputed.value[index]
     if (valueAtIndex == null) {
       throw new TypeError(
-        `[range-slider > thumb] Cannot find value at index \`${index}\`. The \`value\` or \`defaultValue\` length is : ${value.length}`,
+        `[range-slider > thumb] Cannot find value at index \`${index}\`. The \`value\` or \`defaultValue\` length is : ${valueComputed.value.length}`,
       )
     }
 
-    const bounds = valueBounds[index]
+    const bounds = valueBounds.value[index]
 
     return {
       ...rest,
-      ref,
       role: "slider",
       tabIndex: isInteractive ? 0 : undefined,
       id: ids.getThumb(index),
-      "data-active": dataAttr(isDragging && activeIndex === index),
+      "data-active": dataAttr(isDragging && activeIndex.value === index),
       "aria-valuetext":
         getAriaValueTextProp?.(valueAtIndex) ?? ariaValueText?.[index],
       "aria-valuemin": bounds.min,
@@ -480,7 +478,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       "aria-labelledby": ariaLabel?.[index]
         ? undefined
         : ariaLabelledBy?.[index],
-      style: { ...props.style, ...getThumbStyle(index) },
+      style: { ...props.style, ...computedStyle.value.getThumbStyle(index) },
       onKeyDown: callAllHandlers(props.onKeyDown, onKeyDown),
       onFocus: callAllHandlers(props.onFocus, () => {
         isFocused.value = true
@@ -496,9 +494,8 @@ export function useRangeSlider(props: UseRangeSliderProps) {
   const getOutputProps: PropGetter = (props = {}) => {
     return {
       ...props,
-      ref,
       id: ids.output,
-      htmlFor: value.map((v, i) => ids.getThumb(i)).join(" "),
+      htmlFor: valueComputed.value.map((v, i) => ids.getThumb(i)).join(" "),
       "aria-live": "off",
     }
   }
@@ -507,7 +504,9 @@ export function useRangeSlider(props: UseRangeSliderProps) {
     const { value: v, ...rest } = props
 
     const isInRange = !(v < min || v > max)
-    const isHighlighted = v >= value[0] && v <= value[value.length - 1]
+    const isHighlighted =
+      v >= valueComputed.value[0] &&
+      v <= valueComputed.value[valueComputed.value.length - 1]
 
     let percent = valueToPercent(v, min, max)
     percent = isReversed ? 100 - percent : percent
@@ -516,7 +515,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       position: "absolute",
       pointerEvents: "none",
       ...orient({
-        orientation,
+        orientation: orientation ?? "horizontal",
         vertical: { bottom: `${percent}%` },
         horizontal: { left: `${percent}%` },
       }),
@@ -541,22 +540,23 @@ export function useRangeSlider(props: UseRangeSliderProps) {
     const { index, ...rest } = props
     return {
       ...rest,
-      ref,
       id: ids.getInput(index),
       type: "hidden",
-      value: value[index],
+      value: valueComputed.value[index],
       name: Array.isArray(name) ? name[index] : `${name}-${index}`,
     }
   }
 
-  const state: RangeSliderState = {
-    value,
-    isFocused: isFocused.value,
-    isDragging: isFocused.value,
-    getThumbPercent: (index: number) => thumbPercents[index],
-    getThumbMinValue: (index: number) => valueBounds[index].min,
-    getThumbMaxValue: (index: number) => valueBounds[index].max,
-  }
+  const state = computed<ComputedRef<RangeSliderState>>(() => {
+    return {
+      value: valueComputed.value,
+      isFocused: isFocused.value,
+      isDragging: isFocused.value,
+      getThumbPercent: (index: number) => thumbPercents.value[index],
+      getThumbMinValue: (index: number) => valueBounds.value[index].min,
+      getThumbMaxValue: (index: number) => valueBounds.value[index].max,
+    }
+  })
 
   return {
     state,
@@ -568,6 +568,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
     getMarkerProps,
     getInputProps,
     getOutputProps,
+    rootRef,
   }
 }
 

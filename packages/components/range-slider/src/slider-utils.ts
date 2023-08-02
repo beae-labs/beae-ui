@@ -36,7 +36,6 @@ export function getStyles(options: {
   isReversed?: boolean
 }) {
   const { orientation, thumbPercents, thumbRects, isReversed } = options
-
   const getThumbStyle = (i: number): CSSProperties => {
     const rect = thumbRects[i] ?? zeroSize
     return {
