@@ -1,5 +1,4 @@
 import {
-  useRangeSlider,
   RangeSlider,
   RangeSliderFilledTrack,
   RangeSliderTrack,
@@ -13,7 +12,6 @@ import { ref, watchEffect } from "vue"
 const meta = {
   title: "Example/Range slider",
   component: {
-    useRangeSlider,
     RangeSlider,
     RangeSliderFilledTrack,
     RangeSliderTrack,
@@ -24,12 +22,12 @@ const meta = {
 } satisfies Meta<
   | typeof RangeSliderThumb
   | typeof RangeSlider
-  | typeof useRangeSlider
   | typeof RangeSliderFilledTrack
   | typeof RangeSliderTrack
 >
-
-export const HorizontalRangeSlider: StoryObj = {
+export default meta
+type RangeSliderType = StoryObj<typeof meta>
+export const HorizontalRangeSlider: RangeSliderType = {
   render: (args) => ({
     components: {
       RangeSlider,
@@ -38,11 +36,19 @@ export const HorizontalRangeSlider: StoryObj = {
       RangeSliderThumb,
     },
     setup() {
+      const test = ref([])
+      function onchange(payload) {
+        console.log("end", payload)
+        test.value = payload
+      }
       return {
         args,
+        onchange,
+        test,
       }
     },
-    template: `<RangeSlider :onChangeEnd="console.log">
+    template: `
+    <RangeSlider :onChangeEnd="onchange">
       <RangeSliderTrack>
         <RangeSliderFilledTrack />
       </RangeSliderTrack>
@@ -52,7 +58,7 @@ export const HorizontalRangeSlider: StoryObj = {
   }),
   args: {},
 }
-export const VerticalRangeSlider: StoryObj = {
+export const VerticalRangeSlider: RangeSliderType = {
   render: (args) => ({
     components: {
       RangeSlider,
@@ -65,18 +71,20 @@ export const VerticalRangeSlider: StoryObj = {
         args,
       }
     },
-    template: `<RangeSlider orientation="vertical" :onChangeEnd="console.log">
-      <RangeSliderTrack>
-        <RangeSliderFilledTrack />
-      </RangeSliderTrack>
-      <RangeSliderThumb index="0" />
-      <RangeSliderThumb index="1" />
-    </RangeSlider>`,
+    template: `<div style="height: 200px">
+    <RangeSlider orientation="vertical" :onChangeEnd="console.log">
+    <RangeSliderTrack>
+      <RangeSliderFilledTrack />
+    </RangeSliderTrack>
+    <RangeSliderThumb :index="0" />
+    <RangeSliderThumb :index="1" />
+  </RangeSlider>
+    </div>`,
   }),
   args: {},
 }
 
-export const SteppedHorizontalRangeSlider: StoryObj = {
+export const SteppedHorizontalRangeSlider: RangeSliderType = {
   render: (args) => ({
     components: {
       RangeSlider,
@@ -88,7 +96,7 @@ export const SteppedHorizontalRangeSlider: StoryObj = {
       const value = ref([3, 10])
       function setValue(payload: number[]) {
         console.log(payload)
-        value.value = payload
+        // value.value = payload
       }
       return {
         args,
@@ -114,7 +122,7 @@ export const SteppedHorizontalRangeSlider: StoryObj = {
   args: {},
 }
 
-export const DynamicRangeSlider: StoryObj = {
+export const DynamicRangeSlider: RangeSliderType = {
   render: (args) => ({
     components: {
       RangeSlider,
@@ -125,24 +133,25 @@ export const DynamicRangeSlider: StoryObj = {
     setup() {
       const points = ref<number[]>([30, 70])
       function setPoints(payload: number[]) {
-        points.value = payload
+        console.log(payload, "enddddd")
       }
-      watchEffect(() => {
-        setTimeout(() => {
-          setPoints([30, 50, 70])
-        }, 1000)
-      })
+      // watchEffect(() => {
+      //   setTimeout(() => {
+      //     setPoints([30, 50, 70]);
+      //   }, 5000)
+      // })
       return {
         args,
         points,
         setPoints,
       }
     },
-    template: `<RangeSlider :value="points" :onChange="setPoints">
+    template: `
+    <RangeSlider :value="points" :onChange="setPoints">
       <RangeSliderTrack>
         <RangeSliderFilledTrack />
       </RangeSliderTrack>
-        <RangeSliderThumb v-for="(point, index) in points" :key={index} :index={index} />
+        <RangeSliderThumb v-for="(point, index) in points" :key="index" :index="index" />
     </RangeSlider>`,
   }),
   args: {},

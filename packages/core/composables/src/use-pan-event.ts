@@ -348,7 +348,8 @@ export const usePanEvent = (
   })
 
   watchEffect(() => {
-    const node = reference.value
+    // const node = reference.value;
+    const node = reference.value.$el //TODO: need .$el to access dom
 
     if (!node || !hasPanEvents) return
 

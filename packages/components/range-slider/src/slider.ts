@@ -1,5 +1,6 @@
 import { createContext, cx } from "@beae-ui/utils"
 import {
+  beae,
   ComponentWithProps,
   DeepPartial,
   HTMLBeaeProps,
@@ -10,7 +11,7 @@ import {
   useTheme,
 } from "@beae-ui/system"
 import { useSlider, UseSliderProps, UseSliderReturn } from "./use-slider"
-import { PropType, defineComponent, h } from "vue"
+import { PropType, defineComponent, h, computed } from "vue"
 
 interface SliderContext
   extends Omit<UseSliderReturn, "getInputProps" | "getRootProps"> {}
@@ -50,16 +51,19 @@ export const Slider: ComponentWithProps<DeepPartial<SliderProps>> =
     props: {
       min: {
         type: Number as PropType<SliderProps["min"]>,
-        default: 100,
+        default: 1,
       },
       max: {
         type: Number as PropType<SliderProps["max"]>,
-        default: 1,
+        default: 100,
       },
       step: Number as PropType<SliderProps["step"]>,
       value: Number as PropType<SliderProps["value"]>,
       defaultValue: Number as PropType<SliderProps["defaultValue"]>,
-      orientation: String as PropType<SliderProps["orientation"]>,
+      orientation: {
+        type: String as PropType<SliderProps["orientation"]>,
+        default: () => "horizontal",
+      },
       isReversed: Boolean as PropType<SliderProps["isReversed"]>,
       onChangeStart: Function as PropType<SliderProps["onChangeStart"]>,
       onChangeEnd: Function as PropType<SliderProps["onChangeEnd"]>,
@@ -78,32 +82,30 @@ export const Slider: ComponentWithProps<DeepPartial<SliderProps>> =
       direction: String as PropType<SliderProps["direction"]>,
     },
     setup(props, { slots }) {
-      const sliderProps: SliderProps = {
-        ...props,
-        orientation: props?.orientation ?? "horizontal",
-      }
-
+      const sliderProps: SliderProps = computed(() => props)
       const styles = useMultiStyleConfig("Slider", sliderProps)
-      const ownProps = omitThemingProps(sliderProps)
+      const ownProps = omitThemingProps(sliderProps.value)
 
       const { direction } = useTheme()
       ownProps.direction = direction
 
-      const { getInputProps, getRootProps, ...context } = useSlider(ownProps)
+      const { rootRef, getInputProps, getRootProps, ...context } =
+        useSlider(ownProps)
 
       const rootProps = getRootProps()
-      const inputProps = getInputProps({})
+      const inputProps = getInputProps.value({})
       SliderProvider(context)
       SliderStylesProvider(styles)
-      return h(
-        "div",
-        {
-          ...rootProps,
-          class: cx("beae-slider", sliderProps.class),
-          style: styles.container,
-        },
-        [slots.default?.(), h("input", { ...inputProps })],
-      )
+      return () =>
+        h(
+          beae.div,
+          {
+            ...rootProps,
+            class: cx("beae-slider", sliderProps.value.class),
+            __css: styles.value.container,
+          },
+          () => [slots.default?.(), h(beae.input, { ...inputProps })],
+        )
     },
   })
 
@@ -116,16 +118,26 @@ export interface SliderThumbProps extends HTMLBeaeProps<"div"> {}
 export const SliderThumb: ComponentWithProps<DeepPartial<SliderThumbProps>> =
   defineComponent({
     name: "SliderThumb",
-    setup(props, {}) {
-      const { getThumbProps } = useSliderContext()
+    setup(props, { slots }) {
+      const { getThumbProps, state } = useSliderContext()
       const styles = useSliderStyles()
-      const thumbProps = getThumbProps(props)
-
-      return h("div", {
-        ...thumbProps,
-        class: cx("beae-slider__thumb", props.class),
-        style: styles.thumb,
+      const thumbProps = computed(() => {
+        return {
+          reactive: state.value.value, // TODO: need optimize
+          ...getThumbProps(props),
+        }
       })
+
+      return () =>
+        h(
+          beae.div,
+          {
+            ...thumbProps.value,
+            class: cx("beae-slider__thumb", props.class),
+            __css: styles.value.thumb,
+          },
+          () => slots.default?.(),
+        )
     },
   })
 
@@ -134,16 +146,26 @@ export interface SliderTrackProps extends HTMLBeaeProps<"div"> {}
 export const SliderTrack: ComponentWithProps<DeepPartial<SliderTrackProps>> =
   defineComponent({
     name: "SliderTrack",
-    setup(props, {}) {
-      const { getTrackProps } = useSliderContext()
+    setup(props, { slots }) {
+      const { getTrackProps, state } = useSliderContext()
       const styles = useSliderStyles()
-      const trackProps = getTrackProps(props)
-
-      return h("div", {
-        ...trackProps,
-        class: cx("beae-slider__track", props.class),
-        style: styles.track,
+      const trackProps = computed(() => {
+        return {
+          ...getTrackProps(props),
+          reactive: state.value.value, // TODO: need to optimize
+        }
       })
+
+      return () =>
+        h(
+          beae.div,
+          {
+            ...trackProps.value,
+            class: cx("beae-slider__track", props.class),
+            __css: styles.value.track,
+          },
+          () => slots.default?.(),
+        )
     },
   })
 
@@ -153,16 +175,26 @@ export const SliderFilledTrack: ComponentWithProps<
   DeepPartial<SliderInnerTrackProps>
 > = defineComponent({
   name: "SliderFilledTrack",
-  setup(props, ref) {
-    const { getInnerTrackProps } = useSliderContext()
+  setup(props, { slots }) {
+    const { getInnerTrackProps, state } = useSliderContext()
     const styles = useSliderStyles()
-    const trackProps = getInnerTrackProps(props, ref)
-
-    return h("div", {
-      ...trackProps,
-      class: cx("beae-slider__filled-track", props.class),
-      style: styles.filledTrack,
+    const trackProps = computed(() => {
+      return {
+        ...getInnerTrackProps(props),
+        reactive: state.value.value, // TODO: need to optimze
+      }
     })
+
+    return () =>
+      h(
+        beae.div,
+        {
+          ...trackProps.value,
+          class: cx("beae-slider__filled-track", props.class),
+          __css: styles.value.filledTrack,
+        },
+        () => slots.default?.(),
+      )
   },
 })
 
@@ -182,14 +214,24 @@ export const SliderMark: ComponentWithProps<DeepPartial<SliderMarkProps>> =
     props: {
       value: Number as PropType<SliderMarkProps["value"]>,
     },
-    setup(props, {}) {
-      const { getMarkerProps } = useSliderContext()
+    setup(props, { slots }) {
+      const { getMarkerProps, state } = useSliderContext()
       const styles = useSliderStyles()
-      const markProps = getMarkerProps(props)
-      return h("div", {
-        ...markProps,
-        class: cx("beae-slider__marker", props.class),
-        style: styles.mark,
+      const markProps = computed(() => {
+        return {
+          ...getMarkerProps(props),
+          reactive: state.value.value, // TODO: need optimize
+        }
       })
+      return () =>
+        h(
+          beae.div,
+          {
+            ...markProps.value,
+            class: cx("beae-slider__marker", props.class),
+            __css: styles.value.mark,
+          },
+          () => slots.default?.(),
+        )
     },
   })
