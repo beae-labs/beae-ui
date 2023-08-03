@@ -132,11 +132,6 @@ export const DynamicRangeSlider: RangeSliderType = {
       function setPoints(payload: number[]) {
         console.log(payload, "enddddd")
       }
-      // watchEffect(() => {
-      //   setTimeout(() => {
-      //     setPoints([30, 50, 70]);
-      //   }, 5000)
-      // })
       return {
         args,
         points,
