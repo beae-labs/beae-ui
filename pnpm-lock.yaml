@@ -226,6 +226,9 @@ importers:
       '@beae-ui/prop-utils':
         specifier: workspace:^
         version: link:../../utilities/prop-utils
+      '@beae-ui/styled-system':
+        specifier: workspace:^
+        version: link:../../core/styled-system
       '@beae-ui/system':
         specifier: workspace:^
         version: link:../../core/system
@@ -235,6 +238,9 @@ importers:
       '@beae-ui/visually-hidden':
         specifier: workspace:^
         version: link:../visually-hidden
+      '@beae-ui/vue-utils':
+        specifier: workspace:^
+        version: link:../../utilities/vue-utils
       '@vueuse/motion':
         specifier: ^2.0.0
         version: 2.0.0(vue@3.3.4)
@@ -522,6 +528,31 @@ importers:
       clean-package:
         specifier: 2.2.0
         version: 2.2.0
+
+  packages/components/popover:
+    dependencies:
+      '@beae-ui/composables':
+        specifier: workspace:^
+        version: link:../../core/composables
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      '@beae-ui/vue-utils':
+        specifier: workspace:^
+        version: link:../../utilities/vue-utils
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
 
   packages/components/portal:
     dependencies:

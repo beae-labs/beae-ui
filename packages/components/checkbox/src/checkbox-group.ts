@@ -15,31 +15,23 @@
  * @see Theming https://ui.beae.com/docs/theming/component-style
  */
 
-import { PropType, computed, defineComponent, toRefs, renderSlot } from "vue"
-import { createContext } from "@beae-ui/utils"
-import { vueThemingProps } from "../../../utilities/prop-utils/src"
-import {
-  UseCheckboxGroupProps,
-  UseCheckboxGroupReturn,
-  useCheckboxGroup,
-} from "./use-checkbox-group"
-import { ThemingProps } from "@beae-ui/system"
+import { type PropType, computed, defineComponent, renderSlot } from "vue"
+import { type CheckboxGroupProps } from "./checkbox.types"
+import { vueThemingProps } from "@beae-ui/prop-utils"
+import { CheckboxGroupProvider } from "./checkbox-group.context"
+import { useCheckboxGroup } from "./use-checkbox-group"
 
-export interface CheckboxGroupProps
-  extends UseCheckboxGroupProps,
-    Omit<ThemingProps<"Checkbox">, "orientation"> {
-  children?: React.ReactNode
+const props = {
+  modelValue: {
+    type: Array as PropType<CheckboxGroupProps["modelValue"]>,
+    default: () => [],
+  },
+  isDisabled: {
+    type: Boolean as PropType<CheckboxGroupProps["isDisabled"]>,
+    default: () => false,
+  },
+  ...vueThemingProps,
 }
-
-export interface CheckboxGroupContext
-  extends Pick<UseCheckboxGroupReturn, "onChange" | "value" | "isDisabled">,
-    Omit<ThemingProps<"Checkbox">, "orientation"> {}
-
-export const [CheckboxGroupProvider, useCheckboxGroupContext] =
-  createContext<CheckboxGroupContext>({
-    name: "CheckboxGroupContext",
-    strict: false,
-  })
 
 /**
  * Used for multiple checkboxes which are bound in one group,
@@ -49,26 +41,24 @@ export const [CheckboxGroupProvider, useCheckboxGroupContext] =
  */
 export const CheckboxGroup = defineComponent({
   name: "CheckboxGroup",
-  props: {
-    defaultValue: Array as PropType<CheckboxGroupProps["defaultValue"]>,
-    value: Array as PropType<CheckboxGroupProps["value"]>,
-    onChange: Function as PropType<CheckboxGroupProps["onChange"]>,
-    isDisabled: Boolean as PropType<CheckboxGroupProps["isDisabled"]>,
-    isNative: Boolean as PropType<CheckboxGroupProps["isNative"]>,
-    ...vueThemingProps,
-  },
-  emits: ["change", "update:modelValue"],
+  props,
+  emits: ["update:modelValue"],
   setup(props, { emit, slots }) {
-    const { isDisabled, size, variant, colorScheme } = props
-    const { value, onChange } = useCheckboxGroup(toRefs(props))
+    // Take variable don't need reactive
+    const { colorScheme, size, variant } = props
+
+    const checkboxBindingComputed = computed(() => ({
+      context: computed(() => props),
+      emit,
+    }))
+    const {} = useCheckboxGroup(checkboxBindingComputed)
 
     const checkboxGroupContext = computed(() => ({
-      onChange,
-      value,
-      isDisabled,
       size,
       variant,
       colorScheme,
+      modelValue: checkboxBindingComputed.value.context.value.modelValue,
+      isDisabled: checkboxBindingComputed.value.context.value.isDisabled,
     }))
 
     CheckboxGroupProvider(checkboxGroupContext)

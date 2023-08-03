@@ -62,6 +62,12 @@ export {
   localStorageManager,
   cookieStorageManager,
 } from "@beae-ui/color-mode"
+export {
+  type CheckboxProps,
+  type CheckboxGroupProps,
+  Checkbox,
+  CheckboxGroup,
+} from "@beae-ui/checkbox"
 export { type CloseButtonProps, CloseButton } from "@beae-ui/close-button"
 
 // F

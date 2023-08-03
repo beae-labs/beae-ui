@@ -36,7 +36,7 @@ import {
 } from "./use-form-control"
 
 /**
- * `CFormControl` provides context such as
+ * `FormControl` provides context such as
  * `isInvalid`, `isDisabled`, and `isRequired` to form elements.
  *
  * This is commonly used in form elements such as `input`,

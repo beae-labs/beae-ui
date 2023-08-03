@@ -11,101 +11,12 @@
  * @see https://ui.beae.com/guides/component-guide
  */
 
-import { ToRefs, computed, ref, watchEffect, watch } from "vue"
+import { type ComputedRef, ref, watchEffect, watch } from "vue"
 import { useFormControlProps } from "@beae-ui/form-control"
 import { callAllHandlers, dataAttr, omit } from "@beae-ui/utils"
 import { trackFocusVisible } from "@zag-js/focus-visible"
 import { visuallyHiddenStyle } from "@beae-ui/visually-hidden"
-
-export interface UseCheckboxProps {
-  /**
-   * If `true`, the checkbox will be checked.
-   * You'll need to pass `onChange` to update its value (since it is now controlled)
-   */
-  isChecked?: boolean
-  /**
-   * If `true`, the checkbox will be indeterminate.
-   * This only affects the icon shown inside checkbox
-   * and does not modify the isChecked property.
-   */
-  isIndeterminate?: boolean
-  /**
-   * If `true`, the checkbox will be disabled
-   */
-  isDisabled?: boolean
-  /**
-   * If `true` and `isDisabled` is passed, the checkbox will
-   * remain tabbable but not interactive
-   */
-  isFocusable?: boolean
-  /**
-   * If `true`, the checkbox will be readonly
-   */
-  isReadOnly?: boolean
-  /**
-   * If `true`, the checkbox is marked as invalid.
-   * Changes style of unchecked state.
-   */
-  isInvalid?: boolean
-  /**
-   * If `true`, the checkbox input is marked as required,
-   * and `required` attribute will be added
-   */
-  isRequired?: boolean
-  /**
-   * If `true`, the checkbox will be initially checked.
-   */
-  defaultChecked?: boolean
-  /**
-   * The callback invoked when the checked state of the `Checkbox` changes.
-   */
-  onChange?: (event: Event) => void
-  /**
-   * The callback invoked when the checkbox is blurred (loses focus)
-   */
-  onBlur?: (event: FocusEvent) => void
-  /**
-   * The callback invoked when the checkbox is focused
-   */
-  onFocus?: (event: FocusEvent) => void
-  /**
-   * The name of the input field in a checkbox
-   * (Useful for form submission).
-   */
-  name?: string
-  /**
-   * The value to be used in the checkbox input.
-   * This is the value that will be returned on form submission.
-   */
-  value?: string | number
-  /**
-   * id assigned to input
-   */
-  id?: string
-  /**
-   * Defines the string that labels the checkbox element.
-   */
-  "aria-label"?: string
-  /**
-   * Refers to the `id` of the element that labels the checkbox element.
-   */
-  "aria-labelledby"?: string
-  "aria-invalid"?: true | undefined
-  "aria-describedby"?: string
-  tabIndex?: number | string
-}
-
-export interface CheckboxState {
-  isInvalid?: boolean
-  isFocused: boolean
-  isChecked: boolean
-  isActive: boolean
-  isHovered: boolean
-  isIndeterminate?: boolean
-  isDisabled?: boolean
-  isReadOnly?: boolean
-  isRequired?: boolean
-}
+import { type UseCheckboxProps } from "./checkbox.types"
 
 /**
  * useCheckbox that provides all the state and focus management logic
@@ -114,33 +25,28 @@ export interface CheckboxState {
  * @see Docs https://ui.beae.com/checkbox#hooks
  * @see WAI-ARIA https://www.w3.org/WAI/ARIA/apg/patterns/checkbox/
  */
-export function useCheckbox(props: ToRefs<UseCheckboxProps>) {
-  const formControlProps = useFormControlProps(props)
+export function useCheckbox(useCheckboxProps: ComputedRef<UseCheckboxProps>) {
+  const useCheckboxContextProps = useCheckboxProps.value.context
+
+  const state = ref({
+    isInvalid: useCheckboxContextProps.isInvalid,
+    isFocused: useCheckboxContextProps.isFocusable,
+    isChecked: useCheckboxContextProps.isChecked,
+    isIndeterminate: useCheckboxContextProps.isIndeterminate,
+    isDisabled: useCheckboxContextProps.isDisabled,
+    isReadOnly: useCheckboxContextProps.isReadOnly,
+    isRequired: useCheckboxContextProps.isRequired,
+  })
+
+  const formControlProps = useFormControlProps(props.value.context)
   const {
     isDisabled,
     isReadOnly,
     isRequired,
     isInvalid,
     id,
-    onBlur,
-    onFocus,
     "aria-describedby": ariaDescribedBy,
   } = formControlProps
-
-  const {
-    defaultChecked,
-    isChecked: checkedProp,
-    isFocusable,
-    onChange,
-    isIndeterminate,
-    name,
-    value,
-    tabIndex = undefined,
-    "aria-label": ariaLabel,
-    "aria-labelledby": ariaLabelledBy,
-    "aria-invalid": ariaInvalid,
-    ...rest
-  } = props
 
   // filter props to get html properties
   const htmlProps = omit(rest, [
@@ -153,11 +59,6 @@ export function useCheckbox(props: ToRefs<UseCheckboxProps>) {
     "onFocus",
     "aria-describedby",
   ])
-
-  // keep event run again when value props changed
-  const onChangeProp = computed(() => onChange)
-  const onBlurProp = computed(() => onBlur)
-  const onFocusProp = computed(() => onFocus)
 
   const isFocusVisible = ref<boolean>(false)
   const isFocused = ref<boolean>(false)
@@ -172,7 +73,7 @@ export function useCheckbox(props: ToRefs<UseCheckboxProps>) {
   // interact with input[type="checkbox"]
   const inputRef = ref<HTMLInputElement>()
   const rootIsLabelElement = ref<boolean>(true)
-  const checkedState = ref<boolean>(!!defaultChecked?.value)
+  const checkedState = ref<boolean>(!!useCheckboxContextProps.defaultChecked)
   const isControlled = checkedProp !== undefined
   const isChecked = isControlled ? checkedProp : checkedState
 
@@ -202,14 +103,14 @@ export function useCheckbox(props: ToRefs<UseCheckboxProps>) {
     event.stopPropagation()
   }
 
-  watch([isIndeterminate], () => {
-    if (isChecked.value && inputRef.value)
-      inputRef.value["indeterminate"] = Boolean(isIndeterminate?.value)
-  })
+  // watch([isIndeterminate], () => {
+  //   if (isChecked.value && inputRef.value)
+  //     inputRef.value["indeterminate"] = Boolean(isIndeterminate?.value)
+  // })
 
-  watch([isDisabled], () => {
-    if (isDisabled?.value) isFocused.value = false
-  })
+  // watch([isDisabled], () => {
+  //   if (isDisabled?.value) isFocused.value = false
+  // })
 
   /**
    * HTMLFormElement.reset() should reset the checkbox state
@@ -367,7 +268,7 @@ export function useCheckbox(props: ToRefs<UseCheckboxProps>) {
   })
 
   // Create state to manage checkbox
-  const state: CheckboxState = {
+  const state = {
     isInvalid: isInvalid?.value,
     isFocused: isFocused.value,
     isChecked: !!isChecked?.value,
@@ -387,6 +288,7 @@ export function useCheckbox(props: ToRefs<UseCheckboxProps>) {
     getInputProps,
     getLabelProps,
     htmlProps,
+    value: true,
   }
 }
 

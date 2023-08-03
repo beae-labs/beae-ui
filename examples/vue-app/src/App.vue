@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { Button } from "@beae-ui/vue"
+import { Checkbox, CheckboxGroup } from "@beae-ui/vue"
+import { ref } from "vue";
 
+const checkboxData = ref(["hello", "hi"])
 </script>
 
 <template>
   <div>
     <h1>Demo</h1>
-    <!-- <RadioGroup value="2">
-        <Radio value='1'>First</Radio>
-        <Radio value='2'>Second</Radio>
-        <Radio value='3'>Third</Radio>
-    </RadioGroup> -->
-    <Button colorScheme='blue'>Button</Button>
+    <CheckboxGroup colorScheme="green" v-model="checkboxData">
+      <Checkbox value="hello">Naruto</Checkbox>
+      <Checkbox value="hi">Sasuke</Checkbox>
+      <Checkbox value="greet">Kakashi</Checkbox>
+    </CheckboxGroup>
   </div>
 </template>

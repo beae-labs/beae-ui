@@ -51,7 +51,7 @@ export interface FormControlContext extends FormControlOptions {
    */
   id?: string
   /**
-   * The custom `for` attribute passed on to the CFormLabel for it's corresponding field
+   * The custom `for` attribute passed on to the FormLabel for it's corresponding field
    */
   for?: string
 }
@@ -76,13 +76,13 @@ export function useFormControlProvider(props: ToRefs<FormControlContext>) {
   )
 
   /**
-   * Track whether the `CFormErrorMessage` has been rendered.
+   * Track whether the `FormErrorMessage` has been rendered.
    * We use this to append its id the the `aria-describedby` of the `input`.
    */
   const hasFeedbackText = ref(false)
 
   /**
-   * Track whether the `CFormHelperText` has been rendered.
+   * Track whether the `FormHelperText` has been rendered.
    * We use this to append its id the the `aria-describedby` of the `input`.
    */
   const hasHelpText = ref(false)
