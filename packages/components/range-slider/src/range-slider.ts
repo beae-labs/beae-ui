@@ -198,10 +198,6 @@ export const RangeSliderTrack: ComponentWithProps<
   },
 })
 
-export interface RangeSliderInnerTrackProps extends HTMLBeaeProps<"div"> {}
-
-// export const RangeSliderFilledTrack: ComponentWithProps<DeepPartial<RangeSliderInnerTrackProps>> = defineComponent({
-
 export const RangeSliderFilledTrack = defineComponent({
   name: "RangeSliderFilledTrack",
   setup(props, { slots }) {
