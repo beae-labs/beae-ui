@@ -503,7 +503,7 @@ export function useSlider(props: UseSliderProps) {
     }
   })
 
-  const state: SliderState = computed(() => {
+  const state = computed<SliderState>(() => {
     return {
       value: value.value,
       isFocused: isFocused.value,

@@ -95,7 +95,8 @@ export const RangeSlider: ComponentWithProps<DeepPartial<RangeSliderProps>> =
       >,
       ...vueThemingProps,
     },
-    setup(props, { slots }) {
+    emits: ["update:value"],
+    setup(props, { slots, emit }) {
       const sliderProps = computed(() => props)
 
       const styles = useMultiStyleConfig("Slider", sliderProps)
@@ -104,9 +105,16 @@ export const RangeSlider: ComponentWithProps<DeepPartial<RangeSliderProps>> =
       const { direction } = useTheme()
       ownProps.direction = direction
 
-      const { rootRef, getRootProps, ...context } = useRangeSlider(ownProps)
+      const { state, rootRef, getRootProps, ...context } =
+        useRangeSlider(ownProps)
       const ctx = computed(() => {
-        return { ...context, name: sliderProps.value.name }
+        return { ...context, name: sliderProps.value.name, state }
+      })
+
+      const value = computed(() => state.value.value)
+
+      watch(value, (val) => {
+        emit("update:value", val)
       })
 
       RangeSliderProvider(ctx)
