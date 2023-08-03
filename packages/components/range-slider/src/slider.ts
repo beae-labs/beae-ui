@@ -11,7 +11,7 @@ import {
   useTheme,
 } from "@beae-ui/system"
 import { useSlider, UseSliderProps, UseSliderReturn } from "./use-slider"
-import { PropType, defineComponent, h, computed } from "vue"
+import { PropType, defineComponent, h, computed, watch } from "vue"
 
 interface SliderContext
   extends Omit<UseSliderReturn, "getInputProps" | "getRootProps"> {}
@@ -81,7 +81,8 @@ export const Slider: ComponentWithProps<DeepPartial<SliderProps>> =
       "aria-labelledby": String as PropType<SliderProps["aria-labelledby"]>,
       direction: String as PropType<SliderProps["direction"]>,
     },
-    setup(props, { slots }) {
+    emits: ["update:value"],
+    setup(props, { slots, emit }) {
       const sliderProps: SliderProps = computed(() => props)
       const styles = useMultiStyleConfig("Slider", sliderProps)
       const ownProps = omitThemingProps(sliderProps.value)
@@ -89,12 +90,17 @@ export const Slider: ComponentWithProps<DeepPartial<SliderProps>> =
       const { direction } = useTheme()
       ownProps.direction = direction
 
-      const { rootRef, getInputProps, getRootProps, ...context } =
+      const { state, getInputProps, getRootProps, ...context } =
         useSlider(ownProps)
+      const value = computed(() => state.value.value)
+
+      watch(value, (val) => {
+        emit("update:value", val)
+      })
 
       const rootProps = getRootProps()
       const inputProps = getInputProps.value({})
-      SliderProvider(context)
+      SliderProvider({ ...context, state })
       SliderStylesProvider(styles)
       return () =>
         h(

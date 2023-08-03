@@ -36,11 +36,7 @@ export const HorizontalRangeSlider: RangeSliderType = {
       RangeSliderThumb,
     },
     setup() {
-      const test = ref([])
-      function onchange(payload) {
-        console.log("end", payload)
-        test.value = payload
-      }
+      const test = ref([1, 100])
       return {
         args,
         onchange,
@@ -48,7 +44,8 @@ export const HorizontalRangeSlider: RangeSliderType = {
       }
     },
     template: `
-    <RangeSlider :onChangeEnd="onchange">
+    <div>{{test}}</div>
+    <RangeSlider v-model:value="test">
       <RangeSliderTrack>
         <RangeSliderFilledTrack />
       </RangeSliderTrack>

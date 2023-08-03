@@ -114,16 +114,12 @@ export const SteppedHorizontalSlider: SliderType = {
     },
     setup() {
       const value = ref(1)
-      function setValue(payload: number) {
-        value.value = payload
-      }
       return {
         args,
         value,
-        setValue,
       }
     },
-    template: `<Slider :value="value" :onChange="setValue" :min="1" :max="7" :step="2">
+    template: `<Slider v-model:value="value" :min="1" :max="10" :step="1">
       <SliderTrack>
         <SliderFilledTrack />
       </SliderTrack>
