@@ -115,24 +115,30 @@ importers:
         specifier: ^3.3.4
         version: 3.3.4
 
-  packages/components/alert:
+  examples/vue-app:
     dependencies:
-      '@beae-ui/icon':
+      '@beae-ui/theme-tools':
         specifier: workspace:^
-        version: link:../icon
-      '@beae-ui/prop-utils':
+        version: link:../../packages/core/theme-tools
+      '@beae-ui/vue':
         specifier: workspace:^
-        version: link:../../utilities/prop-utils
-      '@beae-ui/system':
-        specifier: workspace:^
-        version: link:../../core/system
-      '@beae-ui/utils':
-        specifier: workspace:^
-        version: link:../../utilities/utils
+        version: link:../../packages/core/vue
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
     devDependencies:
-      clean-package:
-        specifier: 2.2.0
-        version: 2.2.0
+      '@vitejs/plugin-vue':
+        specifier: ^4.2.3
+        version: 4.2.3(vite@4.4.5)(vue@3.3.4)
+      typescript:
+        specifier: ^5.0.2
+        version: 5.1.6
+      vite:
+        specifier: ^4.4.5
+        version: 4.4.5(@types/node@20.4.4)
+      vue-tsc:
+        specifier: ^1.8.5
+        version: 1.8.8(typescript@5.1.6)
 
   packages/components/accordion:
     dependencies:
@@ -162,6 +168,56 @@ importers:
         version: 0.13.0(vue@3.3.4)
       vue:
         specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
+  packages/components/alert:
+    dependencies:
+      '@beae-ui/icon':
+        specifier: workspace:^
+        version: link:../icon
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
+  packages/components/avatar:
+    dependencies:
+      '@beae-ui/icon':
+        specifier: workspace:^
+        version: link:../icon
+      '@beae-ui/layout':
+        specifier: workspace:^
+        version: link:../layout
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/spinner':
+        specifier: workspace:^
+        version: link:../spinner
+      '@beae-ui/styled-system':
+        specifier: workspace:^
+        version: link:../../core/styled-system
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      vue:
+        specifier: 3.3.4
         version: 3.3.4
     devDependencies:
       clean-package:
@@ -210,46 +266,6 @@ importers:
       '@beae-ui/utils':
         specifier: workspace:^
         version: link:../../utilities/utils
-    devDependencies:
-      clean-package:
-        specifier: 2.2.0
-        version: 2.2.0
-
-  packages/components/checkbox:
-    dependencies:
-      '@beae-ui/composables':
-        specifier: workspace:^
-        version: link:../../core/composables
-      '@beae-ui/form-control':
-        specifier: workspace:^
-        version: link:../form-control
-      '@beae-ui/prop-utils':
-        specifier: workspace:^
-        version: link:../../utilities/prop-utils
-      '@beae-ui/styled-system':
-        specifier: workspace:^
-        version: link:../../core/styled-system
-      '@beae-ui/system':
-        specifier: workspace:^
-        version: link:../../core/system
-      '@beae-ui/utils':
-        specifier: workspace:^
-        version: link:../../utilities/utils
-      '@beae-ui/visually-hidden':
-        specifier: workspace:^
-        version: link:../visually-hidden
-      '@beae-ui/vue-utils':
-        specifier: workspace:^
-        version: link:../../utilities/vue-utils
-      '@vueuse/motion':
-        specifier: ^2.0.0
-        version: 2.0.0(vue@3.3.4)
-      '@zag-js/focus-visible':
-        specifier: ^0.13.0
-        version: 0.13.0
-      vue:
-        specifier: ^3.3.4
-        version: 3.3.4
     devDependencies:
       clean-package:
         specifier: 2.2.0
@@ -601,6 +617,56 @@ importers:
         specifier: 2.2.0
         version: 2.2.0
 
+  packages/components/skeleton:
+    dependencies:
+      '@beae-ui/composables':
+        specifier: workspace:^
+        version: link:../../core/composables
+      '@beae-ui/media-query':
+        specifier: workspace:^
+        version: link:../media-query
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
+  packages/components/skip-nav:
+    dependencies:
+      '@beae-ui/icon':
+        specifier: workspace:^
+        version: link:../icon
+      '@beae-ui/input':
+        specifier: workspace:^
+        version: link:../input
+      '@beae-ui/layout':
+        specifier: workspace:^
+        version: link:../layout
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
   packages/components/spinner:
     dependencies:
       '@beae-ui/prop-utils':
@@ -615,6 +681,28 @@ importers:
       '@beae-ui/visually-hidden':
         specifier: workspace:^
         version: link:../visually-hidden
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
+  packages/components/tag:
+    dependencies:
+      '@beae-ui/icon':
+        specifier: workspace:^
+        version: link:../icon
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
     devDependencies:
       clean-package:
         specifier: 2.2.0
@@ -875,9 +963,6 @@ importers:
       '@beae-ui/button':
         specifier: workspace:^
         version: link:../../components/button
-      '@beae-ui/checkbox':
-        specifier: workspace:^
-        version: link:../../components/checkbox
       '@beae-ui/close-button':
         specifier: workspace:^
         version: link:../../components/close-button
@@ -4589,8 +4674,8 @@ packages:
       - supports-color
     dev: true
 
-  /@storybook/builder-vite@7.1.0(typescript@5.1.6)(vite@4.4.7):
-    resolution: {integrity: sha512-4fYsapT5q6op63fBZ4mkZAzA8srObmQqUnydVW4M5v0UCoqKBdZtRMkibLJ2M9FoLJZxDnDO1HydaV7nPwN+zg==}
+  /@storybook/builder-vite@7.2.0(typescript@5.1.6)(vite@4.4.5):
+    resolution: {integrity: sha512-YmTtyIMxWKaFOsJaLU5rGHukvt37LjVvW6QEAEK1Clbl1f3QUNSEGJwVYLRYO7xQvhymBF4JMa8N5NSc1+xSEQ==}
     peerDependencies:
       '@preact/preset-vite': '*'
       typescript: '>= 4.3.x'
@@ -4624,7 +4709,7 @@ packages:
       remark-slug: 6.1.0
       rollup: 3.26.3
       typescript: 5.1.6
-      vite: 4.4.7(@types/node@20.4.4)
+      vite: 4.4.5(@types/node@20.4.4)
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -5050,10 +5135,10 @@ packages:
       '@storybook/core-server': 7.2.0
       '@storybook/vue3': 7.2.0(@vue/compiler-core@3.3.4)(vue@3.3.4)
       '@vitejs/plugin-vue': 4.2.3(vite@4.4.5)(vue@3.3.4)
-      magic-string: 0.30.1
+      magic-string: 0.30.2
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      vite: 4.4.7(@types/node@20.4.4)
+      vite: 4.4.5(@types/node@20.4.4)
       vue-docgen-api: 4.74.0(vue@3.3.4)
     transitivePeerDependencies:
       - '@preact/preset-vite'
@@ -5397,13 +5482,13 @@ packages:
   /@types/lodash.camelcase@4.3.7:
     resolution: {integrity: sha512-Nfi6jpo9vuEOSIJP+mpbTezKyEt75DQlbwjiDvs/JctWkbnHDoyQo5lWqdvgNiJmVUjcmkfvlrvSEgJYvurOKg==}
     dependencies:
-      '@types/lodash': 4.14.196
+      '@types/lodash': 4.14.195
     dev: true
 
   /@types/lodash.memoize@4.1.7:
     resolution: {integrity: sha512-lGN7WeO4vO6sICVpf041Q7BX/9k1Y24Zo3FY0aUezr1QlKznpjzsDk3T3wvH8ofYzoK0QupN9TWcFAFZlyPwQQ==}
     dependencies:
-      '@types/lodash': 4.14.196
+      '@types/lodash': 4.14.195
     dev: true
 
   /@types/lodash.mergewith@4.6.7:
@@ -5742,14 +5827,14 @@ packages:
       eslint-visitor-keys: 3.4.1
     dev: true
 
-  /@vitejs/plugin-vue@4.2.3(vite@4.4.7)(vue@3.3.4):
+  /@vitejs/plugin-vue@4.2.3(vite@4.4.5)(vue@3.3.4):
     resolution: {integrity: sha512-R6JDUfiZbJA9cMiguQ7jxALsgiprjBeHL5ikpXfJCH62pPHtI+JdJ5xWj6Ev73yXSlYl86+blXn1kZHQ7uElxw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.4.7(@types/node@20.4.4)
+      vite: 4.4.5(@types/node@20.4.4)
       vue: 3.3.4
     dev: true
 
@@ -5917,7 +6002,7 @@ packages:
       - vue
     dev: false
 
-  /@yarnpkg/esbuild-plugin-pnp@3.0.0-rc.15(esbuild@0.18.16):
+  /@yarnpkg/esbuild-plugin-pnp@3.0.0-rc.15(esbuild@0.18.17):
     resolution: {integrity: sha512-kYzDJO5CA9sy+on/s2aIW0411AklfCi8Ck/4QDivOqsMKpStZA2SsR+X27VTggGwpStWaLrjJcDcdDMowtG8MA==}
     engines: {node: '>=14.15.0'}
     peerDependencies:
@@ -6199,7 +6284,7 @@ packages:
     resolution: {integrity: sha512-xcLxITLe2HYa1cnYnwCjkOO1PqUHQpozB8x9AR0OgWN2woOBi5kSDVxKfd0b7sb1hw5qFeJhXm9H1nu3xSfLeQ==}
     engines: {node: '>=10'}
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.1
     dev: true
 
   /aria-query@5.1.3:
@@ -11104,7 +11189,7 @@ packages:
     dependencies:
       react: 18.2.0
       react-style-singleton: 2.2.1(react@18.2.0)
-      tslib: 2.6.0
+      tslib: 2.6.1
     dev: true
 
   /react-remove-scroll@2.5.5(react@18.2.0):
@@ -11120,7 +11205,7 @@ packages:
       react: 18.2.0
       react-remove-scroll-bar: 2.3.4(react@18.2.0)
       react-style-singleton: 2.2.1(react@18.2.0)
-      tslib: 2.6.0
+      tslib: 2.6.1
       use-callback-ref: 1.3.0(react@18.2.0)
       use-sidecar: 1.1.2(react@18.2.0)
     dev: true
@@ -11138,7 +11223,7 @@ packages:
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 18.2.0
-      tslib: 2.6.0
+      tslib: 2.6.1
     dev: true
 
   /react@18.2.0:
@@ -12560,7 +12645,7 @@ packages:
         optional: true
     dependencies:
       react: 18.2.0
-      tslib: 2.6.0
+      tslib: 2.6.1
     dev: true
 
   /use-resize-observer@9.1.0(react-dom@18.2.0)(react@18.2.0):
@@ -12586,7 +12671,7 @@ packages:
     dependencies:
       detect-node-es: 1.1.0
       react: 18.2.0
-      tslib: 2.6.0
+      tslib: 2.6.1
     dev: true
 
   /util-deprecate@1.0.2:

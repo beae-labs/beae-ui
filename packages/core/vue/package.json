@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@beae-ui/button": "workspace:^",
-    "@beae-ui/checkbox": "workspace:^",
     "@beae-ui/close-button": "workspace:^",
     "@beae-ui/color-mode": "workspace:^",
     "@beae-ui/composables": "workspace:^",

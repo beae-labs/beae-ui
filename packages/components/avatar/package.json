@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@beae-ui/icon": "workspace:^",
+    "@beae-ui/layout": "workspace:^",
     "@beae-ui/prop-utils": "workspace:^",
     "@beae-ui/spinner": "workspace:^",
     "@beae-ui/styled-system": "workspace:^",

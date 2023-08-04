@@ -115,27 +115,7 @@ const variantSolid = definePartsStyle((props) => {
       color: $fg.reference,
     },
   }
-}
-
-const variantPolaris: PartsStyleFunction<typeof parts> = (props) => {
-  const { status: _status } = props
-  let color = _status == "error" ? "polaris.red.600" : "polaris.gray.900"
-
-  return {
-    container: {
-      bg: color,
-      color: "white",
-      borderRadius: "base",
-      fontSize: "sm",
-    },
-    icon: {
-      color: "white",
-    },
-    spinner: {
-      color: "white",
-    },
-  }
-}
+})
 
 const variants = {
   subtle: variantSubtle,
@@ -143,7 +123,6 @@ const variants = {
   "top-accent": variantTopAccent,
   solid: variantSolid,
 }
-
 
 export const alertTheme = defineMultiStyleConfig({
   baseStyle,
