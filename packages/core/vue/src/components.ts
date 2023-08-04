@@ -14,6 +14,7 @@
 export * from "@beae-ui/button"
 
 // C
+// export * from "@beae-ui/checkbox"
 export * from "@beae-ui/color-mode"
 export * from "@beae-ui/close-button"
 

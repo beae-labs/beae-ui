@@ -42,7 +42,7 @@ const STATUSES = {
 }
 
 const [StylesProvider, useStyles] = createStylesContext("Alert")
-type AlertStatus = keyof typeof STATUSES
+export type AlertStatus = keyof typeof STATUSES
 export type AlertVariant =
   | "solid"
   | "subtle"

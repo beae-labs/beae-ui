@@ -3,7 +3,7 @@ import { SkipNavContent, SkipNavLink } from "../src"
 import { Box, Kbd, List, ListItem, Text } from "@beae-ui/layout"
 import { Icon } from "@beae-ui/icon"
 
-import { Code } from "@beae-ui/code"
+// import { Code } from "@beae-ui/code"
 import { Input } from "@beae-ui/input"
 
 export default {
