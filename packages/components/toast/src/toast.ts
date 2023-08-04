@@ -109,8 +109,8 @@ export function createRenderToast(
   } = {},
 ) {
   const { render, toastComponent: ToastComponent = Toast } = options
-  const renderToast = <RenderProps>((props: ToastProps) => {
-    console.log("render")
+  const renderToast = (props) => {
+    console.log("render", props)
     if (typeof render === "function") {
       return render({ ...props, ...options })
     }
@@ -119,7 +119,7 @@ export function createRenderToast(
         ...props,
         ...options,
       })
-  })
+  }
   return renderToast
 }
 
@@ -183,7 +183,6 @@ export function createToastFn(
   toast.close = toastStore.close
   toast.isActive = toastStore.isActive
   toast.state = toastStore.state
-  console.log(toast.isActive, "ts")
   return toast
 }
 

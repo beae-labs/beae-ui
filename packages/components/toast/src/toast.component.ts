@@ -90,31 +90,32 @@ export const ToastComponent = defineComponent({
       toastSpacing,
     } = props
 
-    console.log(props, "toast")
-    const delay = ref(duration)
-    const isPresent = useIsPresent()
+    console.log(props, "toast sssssssssssssssss")
+    const durationComputed = computed(() => duration)
+    const delay = ref(durationComputed.value)
+    const isPresent = computed(() => useIsPresent())
 
-    watch(isPresent, () => {
-      if (!isPresent) {
+    watch(isPresent, (val) => {
+      if (!val) {
         onCloseComplete?.()
       }
     })
-    watch(duration, () => {
-      delay.value = duration
+    watch(durationComputed, (val) => {
+      delay.value = val
     })
 
     const onMouseEnter = () => (delay.value = null)
     const onMouseLeave = () => (delay.value = duration)
 
     const close = () => {
-      if (isPresent) onRequestRemove()
+      if (isPresent.value) onRequestRemove?.()
     }
 
     watch(
       [isPresent, requestClose],
       (isPresentValue, requestCloseVAlue) => {
         if (isPresentValue && requestCloseVAlue) {
-          onRequestRemove()
+          onRequestRemove?.()
         }
       },
       {
@@ -140,7 +141,7 @@ export const ToastComponent = defineComponent({
       h(
         motion.div,
         {
-          layout,
+          // layout,
           __label: "toast",
           variants: motionVariants,
           initial: "initial",
@@ -158,7 +159,7 @@ export const ToastComponent = defineComponent({
               role: "status",
               "aria-atomic": "true",
               __label: "toast__inner",
-              __css: containerStyles,
+              __css: containerStyles.value,
             },
             () => runIfFn(message, { id, onClose: close }),
           ),

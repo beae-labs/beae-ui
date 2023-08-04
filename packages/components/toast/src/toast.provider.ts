@@ -106,7 +106,7 @@ export const [ToastOptionProvider, useToastOptionContext] = createContext<
  * across all corners ("top", "bottom", etc.)
  */
 export const ToastProvider = defineComponent({
-  name: "ToastProvide",
+  name: "ToastProvider",
   props: {
     defaultOptions: {} as PropType<ToastProviderProps["defaultOptions"]>,
     motionVariants: {} as PropType<ToastProviderProps["motionVariants"]>,
@@ -118,40 +118,42 @@ export const ToastProvider = defineComponent({
   },
   setup(props, { slots }) {
     const state = toastStore.state
-
+    console.log("Toast component init", state)
     const {
       motionVariants,
       component: Component = ToastComponent,
       portalProps,
     } = props
 
-    const stateKeys = Object.keys(state) as Array<keyof typeof state>
+    const stateKeys = Object.keys(state.value) as Array<keyof typeof state>
     const toastList = stateKeys.map((position) => {
-      const toasts = state[position]
+      const toasts = state.value[position] ?? []
 
-      return () =>
-        h(
-          beae.div,
-          {
-            role: "region",
-            "aria-live": "polite",
-            "aria-label": "Notifications",
-            key: position,
-            id: `beae-toast-manager-${position}`,
-            __css: getToastListStyle(position),
-          },
-          () =>
-            h(AnimatePresence, { initial: false }, () => {
-              toasts.map((toast) =>
-                h(Component, {
-                  key: toast.id,
-                  motionVariants: motionVariants,
-                  ...toast,
-                }),
-              )
-            }),
-        )
+      return h(
+        beae.div,
+        {
+          role: "region",
+          "aria-live": "polite",
+          "aria-label": "Notifications",
+          key: position,
+          id: `beae-toast-manager-${position}`,
+          __css: getToastListStyle(position),
+        },
+        () =>
+          h(beae.div, { initial: false }, () =>
+            toasts?.length
+              ? toasts.map((toast) =>
+                  h(Component, {
+                    key: toast.id,
+                    motionVariants: motionVariants,
+                    ...toast,
+                  }),
+                )
+              : [],
+          ),
+      )
     })
+    console.log(toastList, "toastList")
 
     return () => h(Portal, { ...portalProps }, toastList)
   },

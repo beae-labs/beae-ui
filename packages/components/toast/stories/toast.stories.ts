@@ -1,5 +1,5 @@
 import { theme as base } from "@beae-ui/theme"
-import { useToast, createStandaloneToast, ToastId } from "../src"
+import { useToast, createStandaloneToast, ToastId, ToastProvider } from "../src"
 import { Button, ButtonGroup } from "@beae-ui/button"
 import { beae, useColorMode } from "@beae-ui/system"
 import { Alert } from "@beae-ui/alert"
@@ -48,13 +48,10 @@ export function ToastExample() {
     toast.close(id)
     console.log("show", toast.state.value)
   }
-  return () =>
-    h(ButtonGroup, {}, () => [
-      h(Button, { onClick: showToast }, "Show toast"),
-      h(Button, { onClick: closeAll }, "Close all"),
-      h(Button, { onClick: update }, "Update"),
-      h(Button, { onClick: closeOne }, "Close one"),
-    ])
+  return () => [
+    h(Button, { onClick: showToast }, "Show toast"),
+    h(ToastProvider),
+  ]
 }
 
 // export function CustomRender() {

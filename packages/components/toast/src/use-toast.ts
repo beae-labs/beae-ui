@@ -24,15 +24,15 @@ export interface UseToastOptions extends ThemingProps<"Alert"> {
    * Render a component toast component.
    * Any component passed will receive 2 props: `id` and `onClose`.
    */
-  render?(props: RenderProps): React.ReactNode
+  render?(props: RenderProps): Node
   /**
    * The title of the toast
    */
-  title?: React.ReactNode
+  title?: String
   /**
    * The description of the toast
    */
-  description?: React.ReactNode
+  description?: String
   /**
    * If `true`, toast will show a close button
    * @default false
@@ -45,7 +45,7 @@ export interface UseToastOptions extends ThemingProps<"Alert"> {
   /**
    * A custom icon that will be displayed by the toast.
    */
-  icon?: React.ReactNode
+  icon?: String
   /**
    * The `id` of the toast.
    *

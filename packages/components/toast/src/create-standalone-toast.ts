@@ -67,14 +67,15 @@ export function createStandaloneToast({
   // ThemeProvider({theme: theme});
   // <ColorModeContext.Provider value={colorModeContextValue}>
   // ColorModeContext(colorModeContextValue);
-  ToastProvider({
-    aultOptions: defaultOptions,
-    motionVariants: motionVariants,
-    toastSpacing: toastSpacing,
-    component: component,
-  })
-
+  console.log("initssss")
   return {
+    ToastContainer: () =>
+      h(ToastProvider, {
+        aultOptions: defaultOptions,
+        motionVariants: motionVariants,
+        toastSpacing: toastSpacing,
+        component: component,
+      }),
     toast: createToastFn(theme.direction, defaultOptions),
   }
 }

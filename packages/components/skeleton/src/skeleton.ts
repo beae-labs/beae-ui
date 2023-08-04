@@ -19,7 +19,7 @@ import { h, ref, defineComponent, PropType } from "vue"
 import {
   beae,
   ComponentWithProps,
-  cssVar,
+  // cssVar,
   DeepPartial,
   HTMLBeaeProps,
   keyframes,
@@ -59,8 +59,8 @@ export interface SkeletonOptions {
   fadeDuration?: number
 }
 
-const $startColor = cssVar("skeleton-start-color")
-const $endColor = cssVar("skeleton-end-color")
+// const $startColor = cssVar("skeleton-start-color")
+// const $endColor = cssVar("skeleton-end-color")
 
 export type SkeletonType = SkeletonOptions
 
@@ -166,7 +166,7 @@ export const Skeleton: ComponentWithProps<DeepPartial<SkeletonProps>> =
               ...styles.value,
               ...cssVarStyles,
               _dark: { ...cssVarStyles },
-              animation: `${speed}s linear infinite alternate ${bgFade}`,
+              // animation: `${speed}s linear infinite alternate ${bgFade}`,
             },
             ...attrs,
           }),
