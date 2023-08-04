@@ -11,8 +11,9 @@ import type { UseToastOptions } from "./use-toast"
 import { toastStore } from "./toast.store"
 import { getToastListStyle } from "./toast.utils"
 import { createContext } from "@beae-ui/utils"
-import { h } from "vue"
+import { PropType, h } from "vue"
 import { beae } from "@beae-ui/system"
+import { defineComponent } from "vue"
 export interface ToastMethods {
   /**
    * Function to actually create a toast and add it
@@ -48,7 +49,7 @@ export type CreateToastOptions = Partial<
   >
 >
 
-export type ToastProviderProps = React.PropsWithChildren<{
+export type ToastProviderProps = {
   /**
    * Default options for `useToast(options)`
    *
@@ -88,7 +89,7 @@ export type ToastProviderProps = React.PropsWithChildren<{
    * Props to be forwarded to the portal component
    */
   portalProps?: Pick<PortalProps, "appendToParentPortal" | "containerRef">
-}>
+}
 
 /**
  * Passes default options down to be used by toast creator function
@@ -104,41 +105,54 @@ export const [ToastOptionProvider, useToastOptionContext] = createContext<
  * Manages the creation, and removal of toasts
  * across all corners ("top", "bottom", etc.)
  */
-export const ToastProvider = (props: ToastProviderProps) => {
-  const state = toastStore.state
+export const ToastProvider = defineComponent({
+  name: "ToastProvide",
+  props: {
+    defaultOptions: {} as PropType<ToastProviderProps["defaultOptions"]>,
+    motionVariants: {} as PropType<ToastProviderProps["motionVariants"]>,
+    component: {} as PropType<ToastProviderProps["component"]>,
+    toastSpacing: [String, Number] as PropType<
+      ToastProviderProps["toastSpacing"]
+    >,
+    portalProps: {} as PropType<ToastProviderProps["portalProps"]>,
+  },
+  setup(props, { slots }) {
+    const state = toastStore.state
 
-  const {
-    motionVariants,
-    component: Component = ToastComponent,
-    portalProps,
-  } = props
+    const {
+      motionVariants,
+      component: Component = ToastComponent,
+      portalProps,
+    } = props
 
-  const stateKeys = Object.keys(state) as Array<keyof typeof state>
-  const toastList = stateKeys.map((position) => {
-    const toasts = state[position]
+    const stateKeys = Object.keys(state) as Array<keyof typeof state>
+    const toastList = stateKeys.map((position) => {
+      const toasts = state[position]
 
-    return () =>
-      h(
-        beae.div,
-        {
-          role: "region",
-          "aria-live": "polite",
-          "aria-label": "Notifications",
-          key: position,
-          id: `beae-toast-manager-${position}`,
-          __css: getToastListStyle(position),
-        },
-        h(AnimatePresence, { initial: false }, () => {
-          toasts.map((toast) =>
-            h(Component, {
-              key: toast.id,
-              motionVariants: motionVariants,
-              ...toast,
+      return () =>
+        h(
+          beae.div,
+          {
+            role: "region",
+            "aria-live": "polite",
+            "aria-label": "Notifications",
+            key: position,
+            id: `beae-toast-manager-${position}`,
+            __css: getToastListStyle(position),
+          },
+          () =>
+            h(AnimatePresence, { initial: false }, () => {
+              toasts.map((toast) =>
+                h(Component, {
+                  key: toast.id,
+                  motionVariants: motionVariants,
+                  ...toast,
+                }),
+              )
             }),
-          )
-        }),
-      )
-  })
+        )
+    })
 
-  return () => h(Portal, { ...portalProps }, toastList)
-}
+    return () => h(Portal, { ...portalProps }, toastList)
+  },
+})

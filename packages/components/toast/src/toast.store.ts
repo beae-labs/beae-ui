@@ -62,8 +62,6 @@ function createStore(initialState: ToastState): ToastStore {
     const toast = createToast(message, options)
     const { position, id } = toast
 
-    console.log(toast, "too")
-
     setState((prevToasts) => {
       const isTop = position.includes("top")
       /**
@@ -76,7 +74,6 @@ function createStore(initialState: ToastState): ToastStore {
       const toasts = isTop
         ? [toast, ...(prevToasts[position] ?? [])]
         : [...(prevToasts[position] ?? []), toast]
-      console.log(prevToasts, "toassss", position, toasts)
       return {
         ...prevToasts,
         [position]: toasts,

@@ -1,7 +1,7 @@
 import { runIfFn } from "@beae-ui/shared-utils"
 import { motion, useIsPresent, Variants } from "framer-motion"
 import { beae } from "@beae-ui/system"
-import type { ToastOptions, ToastMessage, RenderProps } from "./toast.types"
+import type { ToastOptions } from "./toast.types"
 import { getToastStyle, useTimeout } from "./toast.utils"
 import { ToastProviderProps } from "./toast.provider"
 import { computed, defineComponent, h, PropType, ref, watch } from "vue"
@@ -90,6 +90,7 @@ export const ToastComponent = defineComponent({
       toastSpacing,
     } = props
 
+    console.log(props, "toast")
     const delay = ref(duration)
     const isPresent = useIsPresent()
 

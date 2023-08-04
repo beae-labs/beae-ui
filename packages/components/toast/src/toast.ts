@@ -110,6 +110,7 @@ export function createRenderToast(
 ) {
   const { render, toastComponent: ToastComponent = Toast } = options
   const renderToast = <RenderProps>((props: ToastProps) => {
+    console.log("render")
     if (typeof render === "function") {
       return render({ ...props, ...options })
     }
@@ -140,7 +141,6 @@ export function createToastFn(
   const toast = (options?: UseToastOptions) => {
     const normalizedToastOptions = normalizeToastOptions(options)
     const Message = createRenderToast(normalizedToastOptions)
-    console.log(Message, "message")
     return toastStore.notify(Message, normalizedToastOptions)
   }
 
