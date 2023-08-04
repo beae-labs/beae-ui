@@ -107,7 +107,7 @@ export const Slider: ComponentWithProps<DeepPartial<SliderProps>> =
           beae.div,
           {
             ...rootProps,
-            class: cx("beae-slider", sliderProps.value.class),
+            __label: cx("slider", sliderProps.value.class),
             __css: styles.value.container,
           },
           () => [slots.default?.(), h(beae.input, { ...inputProps })],
@@ -139,7 +139,7 @@ export const SliderThumb: ComponentWithProps<DeepPartial<SliderThumbProps>> =
           beae.div,
           {
             ...thumbProps.value,
-            class: cx("beae-slider__thumb", props.class),
+            __label: cx("slider__thumb", props.class),
             __css: styles.value.thumb,
           },
           () => slots.default?.(),
@@ -167,7 +167,7 @@ export const SliderTrack: ComponentWithProps<DeepPartial<SliderTrackProps>> =
           beae.div,
           {
             ...trackProps.value,
-            class: cx("beae-slider__track", props.class),
+            __label: cx("slider__track", props.class),
             __css: styles.value.track,
           },
           () => slots.default?.(),
@@ -196,7 +196,7 @@ export const SliderFilledTrack: ComponentWithProps<
         beae.div,
         {
           ...trackProps.value,
-          class: cx("beae-slider__filled-track", props.class),
+          __label: cx("slider__filled-track", props.class),
           __css: styles.value.filledTrack,
         },
         () => slots.default?.(),
@@ -234,7 +234,7 @@ export const SliderMark: ComponentWithProps<DeepPartial<SliderMarkProps>> =
           beae.div,
           {
             ...markProps.value,
-            class: cx("beae-slider__marker", props.class),
+            __label: cx("slider__marker", props.class),
             __css: styles.value.mark,
           },
           () => slots.default?.(),

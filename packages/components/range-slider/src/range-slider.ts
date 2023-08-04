@@ -124,7 +124,7 @@ export const RangeSlider: ComponentWithProps<DeepPartial<RangeSliderProps>> =
           beae.div,
           {
             ref: rootRef,
-            class: "beae-slider",
+            __label: "slider",
             __css: styles.value.container,
           },
           () => slots.default?.(),
@@ -163,7 +163,7 @@ export const RangeSliderThumb: ComponentWithProps<
         beae.div,
         {
           ...thumbProps.value,
-          class: cx("beae-slider__thumb", props.class),
+          __label: cx("slider__thumb", props.class),
           __css: styles.value.thumb,
         },
         () => [
@@ -189,7 +189,7 @@ export const RangeSliderTrack: ComponentWithProps<
         beae.div,
         {
           ...trackProps,
-          class: cx("beae-slider__track", props.class),
+          __label: cx("slider__track", props.class),
           __css: styles.value.track,
           "data-testid": "beae-range-slider-track",
         },
@@ -215,7 +215,7 @@ export const RangeSliderFilledTrack = defineComponent({
         beae.div,
         {
           ...trackProps.value,
-          class: "beae-slider__filled-track",
+          __label: "slider__filled-track",
           __css: styles.value.filledTrack,
         },
         () => slots.default?.(),
@@ -249,7 +249,7 @@ export const RangeSliderMark: ComponentWithProps<
         beae.div,
         {
           ...markProps,
-          class: cx("beae-slider__marker", props.class),
+          __label: cx("slider__marker", props.class),
           __css: styles.value.mark,
         },
         () => slots.default?.(),
