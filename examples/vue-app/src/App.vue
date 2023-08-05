@@ -1,17 +1,22 @@
 <script setup lang="ts">
-import { Checkbox, CheckboxGroup } from "@beae-ui/vue"
+import { Radio, RadioGroup } from "@beae-ui/vue"
 import { ref } from "vue";
 
-const checkboxData = ref(["hello", "hi"])
+const radio = ref("hello")
+
+const onChangeFromRadioGroup = (event: Event) => {
+  console.log("radioGroup from App: ", (event.target as HTMLInputElement).value)
+}
 </script>
 
 <template>
   <div>
     <h1>Demo</h1>
-    <CheckboxGroup colorScheme="green" v-model="checkboxData">
-      <Checkbox value="hello">Naruto</Checkbox>
-      <Checkbox value="hi">Sasuke</Checkbox>
-      <Checkbox value="greet">Kakashi</Checkbox>
-    </CheckboxGroup>
+    <RadioGroup colorScheme="green" v-model="radio" @change="onChangeFromRadioGroup">
+      <Radio value="hello">Naruto</Radio>
+      <Radio value="hi" @change="($event) => console.log($event)">Sasuke</Radio>
+      <Radio value="greet">Kakashi</Radio>
+    </RadioGroup>
+    Hello ca nha <pre>{{ radio }}</pre>
   </div>
 </template>

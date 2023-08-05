@@ -184,7 +184,20 @@ export {
 
 // R
 export { cssResetStyles } from "@beae-ui/css-reset"
-export { Radio, RadioGroup } from "@beae-ui/radio"
+export {
+  type RadioProps,
+  type RadioGroupProps,
+  type UseRadioProps,
+  type UseRadioReturn,
+  type UseRadioGroupProps,
+  type UseRadioGroupReturn,
+  type RadioGroupContext,
+  useRadioGroupContext,
+  useRadio,
+  useRadioGroup,
+  Radio,
+  RadioGroup,
+} from "@beae-ui/radio"
 
 // S
 export { Spinner } from "@beae-ui/spinner"

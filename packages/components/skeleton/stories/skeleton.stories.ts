@@ -74,7 +74,6 @@ const ToggleTemplate: StoryFn = (args: any) => ({
 
     function setIsLoaded() {
       isLoaded.value = !isLoaded.value
-      console.log("isLoaded", isLoaded.value)
     }
 
     return { args, setIsLoaded, isLoaded }

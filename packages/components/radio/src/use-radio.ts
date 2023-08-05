@@ -12,198 +12,138 @@
  */
 
 import {
-  ToRefs,
+  type ComputedRef,
   computed,
   getCurrentInstance,
   ref,
-  watch,
   watchEffect,
 } from "vue"
 import { useFormControlContext } from "@beae-ui/form-control"
 import { trackFocusVisible } from "@zag-js/focus-visible"
+import { ariaAttr, dataAttr } from "@beae-ui/utils"
+import { callAll } from "@beae-ui/shared-utils"
+import { useRadioGroupContext } from "./radio.context"
+import { type UseRadioProps } from "./radio.types"
 import { visuallyHiddenStyle } from "@beae-ui/visually-hidden"
-import { ariaAttr, callAllHandlers, dataAttr } from "@beae-ui/utils"
-import { useRadioGroupContext } from "./radio-group"
 
-export interface UseRadioProps {
-  /**
-   * id assigned to input
-   */
-  id?: string
-  /**
-   * The name of the input field in a radio
-   * (Useful for form submission).
-   */
-  name?: string
-  /**
-   * The value to be used in the radio button.
-   * This is the value that will be returned on form submission.
-   */
-  value?: string
-  /**
-   * If `true`, the radio will be checked.
-   * You'll need to pass `onChange` to update its value (since it is now controlled)
-   *
-   * @default false
-   */
-  isChecked?: boolean
-  /**
-   * If `true`, the radio will be initially checked.
-   *
-   * @default false
-   */
-  defaultChecked?: boolean
-  /**
-   * If `true`, the radio will be disabled
-   *
-   * @default false
-   */
-  isDisabled?: boolean
-  /**
-   * If `true` and `isDisabled` is true, the radio will remain
-   * focusable but not interactive.
-   *
-   * @default false
-   */
-  isFocusable?: boolean
-  /**
-   * If `true`, the radio will be read-only
-   *
-   * @default false
-   */
-  isReadOnly?: boolean
-  /**
-   * If `true`, the radio button will be invalid. This also sets `aria-invalid` to `true`.
-   *
-   * @default false
-   */
-  isInvalid?: boolean
-  /**
-   * If `true`, the radio button will be required. This also sets `aria-required` to `true`.
-   *
-   * @default false
-   */
-  isRequired?: boolean
-  /**
-   * Function called when checked state of the `input` changes
-   */
-  onChange?: (event: Event) => void
-  /**
-   * @internal
-   */
-  "data-radiogroup"?: any
-  /**
-   * Refers to the `id` of the element that labels the radio element.
-   */
-  "aria-describedby"?: string
-}
-
-export function useRadio(props: ToRefs<UseRadioProps>) {
-  const {
-    defaultChecked,
-    isChecked: isCheckedProp,
-    isFocusable,
-    isDisabled: isDisabledProp,
-    isReadOnly: isReadOnlyProp,
-    isRequired: isRequiredProp,
-    onChange,
-    isInvalid: isInvalidProp,
-    name,
-    value,
-    id: idProp,
-    "data-radiogroup": dataRadioGroup,
-    "aria-describedby": ariaDescribedBy,
-    ...htmlProps
-  } = props
-
-  const uuid = `radio-${getCurrentInstance()?.uid}`
-
+export function useRadio(
+  option: ComputedRef<{
+    context: UseRadioProps
+    emit: (event: string, ...args: any[]) => void
+  }>,
+) {
   const formControl = useFormControlContext()
   const group = useRadioGroupContext()
 
-  const isWithinRadioGroup = !!group?.value || !!dataRadioGroup?.value
   const isWithinFormControl = !!formControl?.value
+  const isWithinRadioGroup =
+    !!group?.value || !!option.value.context["data-radiogroup"]
 
-  let id =
-    isWithinFormControl && !isWithinRadioGroup
-      ? formControl?.value?.id?.value
-      : uuid
-  id = idProp?.value ?? id
+  const isCheckedState = ref(option.value.context.defaultChecked)
+  const isChecked = computed(() => {
+    if (group?.value?.value && option.value.context.value)
+      return group?.value.value.value === option.value.context.value
+    return option.value.context.isChecked
+  })
+  const isControlled = typeof isChecked.value !== undefined
+  const isCheckedComputed = computed(() =>
+    isControlled ? isChecked.value : isCheckedState.value,
+  )
+
+  const onChange = ref((event: Event) => {
+    option.value.emit("change", event)
+    option.value.emit(
+      "update:modelValue",
+      (event.target as HTMLInputElement).checked,
+    )
+  })
+  if (group.value.onChange && option.value.context.value)
+    onChange.value = callAll(group.value.onChange, onChange.value)
+
+  const name = option.value.context.name ?? group.value.name
+  const uuid = `radio-${getCurrentInstance()?.uid}`
+
+  const id =
+    option.value.context.id ??
+    (isWithinFormControl && !isWithinRadioGroup
+      ? formControl.value.id.value
+      : uuid)
 
   const isDisabled =
-    isDisabledProp?.value ?? formControl.value?.isDisabled?.value
+    option.value.context.isDisabled ??
+    group.value.isDisabled ??
+    formControl.value?.isDisabled?.value
   const isReadOnly =
-    isReadOnlyProp?.value ?? formControl.value?.isReadOnly?.value
+    option.value.context.isReadOnly ?? formControl.value?.isReadOnly?.value
   const isRequired =
-    isRequiredProp?.value ?? formControl.value?.isRequired?.value
-  const isInvalid = isInvalidProp?.value ?? formControl.value?.isInvalid?.value
+    option.value.context.isRequired ?? formControl.value?.isRequired?.value
+  const isInvalid =
+    option.value.context.isInvalid ?? formControl.value?.isInvalid?.value
 
   const isFocusVisible = ref<boolean>(false)
   const isFocused = ref<boolean>(false)
   const isHovered = ref<boolean>(false)
   const isActive = ref<boolean>(false)
 
-  const isCheckedState = ref(
-    Boolean(isCheckedProp?.value ?? defaultChecked?.value),
-  )
-
   // Handle events
-  const onHandleChange = (event: Event) => {
-    console.log("______________________")
-
-    if (isReadOnly || isReadOnly) {
+  const onChangeHandler = (event: Event) => {
+    if (isReadOnly || isDisabled) {
       event.preventDefault()
       return
     }
 
-    isCheckedState.value = (event.target as HTMLInputElement).checked
+    if (!isControlled)
+      isCheckedState.value = (event.target as HTMLInputElement).checked
+
+    onChange.value?.(event)
   }
 
   // Handle watch events
-  watchEffect(() =>
-    trackFocusVisible((newValue: boolean) => (isFocusVisible.value = newValue)),
-  )
+  watchEffect(() => {
+    trackFocusVisible((newValue: boolean) => (isFocusVisible.value = newValue))
+  })
 
-  const getLabelProps = (_props: any = {}) => ({
-    ..._props,
+  const getLabelProps = (props: any = {}) => ({
+    ...props,
     "data-disabled": dataAttr(isDisabled),
-    "data-checked": dataAttr(isCheckedState.value),
+    "data-checked": dataAttr(isCheckedComputed.value),
     "data-invalid": dataAttr(isInvalid),
   })
-  const getInputProps = (_props: any = {}) => {
+  const getInputProps = (props: any = {}) => {
     return {
-      ..._props,
+      ...props,
+      id,
+      name,
       type: "radio",
-      name: name?.value,
-      value: value?.value,
-      checked: isCheckedState.value,
+      value: option.value.context.value,
+      checked: isCheckedComputed.value,
       readOnly: isReadOnly,
       required: isRequired,
       "aria-invalid": ariaAttr(isInvalid),
       "aria-required": ariaAttr(isRequired),
       "data-readonly": dataAttr(isReadOnly),
-      "aria-describedby": ariaDescribedBy?.value,
-      // style: visuallyHiddenStyle,
-      onchange: callAllHandlers(props.onChange?.value, onHandleChange),
+      "aria-describedby": option.value.context["aria-describedby"],
+      style: visuallyHiddenStyle,
+      onchange: onChangeHandler,
     }
   }
-  const getRadioProps = (_props: any = {}) =>
+  const getRadioProps = (props: any = {}) =>
     computed(() => ({
-      ..._props,
+      ...props,
       "data-active": dataAttr(isActive.value),
       "data-hover": dataAttr(isHovered.value),
       "data-disabled": dataAttr(isDisabled),
       "data-invalid": dataAttr(isInvalid),
-      "data-checked": dataAttr(isCheckedState.value),
+      "data-checked": dataAttr(isCheckedComputed.value),
       "data-focus": dataAttr(isFocused.value),
       "data-focus-visible": dataAttr(isFocused.value && isFocusVisible.value),
       "data-readonly": dataAttr(isReadOnly),
       "aria-hidden": true,
     }))
-  const getRootProps = (_props: any = {}) => ({
-    ..._props,
+  const getRootProps = (props: any = {}) => ({
+    ...props,
     "data-disabled": dataAttr(isDisabled),
-    "data-checked": dataAttr(isCheckedState.value),
+    "data-checked": dataAttr(isCheckedComputed.value),
     "data-invalid": dataAttr(isInvalid),
   })
 
@@ -212,7 +152,7 @@ export function useRadio(props: ToRefs<UseRadioProps>) {
     getInputProps,
     getRadioProps,
     getRootProps,
-    htmlProps,
+    group,
   }
 }
 

@@ -90,7 +90,6 @@ export const Popover = defineComponent({
 
     // // Context value/Hooks
     // const api = usePopover({}, 1)
-    // console.log("🚀 ~ file: popover.ts:93 ~ setup ~ api:", api)
 
     // Styles and Effect/Animation
     const stylesComputed = useMultiStyleConfig<AnatomyParts.Popover>(

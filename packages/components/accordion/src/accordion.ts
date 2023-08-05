@@ -229,7 +229,6 @@ export const AccordionButton: ComponentWithProps<AccordionButtonProps> =
       const { opens, setOpen } = useAccordion()
 
       const styles = useStyles()
-      console.log(props, "prop")
       const buttonStyles = computed<SystemStyleObject>(() => ({
         display: "flex",
         alignItems: "center",

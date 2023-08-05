@@ -178,7 +178,6 @@ export const AlertIcon: ComponentWithProps<DeepPartial<AlertIconProps>> =
     setup(_, { attrs, slots }) {
       const styles = useStyles()
       const { status } = useAlertContext()
-      console.log(status.value, "status")
       const { icon: BaseIcon } = STATUSES?.[status?.value] ?? {
         colorScheme: "blue",
         icon: InfoIcon,

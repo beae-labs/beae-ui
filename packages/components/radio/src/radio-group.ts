@@ -15,45 +15,27 @@
  * @see Theming https://ui.beae.com/docs/theming/component-style
  */
 
+import { type PropType, computed, defineComponent, h, toRefs, watch } from "vue"
 import {
-  ComputedRef,
-  PropType,
-  computed,
-  defineComponent,
-  h,
-  toRefs,
-} from "vue"
-import {
-  ComponentWithProps,
-  DeepPartial,
-  HTMLBeaeProps,
-  ThemingProps,
+  type ComponentWithProps,
+  type DeepPartial,
   beae,
 } from "@beae-ui/system"
-import { createContext, getValidChildren } from "@beae-ui/utils"
-import {
-  UseRadioGroupProps,
-  UseRadioGroupReturn,
-  useRadioGroup,
-} from "./use-radio-group"
-import { vueThemingProps } from "../../../utilities/prop-utils/src"
+import { getValidChildren } from "@beae-ui/utils"
+import { useRadioGroup } from "./use-radio-group"
+import { vueThemingProps } from "@beae-ui/prop-utils"
+import { type RadioGroupProps } from "./radio.types"
+import { RadioGroupProvider } from "./radio.context"
 
-export type RadioGroupContext = ComputedRef<
-  Pick<UseRadioGroupReturn, "value" | "name" | "isDisabled" | "isFocusable"> &
-    Omit<ThemingProps<"Radio">, "orientation"> & {}
->
-
-const [RadioGroupProvider, useRadioGroupContext] =
-  createContext<RadioGroupContext>({
-    name: "RadioGroupContext",
-    strict: false,
-  })
-
-type Omitted = "value" | "defaultValue" | "defaultChecked"
-export interface RadioGroupProps
-  extends UseRadioGroupProps,
-    Omit<HTMLBeaeProps<"div">, Omitted>,
-    Omit<ThemingProps<"Radio">, "orientation"> {}
+const props = {
+  defaultValue: String as PropType<RadioGroupProps["defaultValue"]>,
+  modelValue: String as PropType<RadioGroupProps["modelValue"]>,
+  value: String as PropType<RadioGroupProps["value"]>,
+  isDisabled: Boolean as PropType<RadioGroupProps["isDisabled"]>,
+  isFocusable: Boolean as PropType<RadioGroupProps["isFocusable"]>,
+  name: String as PropType<RadioGroupProps["name"]>,
+  ...vueThemingProps,
+}
 
 /**
  * Used for multiple radios which are bound in one group,
@@ -64,26 +46,31 @@ export interface RadioGroupProps
 export const RadioGroup: ComponentWithProps<DeepPartial<RadioGroupProps>> =
   defineComponent({
     name: "RadioGroup",
-    props: {
-      isDisabled: Boolean as PropType<RadioGroupProps["isDisabled"]>,
-      isFocusable: Boolean as PropType<RadioGroupProps["isFocusable"]>,
-      name: String as PropType<RadioGroupProps["name"]>,
-      value: String as PropType<RadioGroupProps["value"]>,
-      ...vueThemingProps,
-    },
+    props,
     emits: ["change", "update:modelValue"],
-    setup(props, { attrs, slots }) {
-      const { value, getRootProps, name, htmlProps } = useRadioGroup(
-        toRefs(props),
-      )
+    setup(props, { attrs, emit, slots }) {
+      const useRadioGroupOptionComputed = computed(() => ({
+        context: props,
+        emit,
+      }))
+      const {
+        isDisabled,
+        isFocusable,
+        getRootProps,
+        onChange,
+        name,
+        value,
+        htmlProps,
+      } = useRadioGroup(useRadioGroupOptionComputed)
 
       const radioGroupContext = computed(() => ({
         name,
         value,
+        onChange,
         size: props.size,
         variant: props.variant,
-        isDisabled: props.isDisabled,
-        isFocusable: props.isFocusable,
+        isDisabled,
+        isFocusable,
         colorScheme: props.colorScheme,
       }))
 
@@ -102,5 +89,3 @@ export const RadioGroup: ComponentWithProps<DeepPartial<RadioGroupProps>> =
         )
     },
   })
-
-export { useRadioGroupContext }

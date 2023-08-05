@@ -34,9 +34,13 @@
   "dependencies": {
     "@beae-ui/composables": "workspace:^",
     "@beae-ui/form-control": "workspace:^",
+    "@beae-ui/prop-utils": "workspace:^",
+    "@beae-ui/shared-utils": "workspace:^",
+    "@beae-ui/styled-system": "workspace:^",
     "@beae-ui/system": "workspace:^",
     "@beae-ui/utils": "workspace:^",
     "@beae-ui/visually-hidden": "workspace:^",
+    "@beae-ui/vue-utils": "workspace:^",
     "@zag-js/focus-visible": "^0.13.0",
     "vue": "^3.3.4"
   },

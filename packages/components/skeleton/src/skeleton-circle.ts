@@ -15,8 +15,6 @@ export const SkeletonCircle: ComponentWithProps<DeepPartial<ThemingProps>> =
       ...vueThemingProps,
     },
     setup(props) {
-      console.log("props: ", props)
-
       const { size = ref("2rem") } = toRefs(props)
       return () => {
         return h(beae(Skeleton, { label: "skeleton__circle" }), {

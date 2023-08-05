@@ -597,6 +597,15 @@ importers:
       '@beae-ui/form-control':
         specifier: workspace:^
         version: link:../form-control
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/shared-utils':
+        specifier: workspace:^
+        version: link:../../utilities/shared-utils
+      '@beae-ui/styled-system':
+        specifier: workspace:^
+        version: link:../../core/styled-system
       '@beae-ui/system':
         specifier: workspace:^
         version: link:../../core/system
@@ -606,6 +615,9 @@ importers:
       '@beae-ui/visually-hidden':
         specifier: workspace:^
         version: link:../visually-hidden
+      '@beae-ui/vue-utils':
+        specifier: workspace:^
+        version: link:../../utilities/vue-utils
       '@zag-js/focus-visible':
         specifier: ^0.13.0
         version: 0.13.0

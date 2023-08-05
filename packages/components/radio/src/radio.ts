@@ -15,49 +15,19 @@
  * @see Theming https://ui.beae.com/docs/theming/component-style
  */
 
+import { type PropType, defineComponent, h, computed } from "vue"
 import {
-  InputHTMLAttributes,
-  PropType,
-  defineComponent,
-  h,
-  reactive,
-  ref,
-  toRefs,
-} from "vue"
-import {
-  HTMLBeaeProps,
-  ComponentWithProps,
-  DeepPartial,
-  ThemingProps,
-  SystemProps,
+  type ComponentWithProps,
+  type DeepPartial,
+  type SystemStyleObject,
   useMultiStyleConfig,
   omitThemingProps,
-  SystemStyleObject,
   beae,
 } from "@beae-ui/system"
-import { UseRadioProps, useRadio } from "./use-radio"
-import { vueThemingProps } from "../../../utilities/prop-utils/src"
-import { useRadioGroupContext } from "./radio-group"
-import { getValidChildren, split } from "@beae-ui/utils"
-
-type RadioControlProps = Omit<HTMLBeaeProps<"div">, keyof UseRadioProps>
-
-export interface RadioProps
-  extends HTMLBeaeProps<"input">,
-    ThemingProps<"Radio">,
-    UseRadioProps,
-    RadioControlProps {
-  /**
-   * The spacing between the checkbox and its label text
-   * @default 0.5rem
-   * @type SystemProps["marginLeft"]
-   */
-  spacing?: SystemProps["marginLeft"]
-  /**
-   * Additional props to be forwarded to the `input` element
-   */
-  inputProps?: InputHTMLAttributes
-}
+import { useRadio } from "./use-radio"
+import { vueThemingProps } from "@beae-ui/prop-utils"
+import { getValidChildren } from "@beae-ui/utils"
+import { type RadioProps } from "./radio.types"
 
 /**
  * Radio component is used in forms when a user needs to select a single value from
@@ -65,7 +35,6 @@ export interface RadioProps
  *
  * @see Docs https://ui.beae.com/radio
  */
-// @ts-ignore TODO: fix Radio Type DeepPartial cannot read
 export const Radio: ComponentWithProps<DeepPartial<RadioProps>> =
   defineComponent({
     name: "Radio",
@@ -90,50 +59,31 @@ export const Radio: ComponentWithProps<DeepPartial<RadioProps>> =
       ...vueThemingProps,
     },
     emits: ["change", "update:modelValue"],
-    setup(props, { slots }) {
-      const group = useRadioGroupContext()
+    setup(props, { emit, slots }) {
       const ownProps = omitThemingProps(props)
 
       const {
         spacing = "0.5rem",
-        isDisabled = group?.value.isDisabled,
-        isFocusable = group?.value.isFocusable,
         inputProps: htmlInputProps,
         ...rest
       } = ownProps
 
-      const isChecked = ref<boolean | undefined>(props.isChecked)
-      if (group?.value?.value != null && props.value != null) {
-        isChecked.value = group?.value.value === props.value
-      }
-
-      const name = props?.name ?? group?.value?.name
-
       ///
       // Interact use-radio hooks
       ///
+      const useRadioOptionComputed = computed(() => ({
+        context: rest,
+        emit,
+      }))
       const {
         getLabelProps,
         getInputProps,
         getRadioProps,
         getRootProps,
-        htmlProps,
-      } = useRadio(
-        toRefs(
-          reactive({
-            ...rest,
-            isChecked: isChecked.value,
-            isFocusable,
-            isDisabled,
-            name,
-          }),
-        ),
-      )
+        group,
+      } = useRadio(useRadioOptionComputed)
 
-      ///
-      // Handle styles
-      ///
-      const styles = useMultiStyleConfig("Radio", { ...group, ...props })
+      const styles = useMultiStyleConfig("Radio", { ...group.value, ...props })
       const rootStyles: SystemStyleObject = {
         display: "inline-flex",
         alignItems: "center",
@@ -155,22 +105,20 @@ export const Radio: ComponentWithProps<DeepPartial<RadioProps>> =
         ...styles.value?.label,
       }
 
-      const [layoutProps, otherProps] = split(htmlProps, {} as any)
-
       return () => {
         const children = getValidChildren(slots)
         const hasChildren = children.length
 
         const labelProps = getLabelProps()
         const inputProps = getInputProps(htmlInputProps)
-        const radioProps = getRadioProps(otherProps)
+        const radioProps = getRadioProps()
 
         return h(
           beae.label,
           {
             __label: "radio",
             __css: rootStyles,
-            ...Object.assign({}, layoutProps, getRootProps()),
+            ...Object.assign({}, getRootProps()),
           },
           () => [
             h(beae.input, {

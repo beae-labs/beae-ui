@@ -10,83 +10,62 @@
  *
  * @see https://ui.beae.com/guides/component-guide
  */
-import { ToRefs, getCurrentInstance, ref } from "vue"
-import { isObject } from "@beae-ui/utils"
-
-type EventOrValue = Event | string | number
-
-export interface UseRadioGroupProps {
-  /**
-   * The value of the radio to be `checked`
-   * (in controlled mode)
-   */
-  value?: string
-  /**
-   * The value of the radio to be `checked`
-   * initially (in uncontrolled mode)
-   */
-  defaultValue?: string
-  /**
-   * Function called once a radio is checked
-   * @param nextValue the value of the checked radio
-   */
-  onChange?(nextValue: string): void
-  /**
-   * If `true`, all wrapped radio inputs will be disabled
-   *
-   * @default false
-   */
-  isDisabled?: boolean
-  /**
-   * If `true` and `isDisabled` is true, all wrapped radio inputs will remain
-   * focusable but not interactive.
-   *
-   * @default false
-   */
-  isFocusable?: boolean
-  /**
-   * The `name` attribute forwarded to each `radio` element
-   */
-  name?: string
-  /**
-   * If `true`, input elements will receive
-   * `checked` attribute instead of `isChecked`.
-   *
-   * This assumes, you're using native radio inputs
-   *
-   * @default false
-   */
-  isNative?: boolean
-}
-
-function isInputEvent(value: any): value is { target: HTMLInputElement } {
-  return value && isObject(value) && isObject(value.target)
-}
+import { type ComputedRef } from "vue"
+import { getCurrentInstance, ref } from "vue"
+import { EventOrValue, UseRadioGroupProps } from "./radio.types"
+import { isInputEvent } from "./radio.utils"
 
 /**
  * `useRadioGroup` is a custom hook that provides all the state management logic for a group of radios.
  *
  * @see Docs https://ui.beae.com/docs/hooks/use-radio-group
  */
-export function useRadioGroup(props: ToRefs<UseRadioGroupProps>) {
+export function useRadioGroup(
+  option: ComputedRef<{
+    context: UseRadioGroupProps
+    emit: (event: string, ...args: any[]) => void
+  }>,
+) {
   const {
-    onChange: onChangeProp,
-    value: valueProp,
     defaultValue,
+    modelValue,
+    value: valueProp,
     name: nameProp,
     isDisabled,
     isFocusable,
     isNative,
     ...htmlProps
-  } = props
+  } = option.value.context
 
-  const valueState = ref<string | number>(props.defaultValue?.value || "")
-  const isControlled = typeof props.value?.value !== "undefined"
-  const value = isControlled ? props.value?.value : valueState.value
+  const valueState = ref<string>(modelValue || valueProp || defaultValue || "")
+  const isControlled = typeof modelValue !== "undefined"
+  const value = ref(isControlled ? modelValue : valueState.value)
 
   const radioGroupRef = ref<HTMLElement>()
 
-  const focus = () => {
+  const uuid = getCurrentInstance()?.uid
+  const fallbackName = `radio-${uuid}`
+  const name = nameProp || fallbackName
+
+  const getRootProps = (props: any = {}) => ({
+    role: "radiogroup",
+    ref: radioGroupRef.value,
+    ...props,
+  })
+
+  const onChange = (eventOrValue: EventOrValue) => {
+    const nextValue = isInputEvent(eventOrValue)
+      ? eventOrValue.target.value
+      : eventOrValue
+
+    if (!isControlled) valueState.value = nextValue as string
+
+    value.value = String(nextValue)
+    option.value.emit("change", eventOrValue)
+    option.value.emit("update:modelValue", String(nextValue))
+  }
+
+  const onFocus = () => {
     const rootNode = radioGroupRef.value
     if (!rootNode) return
 
@@ -107,37 +86,14 @@ export function useRadioGroup(props: ToRefs<UseRadioGroupProps>) {
     firstEnabledInput?.focus()
   }
 
-  /**
-   * Note: All radio options must use the same name
-   */
-  const uuid = getCurrentInstance()?.uid
-  const fallbackName = `radio-${uuid}`
-  const name = nameProp?.value || fallbackName
-
-  const onChange = (eventOrValue: EventOrValue) => {
-    const nextValue = isInputEvent(eventOrValue)
-      ? eventOrValue.target.value
-      : eventOrValue
-
-    if (!isControlled) valueState.value = nextValue as number | string
-
-    props.onChange?.value?.(String(nextValue))
-  }
-
-  const getRootProps = (_props: any = {}) => ({
-    role: "radiogroup",
-    ref: radioGroupRef.value,
-    ..._props,
-  })
-
   return {
-    getRootProps,
     name,
-    focus,
     value,
+    getRootProps,
+    onFocus,
     onChange,
-    isDisabled: props.isDisabled?.value,
-    isFocusable: props.isFocusable?.value,
+    isDisabled,
+    isFocusable,
     htmlProps,
   }
 }
