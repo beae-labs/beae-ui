@@ -1,7 +1,7 @@
 import { useMediaQuery } from "./use-media-query"
 
 /**
- * React hook used to get the user's animation preference.
+ * Vue hook used to get the user's animation preference.
  */
 export function usePrefersReducedMotion(): boolean {
   const [prefersReducedMotion] = useMediaQuery(
@@ -11,7 +11,7 @@ export function usePrefersReducedMotion(): boolean {
 }
 
 /**
- * React hook for getting the user's color mode preference.
+ * Vue hook for getting the user's color mode preference.
  */
 export function useColorModePreference(): "dark" | "light" | undefined {
   const [isLight, isDark] = useMediaQuery([

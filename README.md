@@ -4,7 +4,7 @@
   </a>
 </p>
 
-<h1 align="center">Build Accessible React Apps with Speed ⚡️</h1>
+<h1 align="center">Build Accessible Vue Apps with Speed ⚡️</h1>
 <br />
 
 <p align="center">
@@ -19,8 +19,8 @@
 
 <br />
 
-Beae UI is a comprehensive library of accessible, reusable, and composable
-React components that streamlines the development of modern web applications and
+Beae UI is a comprehensive library of accessible, reusable, and composable Vue
+components that streamlines the development of modern web applications and
 websites. The library offers a diverse range of components that can be easily
 combined to build complex user interfaces while adhering to accessibility best
 practices.

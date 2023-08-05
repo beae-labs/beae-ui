@@ -5,7 +5,7 @@ import type { PropType } from "vue"
  * Carefully selected html elements for beae components.
  * This is mostly for `beae.[element]` syntax.
  *
- * Adapted from React package
+ * Adapted from Vue package
  */
 export const domElements = [
   "a",

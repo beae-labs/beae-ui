@@ -149,7 +149,7 @@ export interface RangeSliderActions {
 }
 
 /**
- * React hook that implements an accessible range slider.
+ * Vue hook that implements an accessible range slider.
  *
  * It is an alternative to `<input type="range" />`, and returns
  * prop getters for the component parts
