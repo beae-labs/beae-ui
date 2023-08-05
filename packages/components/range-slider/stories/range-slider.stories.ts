@@ -92,7 +92,6 @@ export const SteppedHorizontalRangeSlider: RangeSliderType = {
     setup() {
       const value = ref([3, 10])
       function setValue(payload: number[]) {
-        console.log(payload)
         // value.value = payload
       }
       return {

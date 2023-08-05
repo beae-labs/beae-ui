@@ -48,6 +48,20 @@ export { Button, ButtonGroup, IconButton } from "@beae-ui/button"
 
 // C
 export {
+  type CheckboxProps,
+  type CheckboxGroupProps,
+  type UseCheckboxProps,
+  type UseCheckboxReturn,
+  type UseCheckboxGroupProps,
+  type UseCheckboxGroupReturn,
+  type CheckboxGroupContext,
+  useCheckboxGroupContext,
+  useCheckbox,
+  useCheckboxGroup,
+  Checkbox,
+  CheckboxGroup,
+} from "@beae-ui/checkbox"
+export {
   type ColorModeOptions,
   type ColorModeContext,
   type InternalColorModeContext,

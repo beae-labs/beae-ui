@@ -24,11 +24,7 @@ import {
   watch,
   cloneVNode,
 } from "vue"
-import type {
-  ComponentWithProps,
-  DOMElements,
-  DeepPartial,
-} from "@beae-ui/system"
+import type { DOMElements } from "@beae-ui/system"
 import { useRef } from "@beae-ui/utils"
 import {
   MotionVariants as MotionVariantOptions,
@@ -71,53 +67,52 @@ export const variants: MotionVariants = {
 
 type MotionVariant = keyof MotionVariants
 
-export const Motion: ComponentWithProps<DeepPartial<MotionVariant>> =
-  defineComponent({
-    name: "Motion",
-    props: {
-      as: {
-        type: [Object, String] as PropType<DOMElements>,
-        default: "div",
-      },
-      type: {
-        type: String as PropType<keyof MotionVariants>,
-        default: "fade",
-      },
+export const Motion = defineComponent({
+  name: "Motion",
+  props: {
+    as: {
+      type: [Object, String] as PropType<DOMElements>,
+      default: "div",
     },
-    setup(props, { slots, attrs }) {
-      const [targetRef, targetNode] = useRef()
-      const motionInstance = ref()
-      watch(
-        targetNode,
-        (node) => {
-          if (!node) return
-          motionInstance.value = useMotion(targetNode, variants[props.type])
-        },
-        {
-          immediate: true,
-          flush: "post",
-        },
+    type: {
+      type: String as PropType<MotionVariant>,
+      default: "fade",
+    },
+  },
+  setup(props, { slots, attrs }) {
+    const [targetRef, targetNode] = useRef()
+    const motionInstance = ref()
+    watch(
+      targetNode,
+      (node) => {
+        if (!node) return
+        motionInstance.value = useMotion(targetNode, variants[props.type])
+      },
+      {
+        immediate: true,
+        flush: "post",
+      },
+    )
+
+    const onLeave = (el: Element, done: VoidFunction) => {
+      motionInstance.value.leave(done)
+    }
+    return () => {
+      let children: any = undefined
+
+      const vNodes = slots
+        ?.default?.()
+        .filter((vnode) => String(vnode.type) !== "Symbol(Comment)")
+
+      children = vNodes?.length
+        ? cloneVNode(vNodes[0], { ref: targetRef as any })
+        : vNodes
+
+      return h(
+        Transition,
+        { css: false, mode: "out-in", onLeave: onLeave },
+        () => [children],
       )
-
-      const onLeave = (el: Element, done: VoidFunction) => {
-        motionInstance.value.leave(done)
-      }
-      return () => {
-        let children: any = undefined
-
-        const vNodes = slots
-          ?.default?.()
-          .filter((vnode) => String(vnode.type) !== "Symbol(Comment)")
-
-        children = vNodes?.length
-          ? cloneVNode(vNodes[0], { ref: targetRef as any })
-          : vNodes
-
-        return h(
-          Transition,
-          { css: false, mode: "out-in", onLeave: onLeave },
-          () => [children],
-        )
-      }
-    },
-  })
+    }
+  },
+})

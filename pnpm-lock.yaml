@@ -271,6 +271,43 @@ importers:
         specifier: 2.2.0
         version: 2.2.0
 
+  packages/components/checkbox:
+    dependencies:
+      '@beae-ui/composables':
+        specifier: workspace:^
+        version: link:../../core/composables
+      '@beae-ui/form-control':
+        specifier: workspace:^
+        version: link:../form-control
+      '@beae-ui/motion':
+        specifier: workspace:^
+        version: link:../motion
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/styled-system':
+        specifier: workspace:^
+        version: link:../../core/styled-system
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+      '@beae-ui/utils':
+        specifier: workspace:^
+        version: link:../../utilities/utils
+      '@beae-ui/visually-hidden':
+        specifier: workspace:^
+        version: link:../visually-hidden
+      '@beae-ui/vue-utils':
+        specifier: workspace:^
+        version: link:../../utilities/vue-utils
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+
   packages/components/close-button:
     dependencies:
       '@beae-ui/icon':
@@ -1035,6 +1072,9 @@ importers:
       '@beae-ui/button':
         specifier: workspace:^
         version: link:../../components/button
+      '@beae-ui/checkbox':
+        specifier: workspace:^
+        version: link:../../components/checkbox
       '@beae-ui/close-button':
         specifier: workspace:^
         version: link:../../components/close-button

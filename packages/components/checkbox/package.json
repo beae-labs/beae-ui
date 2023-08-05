@@ -1,7 +1,7 @@
 {
-  "name": "@beae-ui/vue",
+  "name": "@beae-ui/checkbox",
   "version": "1.0.0",
-  "description": "Beae UI | Responsive and accessible Vue UI components built with Vue and Emotion",
+  "description": "Beae UI | Checkbox component is used in forms when a user needs to select multiple values from several options",
   "author": "Toan Tran (Albert) <trantoan.fox.97@gmail.com>",
   "homepage": "https://github.com/beae-labs/beae-ui#readme",
   "license": "MIT",
@@ -17,7 +17,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/beae-labs/beae-ui.git",
-    "directory": "packages/core/vue"
+    "directory": "packages/components/checkbox"
   },
   "bugs": {
     "url": "https://github.com/beae-labs/beae-ui/issues"
@@ -32,43 +32,18 @@
     "postpack": "clean-package restore"
   },
   "dependencies": {
-    "@beae-ui/button": "workspace:^",
-    "@beae-ui/checkbox": "workspace:^",
-    "@beae-ui/close-button": "workspace:^",
-    "@beae-ui/color-mode": "workspace:^",
     "@beae-ui/composables": "workspace:^",
-    "@beae-ui/css-reset": "workspace:^",
-    "@beae-ui/focus-lock": "workspace:^",
     "@beae-ui/form-control": "workspace:^",
-    "@beae-ui/icon": "workspace:^",
-    "@beae-ui/image": "workspace:^",
-    "@beae-ui/input": "workspace:^",
-    "@beae-ui/layout": "workspace:^",
-    "@beae-ui/media-query": "workspace:^",
-    "@beae-ui/modal": "workspace:^",
     "@beae-ui/motion": "workspace:^",
-    "@beae-ui/pin-input": "workspace:^",
-    "@beae-ui/portal": "workspace:^",
-    "@beae-ui/radio": "workspace:^",
-    "@beae-ui/spinner": "workspace:^",
-    "@beae-ui/styled": "workspace:^",
+    "@beae-ui/prop-utils": "workspace:^",
     "@beae-ui/styled-system": "workspace:^",
     "@beae-ui/system": "workspace:^",
-    "@beae-ui/theme": "workspace:^",
-    "@beae-ui/theme-provider": "workspace:^",
-    "@beae-ui/theme-tools": "workspace:^",
-    "@beae-ui/theme-utils": "workspace:^",
     "@beae-ui/utils": "workspace:^",
     "@beae-ui/visually-hidden": "workspace:^",
     "@beae-ui/vue-utils": "workspace:^",
-    "@emotion/cache": "^11.11.0",
-    "@emotion/serialize": "^1.1.2",
-    "@emotion/sheet": "^1.2.2",
-    "@emotion/utils": "^1.2.1",
-    "lodash.mergewith": "^4.6.2"
+    "vue": "^3.3.4"
   },
   "devDependencies": {
-    "@types/lodash.mergewith": "^4.6.7",
     "clean-package": "2.2.0"
   },
   "clean-package": "../../../clean-package.config.json",

@@ -203,14 +203,12 @@ const Loading: ComponentWithProps<DeepPartial<LoadingProps>> = defineComponent({
         colorScheme: colorScheme.value,
       })),
     )
-    console.log(styles.value)
     const trackStyle = computed<SystemStyleObject>(() => ({
       overflow: "hidden",
       position: "relative",
       ...styles.value.track,
       ...(height.value && { height: height.value }),
     }))
-    console.log(trackStyle.value)
     const css = computed<SystemStyleObject>(() => {
       const shouldAddStripe = !isIndeterminate.value && hasStripe.value
 
