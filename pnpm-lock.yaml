@@ -631,9 +631,6 @@ importers:
       '@beae-ui/prop-utils':
         specifier: workspace:^
         version: link:../../utilities/prop-utils
-      '@beae-ui/styled-system':
-        specifier: workspace:^
-        version: link:../../core/styled-system
       '@beae-ui/system':
         specifier: workspace:^
         version: link:../../core/system
@@ -643,9 +640,6 @@ importers:
       '@beae-ui/vue-utils':
         specifier: workspace:^
         version: link:../../utilities/vue-utils
-      '@vueuse/motion':
-        specifier: ^2.0.0
-        version: 2.0.0(vue@3.3.4)
     devDependencies:
       clean-package:
         specifier: 2.2.0
@@ -737,6 +731,25 @@ importers:
       clean-package:
         specifier: 2.2.0
         version: 2.2.0
+
+  packages/components/select:
+    dependencies:
+      '@beae-ui/form-control':
+        specifier: workspace:^
+        version: link:../form-control
+      '@beae-ui/prop-utils':
+        specifier: workspace:^
+        version: link:../../utilities/prop-utils
+      '@beae-ui/system':
+        specifier: workspace:^
+        version: link:../../core/system
+    devDependencies:
+      clean-package:
+        specifier: 2.2.0
+        version: 2.2.0
+      vue:
+        specifier: ^3.3.4
+        version: 3.3.4
 
   packages/components/skeleton:
     dependencies:
@@ -1135,6 +1148,9 @@ importers:
       '@beae-ui/radio':
         specifier: workspace:^
         version: link:../../components/radio
+      '@beae-ui/select':
+        specifier: workspace:^
+        version: link:../../components/select
       '@beae-ui/spinner':
         specifier: workspace:^
         version: link:../../components/spinner

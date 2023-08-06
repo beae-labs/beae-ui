@@ -214,6 +214,12 @@ export {
 } from "@beae-ui/radio"
 
 // S
+export {
+  type SelectProps,
+  type SelectFieldProps,
+  Select,
+  SelectField,
+} from "@beae-ui/select"
 export { Spinner } from "@beae-ui/spinner"
 
 // T
