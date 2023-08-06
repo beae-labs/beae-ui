@@ -82,20 +82,16 @@ export const Popover = defineComponent({
     "interact-outside",
   ],
   setup(props, { attrs, emit, slots }) {
-    const popoverBindingComputed = computed(() => ({
-      context: props,
-      emit,
-    }))
     const mergedPropsComputed = computed(() => mergeProps(props, attrs))
-
-    // // Context value/Hooks
-    // const api = usePopover({}, 1)
-
-    // Styles and Effect/Animation
     const stylesComputed = useMultiStyleConfig<AnatomyParts.Popover>(
       "Popover",
       mergedPropsComputed.value,
     )
+
+    const popoverBindingComputed = computed(() => ({
+      context: props,
+      emit,
+    }))
 
     // Provider options/configs to root/group component
     const popoverProviderConfigComputed = computed(() => ({

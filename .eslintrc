@@ -1,0 +1,23 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 10
+  },
+  "extends": ["prettier"],
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "plugins": ["@typescript-eslint/eslint-plugin"],
+  "rules": {},
+  "overrides": [
+    {
+      "files": ["packages/**/*.ts", "tooling/**/*/*.ts", "scripts/**/*.ts"],
+      "parserOptions": {
+        "project": ["tsconfig.json"]
+      }
+    }
+  ]
+}

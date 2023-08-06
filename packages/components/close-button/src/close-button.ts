@@ -18,8 +18,6 @@
 import { h, defineComponent, PropType, computed } from "vue"
 import {
   beae,
-  ComponentWithProps,
-  DeepPartial,
   DOMElements,
   SystemStyleObject,
   ThemingProps,
@@ -56,55 +54,55 @@ export interface CloseButtonProps {
   styleConfig: PropType<ThemingProps["styleConfig"]>
 }
 
-export const CloseButton: ComponentWithProps<DeepPartial<CloseButtonProps>> =
-  defineComponent({
-    props: {
-      as: {
-        type: [Object, String] as CloseButtonProps["as"],
-        default: "button",
-      },
-      isDisabled: {
-        type: [Boolean] as CloseButtonProps["isDisabled"],
-        default: false,
-      },
-      size: [String] as CloseButtonProps["size"],
-      styleConfig: [String] as CloseButtonProps["styleConfig"],
+export const CloseButton = defineComponent({
+  name: "CloseButton",
+  props: {
+    as: {
+      type: [Object, String] as CloseButtonProps["as"],
+      default: "button",
     },
-    setup(props, { slots, attrs }) {
-      return () => {
-        const themingProps = computed(() =>
-          filterUndefined({
-            size: props.size,
-            styleConfig: props.styleConfig,
-          }),
-        )
+    isDisabled: {
+      type: [Boolean] as CloseButtonProps["isDisabled"],
+      default: false,
+    },
+    size: [String] as CloseButtonProps["size"],
+    styleConfig: [String] as CloseButtonProps["styleConfig"],
+  },
+  setup(props, { slots, attrs }) {
+    return () => {
+      const themingProps = computed(() =>
+        filterUndefined({
+          size: props.size,
+          styleConfig: props.styleConfig,
+        }),
+      )
 
-        const baseStyles: SystemStyleObject = {
-          outline: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }
-
-        const styles = useStyleConfig("CloseButton", themingProps)
-
-        return h(
-          beae(props.as, {
-            label: "icon-button",
-            __css: {
-              ...baseStyles,
-              ...styles.value,
-            },
-          }),
-          {
-            type: "button",
-            disabled: props.isDisabled,
-            "aria-label": "Close",
-            ...attrs,
-          },
-          slots.default ? slots : () => h(CloseIcon),
-        )
+      const baseStyles: SystemStyleObject = {
+        outline: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
       }
-    },
-  })
+
+      const styles = useStyleConfig("CloseButton", themingProps)
+
+      return h(
+        beae(props.as, {
+          label: "icon-button",
+          __css: {
+            ...baseStyles,
+            ...styles.value,
+          },
+        }),
+        {
+          type: "button",
+          disabled: props.isDisabled,
+          "aria-label": "Close",
+          ...attrs,
+        },
+        slots.default ? slots : () => h(CloseIcon),
+      )
+    }
+  },
+})

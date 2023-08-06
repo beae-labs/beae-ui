@@ -619,12 +619,21 @@ importers:
 
   packages/components/popover:
     dependencies:
+      '@beae-ui/close-button':
+        specifier: workspace:^
+        version: link:../close-button
       '@beae-ui/composables':
         specifier: workspace:^
         version: link:../../core/composables
+      '@beae-ui/motion':
+        specifier: workspace:^
+        version: link:../motion
       '@beae-ui/prop-utils':
         specifier: workspace:^
         version: link:../../utilities/prop-utils
+      '@beae-ui/styled-system':
+        specifier: workspace:^
+        version: link:../../core/styled-system
       '@beae-ui/system':
         specifier: workspace:^
         version: link:../../core/system
@@ -634,6 +643,9 @@ importers:
       '@beae-ui/vue-utils':
         specifier: workspace:^
         version: link:../../utilities/vue-utils
+      '@vueuse/motion':
+        specifier: ^2.0.0
+        version: 2.0.0(vue@3.3.4)
     devDependencies:
       clean-package:
         specifier: 2.2.0

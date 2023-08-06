@@ -23,12 +23,7 @@ import {
   PropType,
   SVGAttributes,
 } from "vue"
-import {
-  beae,
-  BeaeProps,
-  ComponentWithProps,
-  DeepPartial,
-} from "@beae-ui/system"
+import { beae, BeaeProps } from "@beae-ui/system"
 import { SNAO, camelCase, mergeWith } from "@beae-ui/utils"
 
 const fallbackIcon = {
@@ -71,47 +66,45 @@ const _iconProps = {
   name: String as PropType<IconProps["name"]>,
 }
 
-export const Icon: ComponentWithProps<DeepPartial<IconProps>> = defineComponent(
-  {
-    name: "Icon",
-    props: _iconProps,
-    setup(_props, { slots, attrs }) {
-      const props = computed<IconProps>(() => mergeWith({}, iconProps, _props))
-      const icons = inject<Record<string, any>>("$beaeIcons")
-      const icon = computed(
-        () => icons?.[props.value?.name as string] || fallbackIcon,
+export const Icon = defineComponent({
+  name: "Icon",
+  props: _iconProps,
+  setup(_props, { slots, attrs }) {
+    const props = computed<IconProps>(() => mergeWith({}, iconProps, _props))
+    const icons = inject<Record<string, any>>("$beaeIcons")
+    const icon = computed(
+      () => icons?.[props.value?.name as string] || fallbackIcon,
+    )
+
+    const hasDefaultSlot = computed(() => slots?.default?.()?.length)
+    const vnodeProps = computed(() => ({
+      w: props.value.size,
+      h: props.value.size,
+      display: "inline-block",
+      lineHeight: "1em",
+      flexShrink: 0,
+      color: "currentColor",
+      ...(!hasDefaultSlot.value && {
+        innerHTML: icon.value.path,
+      }),
+      focusable: false,
+      viewBox: icon.value.viewBox || fallbackIcon.viewBox,
+    }))
+
+    return () =>
+      h(
+        beae.svg,
+        {
+          as: props.value.as,
+          __label: "icon",
+          ...(icon.value.attrs || {}),
+          ...vnodeProps.value,
+          ...attrs,
+        },
+        slots,
       )
-
-      const hasDefaultSlot = computed(() => slots?.default?.()?.length)
-      const vnodeProps = computed(() => ({
-        w: props.value.size,
-        h: props.value.size,
-        display: "inline-block",
-        lineHeight: "1em",
-        flexShrink: 0,
-        color: "currentColor",
-        ...(!hasDefaultSlot.value && {
-          innerHTML: icon.value.path,
-        }),
-        focusable: false,
-        viewBox: icon.value.viewBox || fallbackIcon.viewBox,
-      }))
-
-      return () =>
-        h(
-          beae.svg,
-          {
-            as: props.value.as,
-            __label: "icon",
-            ...(icon.value.attrs || {}),
-            ...vnodeProps.value,
-            ...attrs,
-          },
-          slots,
-        )
-    },
   },
-)
+})
 
 export function createIconComponent(name: string) {
   const componentName = camelCase(name)

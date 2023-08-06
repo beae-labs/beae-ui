@@ -22,7 +22,6 @@ import {
   defineComponent,
   h,
   mergeProps,
-  getCurrentInstance,
 } from "vue"
 import { SNAO, vueThemingProps } from "@beae-ui/prop-utils"
 import { useMultiStyleConfig, beae } from "@beae-ui/system"
