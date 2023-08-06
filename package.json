@@ -35,6 +35,7 @@
   "devDependencies": {
     "@beae-ui/anatomy": "workspace:^",
     "@commitlint/cli": "^17.6.7",
+    "@octokit/rest": "^20.0.1",
     "@storybook/addon-essentials": "^7.2.0",
     "@storybook/addon-interactions": "^7.2.0",
     "@storybook/addon-links": "^7.2.0",
