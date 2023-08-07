@@ -7,15 +7,15 @@ import {
   inject,
   computed,
 } from "vue"
-import { Theme } from "@beae-ui/theme"
-import { ComponentWithProps } from "@beae-ui/system"
+import { type Theme } from "@beae-ui/theme"
 
-export interface ThemeProviderProps {
+export interface ThemingProviderProps {
   value?: Theme
 }
 
-const ThemeProvider: ComponentWithProps<ThemeProviderProps> = defineComponent({
-  name: "ThemeProvider",
+// @ts-ignore
+export const ThemingProvider = defineComponent({
+  name: "ThemingProvider",
   props: {
     value: {
       type: [Object] as PropType<Theme>,
@@ -29,5 +29,3 @@ const ThemeProvider: ComponentWithProps<ThemeProviderProps> = defineComponent({
     return () => h(Fragment, slots.default?.({ $beaeTheme: props.value }))
   },
 })
-
-export default ThemeProvider

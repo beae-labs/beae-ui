@@ -1,5 +1,5 @@
-import { DOMElements, ThemingProps } from "@beae-ui/system"
-import { PropType } from "@vue/runtime-core"
+import { type DOMElements, type ThemingProps } from "@beae-ui/system"
+import { type PropType } from "vue"
 
 export const vueThemingProps = {
   colorScheme: String as PropType<ThemingProps["colorScheme"]>,

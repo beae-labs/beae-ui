@@ -223,6 +223,10 @@ export {
 export { Spinner } from "@beae-ui/spinner"
 
 // T
+export {
+  type ThemingProviderProps,
+  ThemingProvider,
+} from "@beae-ui/theme-provider"
 
 // V
 export {

@@ -1,4 +1,8 @@
-import { defineStyle, defineStyleConfig } from "@beae-ui/styled-system"
+import {
+  type SystemStyleObject,
+  defineStyle,
+  defineStyleConfig,
+} from "@beae-ui/styled-system"
 import { badgeTheme, badgeVars as vars } from "./badge"
 
 const { variants, defaultProps } = badgeTheme
@@ -36,5 +40,6 @@ export const codeTheme = defineStyleConfig({
   baseStyle,
   variants,
   sizes,
+  // @ts-ignore
   defaultProps,
 })

@@ -25,7 +25,7 @@ export interface FocusableElement {
 
 export function isInputElement(
   element: FocusableElement,
-): element is HTMInputElement {
+): element is HTMLInputElement {
   return (
     isHTMLElement(element) &&
     element.localName === "input" &&
