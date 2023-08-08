@@ -7,11 +7,9 @@ import {
   computed,
   ImgHTMLAttributes,
 } from "vue"
-
 import { omit } from "@beae-ui/utils"
-
-import { beae, HTMLBeaeProps, SystemProps } from "@beae-ui/system"
-
+import { type HTMLBeaeProps, beae } from "@beae-ui/system"
+import { type SystemProps } from "@beae-ui/styled-system"
 import { useImage, UseImageProps } from "./use-image"
 
 interface NativeImageOptions {

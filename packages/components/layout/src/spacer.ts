@@ -1,9 +1,4 @@
-import {
-  beae,
-  ComponentWithProps,
-  DeepPartial,
-  HTMLBeaeProps,
-} from "@beae-ui/system"
+import { type HTMLBeaeProps, beae } from "@beae-ui/system"
 import { defineComponent, h } from "vue"
 
 export interface SpacerProps extends HTMLBeaeProps<"div"> {}
@@ -14,22 +9,21 @@ export interface SpacerProps extends HTMLBeaeProps<"div"> {}
  *
  * @see Docs https://beae-ui.com/docs/layout/flex#using-the-spacer
  */
-export const Spacer: ComponentWithProps<DeepPartial<SpacerProps>> =
-  defineComponent({
-    name: "Spacer",
-    setup(_, { slots }) {
-      return () =>
-        h(
-          beae.div,
-          {
-            __label: "spacer",
-            baseStyle: {
-              flex: 1,
-              justifySelf: "stretch",
-              alignSelf: "stretch",
-            },
+export const Spacer = defineComponent({
+  name: "Spacer",
+  setup(_, { slots }) {
+    return () =>
+      h(
+        beae.div,
+        {
+          __label: "spacer",
+          baseStyle: {
+            flex: 1,
+            justifySelf: "stretch",
+            alignSelf: "stretch",
           },
-          slots,
-        )
-    },
-  })
+        },
+        slots,
+      )
+  },
+})

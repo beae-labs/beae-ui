@@ -1,17 +1,10 @@
 import type { SystemProps } from "@beae-ui/styled-system"
-import type {
-  HTMLBeaeProps,
-  DOMElements,
-  ComponentWithProps,
-  DeepPartial,
-} from "@beae-ui/system"
-import { PropType } from "vue"
+import { type HTMLBeaeProps, type DOMElements, beae } from "@beae-ui/system"
 
 import { tokenToCSSVar } from "@beae-ui/styled-system"
 import { Dict, mapResponsive } from "@beae-ui/utils"
-import { beae } from "@beae-ui/system"
 import { getValidChildren, SNAO } from "@beae-ui/utils"
-import { computed, defineComponent, h } from "vue"
+import { type PropType, computed, defineComponent, h } from "vue"
 
 export interface WrapProps extends HTMLBeaeProps<"div"> {
   /**
@@ -40,7 +33,7 @@ export interface WrapProps extends HTMLBeaeProps<"div"> {
   shouldWrapChildren?: boolean
 }
 
-export const WrapProps = {
+export const WrapProps: any = {
   spacing: SNAO as PropType<WrapProps["spacing"]>,
   justify: SNAO as PropType<WrapProps["justify"]>,
   align: SNAO as PropType<WrapProps["align"]>,
@@ -53,8 +46,8 @@ export const WrapProps = {
  *
  * @see Docs https://vue.beae-ui.com/docs/typography/text
  */
-export const Wrap: ComponentWithProps<DeepPartial<WrapProps>> = defineComponent(
-  {
+export const Wrap: any = () =>
+  defineComponent({
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,
@@ -90,6 +83,7 @@ export const Wrap: ComponentWithProps<DeepPartial<WrapProps>> = defineComponent(
 
       return () => {
         return h(
+          // @ts-ignore
           beae(props.as, {
             label: "wrap",
             ...attrs,
@@ -97,6 +91,7 @@ export const Wrap: ComponentWithProps<DeepPartial<WrapProps>> = defineComponent(
           {},
           () =>
             h(
+              // @ts-ignore
               beae("ul", { label: "wrap__list", __css: styles.value }),
               {},
               childrenToRender,
@@ -104,8 +99,7 @@ export const Wrap: ComponentWithProps<DeepPartial<WrapProps>> = defineComponent(
         )
       }
     },
-  },
-)
+  })
 
 export interface WrapItemProps extends HTMLBeaeProps<"li"> {}
 
@@ -113,6 +107,7 @@ export const WrapItem = defineComponent({
   setup(_, { attrs, slots }) {
     return () => {
       return h(
+        // @ts-ignore
         beae("li", {
           label: "wrap__listItem",
           __css: {

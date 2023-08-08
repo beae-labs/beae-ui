@@ -1,21 +1,19 @@
 import { BoxProps } from "./box"
 import {
+  type PropType,
+  type Component,
+  type ConcreteComponent,
   h,
   defineComponent,
-  PropType,
   computed,
-  Component,
-  ConcreteComponent,
 } from "vue"
 import {
+  type HTMLBeaeProps,
+  type ResponsiveValue,
+  type DOMElements,
   beae,
-  HTMLBeaeProps,
-  SystemProps,
-  ResponsiveValue,
-  DOMElements,
-  ComponentWithProps,
-  DeepPartial,
 } from "@beae-ui/system"
+import { type SystemProps } from "@beae-ui/styled-system"
 import { filterUndefined, mapResponsive, SNAO } from "@beae-ui/utils"
 
 export interface GridProps extends HTMLBeaeProps<"div">, GridOptions {}
@@ -120,8 +118,8 @@ export interface GridItemProps extends BoxProps {
  *
  * @see Docs https://vue.beae-ui.com/docs/layout/grid
  */
-export const Grid: ComponentWithProps<DeepPartial<GridProps>> = defineComponent(
-  {
+export const Grid: any = () =>
+  defineComponent({
     name: "Grid",
     props: {
       as: {
@@ -164,6 +162,7 @@ export const Grid: ComponentWithProps<DeepPartial<GridProps>> = defineComponent(
 
       return () =>
         h(
+          // @ts-ignore
           beae.div,
           {
             as: props.as,
@@ -174,8 +173,7 @@ export const Grid: ComponentWithProps<DeepPartial<GridProps>> = defineComponent(
           slots,
         )
     },
-  },
-)
+  })
 
 function spanFn(span?: ResponsiveValue<number | "auto">) {
   return mapResponsive(span, (value) =>
@@ -183,45 +181,45 @@ function spanFn(span?: ResponsiveValue<number | "auto">) {
   )
 }
 
-export const GridItem: ComponentWithProps<DeepPartial<GridItemProps>> =
-  defineComponent({
-    name: "GridItem",
-    props: {
-      as: {
-        type: [String, Object] as PropType<
-          DOMElements | Component | ConcreteComponent | string
-        >,
-        default: "div",
-      },
-      colSpan: SNAO as PropType<GridItemProps["colSpan"]>,
-      colStart: SNAO as PropType<GridItemProps["colStart"]>,
-      colEnd: SNAO as PropType<GridItemProps["colEnd"]>,
-      rowStart: SNAO as PropType<GridItemProps["rowStart"]>,
-      rowEnd: SNAO as PropType<GridItemProps["rowEnd"]>,
-      rowSpan: SNAO as PropType<GridItemProps["rowSpan"]>,
+export const GridItem = defineComponent({
+  name: "GridItem",
+  props: {
+    as: {
+      type: [String, Object] as PropType<
+        DOMElements | Component | ConcreteComponent | string
+      >,
+      default: "div",
     },
-    setup(props, { slots, attrs }) {
-      const styles = computed(() =>
-        filterUndefined({
-          gridColumn: spanFn(props.colSpan),
-          gridRow: spanFn(props.rowSpan),
-          gridColumnStart: props.colStart,
-          gridColumnEnd: props.colEnd,
-          gridRowStart: props.rowStart,
-          gridRowEnd: props.rowEnd,
-        }),
-      )
+    colSpan: SNAO as PropType<GridItemProps["colSpan"]>,
+    colStart: SNAO as PropType<GridItemProps["colStart"]>,
+    colEnd: SNAO as PropType<GridItemProps["colEnd"]>,
+    rowStart: SNAO as PropType<GridItemProps["rowStart"]>,
+    rowEnd: SNAO as PropType<GridItemProps["rowEnd"]>,
+    rowSpan: SNAO as PropType<GridItemProps["rowSpan"]>,
+  },
+  setup(props, { slots, attrs }) {
+    const styles = computed(() =>
+      filterUndefined({
+        gridColumn: spanFn(props.colSpan),
+        gridRow: spanFn(props.rowSpan),
+        gridColumnStart: props.colStart,
+        gridColumnEnd: props.colEnd,
+        gridRowStart: props.rowStart,
+        gridRowEnd: props.rowEnd,
+      }),
+    )
 
-      return () =>
-        h(
-          beae.div,
-          {
-            as: props.as,
-            __label: "grid__item",
-            __css: styles.value,
-            ...attrs,
-          },
-          slots,
-        )
-    },
-  })
+    return () =>
+      h(
+        // @ts-ignore
+        beae.div,
+        {
+          as: props.as,
+          __label: "grid__item",
+          __css: styles.value,
+          ...attrs,
+        },
+        slots,
+      )
+  },
+})

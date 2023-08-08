@@ -1,5 +1,8 @@
 import { defineComponent, h } from "vue"
-import { usePopoverContext, useStyles } from "./popover.context"
+import {
+  // usePopoverContext,
+  useStyles,
+} from "./popover.context"
 import { HTMLBeaeProps, beae } from "@beae-ui/system"
 
 export interface PopoverPositionerProps extends HTMLBeaeProps<"div"> {}
@@ -7,7 +10,7 @@ export const PopoverPositioner = defineComponent({
   name: "PopoverPositioner",
   inheritAttrs: false,
   setup(_, { slots, attrs }) {
-    const api = usePopoverContext()
+    // const api = usePopoverContext()
 
     const styles = useStyles()
 

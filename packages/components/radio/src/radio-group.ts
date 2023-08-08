@@ -15,12 +15,8 @@
  * @see Theming https://ui.beae.com/docs/theming/component-style
  */
 
-import { type PropType, computed, defineComponent, h, toRefs, watch } from "vue"
-import {
-  type ComponentWithProps,
-  type DeepPartial,
-  beae,
-} from "@beae-ui/system"
+import { type PropType, computed, defineComponent, h } from "vue"
+import { beae } from "@beae-ui/system"
 import { getValidChildren } from "@beae-ui/utils"
 import { useRadioGroup } from "./use-radio-group"
 import { vueThemingProps } from "@beae-ui/prop-utils"
@@ -43,49 +39,48 @@ const props = {
  *
  * @see Docs https://ui.beae.com/radio
  */
-export const RadioGroup: ComponentWithProps<DeepPartial<RadioGroupProps>> =
-  defineComponent({
-    name: "RadioGroup",
-    props,
-    emits: ["change", "update:modelValue"],
-    setup(props, { attrs, emit, slots }) {
-      const useRadioGroupOptionComputed = computed(() => ({
-        context: props,
-        emit,
-      }))
-      const {
-        isDisabled,
-        isFocusable,
-        getRootProps,
-        onChange,
-        name,
-        value,
-        htmlProps,
-      } = useRadioGroup(useRadioGroupOptionComputed)
+export const RadioGroup = defineComponent({
+  name: "RadioGroup",
+  props,
+  emits: ["change", "update:modelValue"],
+  setup(props, { attrs, emit, slots }) {
+    const useRadioGroupOptionComputed: any = computed(() => ({
+      context: props,
+      emit,
+    }))
+    const {
+      isDisabled,
+      isFocusable,
+      getRootProps,
+      onChange,
+      name,
+      value,
+      htmlProps,
+    } = useRadioGroup(useRadioGroupOptionComputed)
 
-      const radioGroupContext = computed(() => ({
-        name,
-        value,
-        onChange,
-        size: props.size,
-        variant: props.variant,
-        isDisabled,
-        isFocusable,
-        colorScheme: props.colorScheme,
-      }))
+    const radioGroupContext = computed(() => ({
+      name,
+      value,
+      onChange,
+      size: props.size,
+      variant: props.variant,
+      isDisabled,
+      isFocusable,
+      colorScheme: props.colorScheme,
+    }))
 
-      RadioGroupProvider(radioGroupContext)
+    RadioGroupProvider(radioGroupContext)
 
-      return () =>
-        h(
-          beae.div,
-          {
-            __label: "radio__group",
-            role: "radiogroup",
-            ...getRootProps(htmlProps as any),
-            ...attrs,
-          },
-          () => getValidChildren(slots),
-        )
-    },
-  })
+    return () =>
+      h(
+        beae.div,
+        {
+          __label: "radio__group",
+          role: "radiogroup",
+          ...getRootProps(htmlProps as any),
+          ...attrs,
+        },
+        () => getValidChildren(slots),
+      )
+  },
+})

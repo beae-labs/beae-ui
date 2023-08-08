@@ -1,11 +1,5 @@
-import { defineComponent, h, PropType } from "vue"
-import {
-  beae,
-  HTMLBeaeProps,
-  ComponentWithProps,
-  DeepPartial,
-  DOMElements,
-} from "@beae-ui/system"
+import { type PropType, defineComponent, h } from "vue"
+import { type HTMLBeaeProps, type DOMElements, beae } from "@beae-ui/system"
 
 export interface CenterProps extends HTMLBeaeProps<"div"> {}
 
@@ -15,30 +9,29 @@ export interface CenterProps extends HTMLBeaeProps<"div"> {}
  *
  * @see Docs https://vue.beae-ui.com/docs/layout/center
  */
-export const Center: ComponentWithProps<DeepPartial<CenterProps>> =
-  defineComponent({
-    name: "Center",
-    props: {
-      as: {
-        type: [String, Object] as PropType<DOMElements>,
-        default: "div",
-      },
+export const Center = defineComponent({
+  name: "Center",
+  props: {
+    as: {
+      type: [String, Object] as PropType<DOMElements>,
+      default: "div",
     },
-    setup(props, { slots, attrs }) {
-      return () =>
-        h(
-          beae.div,
-          {
-            __label: "center",
-            __css: {
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            },
-            ...props,
-            ...attrs,
+  },
+  setup(props, { slots, attrs }) {
+    return () =>
+      h(
+        beae.div,
+        {
+          __label: "center",
+          __css: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           },
-          slots,
-        )
-    },
-  })
+          ...props,
+          ...attrs,
+        },
+        slots,
+      )
+  },
+})

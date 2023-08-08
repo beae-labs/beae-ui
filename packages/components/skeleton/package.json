@@ -36,6 +36,7 @@
     "@beae-ui/media-query": "workspace:^",
     "@beae-ui/prop-utils": "workspace:^",
     "@beae-ui/system": "workspace:^",
+    "@beae-ui/styled-system": "workspace:^",
     "@beae-ui/utils": "workspace:^",
     "vue": "^3.3.4"
   },

@@ -24,20 +24,24 @@ export const PopoverContent = defineComponent({
       ...styles.value.content,
       transformOrigin: toVar(
         "--transform-origin",
+        // @ts-ignore
         api.value.positionerProps.style.transformOrigin,
       ).varRef,
     }))
 
     const popoverContentProps = computed(() => {
+      // @ts-ignore
       const { ...rest } = { ...attrs, ...api.value.contentProps }
       return {
         ...rest,
         ...match(api.value.trigger, {
           hover: {
             onPointerenter(e: MouseEvent) {
+              // @ts-ignore
               api.value.open()
             },
             onPointerleave(e: MouseEvent) {
+              // @ts-ignore
               api.value.close()
             },
           },

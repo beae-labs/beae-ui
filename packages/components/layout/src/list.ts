@@ -1,17 +1,15 @@
 import { Icon } from "@beae-ui/icon"
 import {
-  beae,
-  DOMElements,
-  HTMLBeaeProps,
-  SystemProps,
-  ThemingProps,
+  type DOMElements,
+  type HTMLBeaeProps,
+  type ThemingProps,
+  StylesProvider,
   useMultiStyleConfig,
   useStyles,
-  StylesProvider,
-  ComponentWithProps,
-  DeepPartial,
+  beae,
 } from "@beae-ui/system"
-import { h, defineComponent, PropType, computed } from "vue"
+import { type SystemProps } from "@beae-ui/styled-system"
+import { type PropType, h, defineComponent, computed } from "vue"
 import { getValidChildren, SNAO, SAO } from "@beae-ui/utils"
 
 interface ListOptions {
@@ -42,8 +40,8 @@ export interface ListProps
  *
  * @see Docs https://vue.beae-ui.com/docs/data-display/list
  */
-export const List: ComponentWithProps<DeepPartial<ListProps>> = defineComponent(
-  {
+export const List: any = () =>
+  defineComponent({
     name: "List",
     props: {
       as: {
@@ -87,77 +85,75 @@ export const List: ComponentWithProps<DeepPartial<ListProps>> = defineComponent(
         )
       }
     },
+  })
+
+export const OrderedList = defineComponent({
+  name: "OrderedList",
+  setup(props, { slots, attrs }) {
+    return () =>
+      h(
+        beae(List, {
+          // @ts-ignore
+          styleType: "decimal",
+          marginStart: "1em",
+          ...attrs,
+        }),
+        {},
+        slots,
+      )
   },
-)
+})
 
-export const OrderedList: ComponentWithProps<DeepPartial<ListProps>> =
-  defineComponent({
-    name: "OrderedList",
-    setup(props, { slots, attrs }) {
-      return () =>
-        h(
-          beae(List, {
-            styleType: "decimal",
-            marginStart: "1em",
-            ...attrs,
-          }),
-          {},
-          slots,
-        )
-    },
-  })
+export const UnorderedList = defineComponent({
+  name: "UnorderedList",
+  setup(props, { slots, attrs }) {
+    return () =>
+      h(
+        beae(List, {
+          // @ts-ignore
+          styleType: "initial",
+          marginStart: "1em",
+          ...attrs,
+        }),
+        {},
+        slots,
+      )
+  },
+})
 
-export const UnorderedList: ComponentWithProps<DeepPartial<ListProps>> =
-  defineComponent({
-    name: "UnorderedList",
-    setup(props, { slots, attrs }) {
-      return () =>
-        h(
-          beae(List, {
-            styleType: "initial",
-            marginStart: "1em",
-            ...attrs,
-          }),
-          {},
-          slots,
-        )
-    },
-  })
+export const ListItem = defineComponent({
+  name: "ListItem",
+  setup(_, { slots, attrs }) {
+    const styles = useStyles()
+    return () =>
+      h(
+        beae.li,
+        {
+          __label: "list__item",
+          // @ts-ignore
+          __css: styles.value.item,
+          ...attrs,
+        },
+        slots,
+      )
+  },
+})
 
-export const ListItem: ComponentWithProps<DeepPartial<HTMLBeaeProps<"li">>> =
-  defineComponent({
-    name: "ListItem",
-    setup(_, { slots, attrs }) {
-      const styles = useStyles()
-      return () =>
-        h(
-          beae.li,
-          {
-            __label: "list__item",
-            // @ts-ignore
-            __css: styles.value.item,
-            ...attrs,
-          },
-          slots,
-        )
-    },
-  })
-
-export const ListIcon: ComponentWithProps<DeepPartial<HTMLBeaeProps<"svg">>> =
-  defineComponent({
-    name: "ListIcon",
-    setup(_, { slots, attrs }) {
-      const styles = useStyles()
-      return () =>
-        h(
-          beae(Icon, {
-            role: "presentation",
-            // @ts-ignore
-            __css: styles.value.icon,
-            ...attrs,
-          }),
-          {},
-          slots,
-        )
-    },
-  })
+export const ListIcon = defineComponent({
+  name: "ListIcon",
+  setup(_, { slots, attrs }) {
+    const styles = useStyles()
+    return () =>
+      h(
+        beae(Icon, {
+          // @ts-ignore
+          role: "presentation",
+          // @ts-ignore
+          __css: styles.value.icon,
+          ...attrs,
+        }),
+        {},
+        slots,
+      )
+  },
+})

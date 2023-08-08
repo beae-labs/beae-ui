@@ -15,15 +15,14 @@
  * @see Theming https://ui.beae.com/docs/theming/component-style
  */
 
-import { computed, defineComponent, mergeProps, type PropType } from "vue"
-import { useId } from "@beae-ui/composables"
+import { type PropType, computed, defineComponent, mergeProps } from "vue"
 import { vueThemingProps } from "@beae-ui/prop-utils"
 import {
   useMultiStyleConfig,
   type ComponentWithProps,
   type AnatomyParts,
 } from "@beae-ui/system"
-import { usePopover, type UsePopoverProps } from "./use-popover"
+import { type UsePopoverProps } from "./use-popover"
 import { PopoverProvider, PopoverStylesProvider } from "./popover.context"
 
 export interface PopoverProps extends UsePopoverProps {
@@ -81,23 +80,23 @@ export const Popover = defineComponent({
     "focus-outside",
     "interact-outside",
   ],
-  setup(props, { attrs, emit, slots }) {
+  setup(props, { attrs, slots }) {
     const mergedPropsComputed = computed(() => mergeProps(props, attrs))
     const stylesComputed = useMultiStyleConfig<AnatomyParts.Popover>(
       "Popover",
       mergedPropsComputed.value,
     )
 
-    const popoverBindingComputed = computed(() => ({
-      context: props,
-      emit,
-    }))
+    // const popoverBindingComputed = computed(() => ({
+    //   context: props,
+    //   emit,
+    // }))
 
     // Provider options/configs to root/group component
     const popoverProviderConfigComputed = computed(() => ({
       trigger: props.trigger,
     }))
-
+    // @ts-ignore
     PopoverProvider(popoverProviderConfigComputed)
     PopoverStylesProvider(stylesComputed)
 

@@ -16,9 +16,9 @@
  */
 
 import {
+  type PropType,
   h,
   defineComponent,
-  PropType,
   Teleport,
   TeleportProps,
   onBeforeMount,
@@ -27,7 +27,6 @@ import {
 } from "vue"
 import { createPortalTarget, ensureTarget, unmountTarget } from "./portal.utils"
 import { useStackProvider } from "@beae-ui/composables"
-import { ComponentWithProps, DeepPartial } from "@beae-ui/system"
 
 export interface PortalProps extends Omit<TeleportProps, "to"> {
   /**
@@ -50,7 +49,7 @@ export interface PortalProps extends Omit<TeleportProps, "to"> {
  * If no target is given to the `Portal` component via the `to` prop,
  * it will generate a target and append to the document body
  */
-const Portal: ComponentWithProps<DeepPartial<PortalProps>> = defineComponent({
+const Portal = defineComponent({
   name: "Portal",
   props: {
     to: String as PropType<PortalProps["to"]>,

@@ -240,7 +240,7 @@ export function useSlider(props: UseSliderProps) {
     if (!trackRef.value) return
 
     eventSource.value = "pointer"
-
+    // @ts-ignore
     const trackRect = trackRef.value.$el.getBoundingClientRect()
     const { clientX, clientY } = event.touches?.[0] ?? event
 
@@ -301,15 +301,24 @@ export function useSlider(props: UseSliderProps) {
    * Keyboard interaction to ensure users can operate
    * the slider using only their keyboard.
    */
+
   const onKeyDown = (event: KeyboardEvent) => {
     const keyMap: Record<string, KeyboardEvent> = {
+      // @ts-ignore
       ArrowRight: () => actions.stepUp(),
+      // @ts-ignore
       ArrowUp: () => actions.stepUp(),
+      // @ts-ignore
       ArrowLeft: () => actions.stepDown(),
+      // @ts-ignore
       ArrowDown: () => actions.stepDown(),
+      // @ts-ignore
       PageUp: () => actions.stepUp(tenSteps),
+      // @ts-ignore
       PageDown: () => actions.stepDown(tenSteps),
+      // @ts-ignore
       Home: () => constrain(stateRef.value.min),
+      // @ts-ignore
       End: () => constrain(stateRef.value.max),
     }
 
@@ -318,6 +327,7 @@ export function useSlider(props: UseSliderProps) {
     if (action) {
       event.preventDefault()
       event.stopPropagation()
+      // @ts-ignore
       action(event)
       eventSource.value = "keyboard"
     }
@@ -375,6 +385,7 @@ export function useSlider(props: UseSliderProps) {
   }
   onMounted(() => {
     if (rootRef.value) {
+      // @ts-ignore
       usePanEvent(rootRef, {
         onPanSessionStart(event) {
           if (!stateRef.value.isInteractive) return
@@ -405,6 +416,7 @@ export function useSlider(props: UseSliderProps) {
       "aria-disabled": ariaAttr(isDisabled),
       "data-focused": dataAttr(isFocused.value),
       style: {
+        // @ts-ignore
         ...props.style,
         ...computedStyle.value.rootStyle,
       },
@@ -418,6 +430,7 @@ export function useSlider(props: UseSliderProps) {
       ref: trackRef,
       "data-disabled": dataAttr(isDisabled),
       style: {
+        // @ts-ignore
         ...props.style,
         ...computedStyle.value.trackStyle,
       },
@@ -428,6 +441,7 @@ export function useSlider(props: UseSliderProps) {
     return {
       ...props,
       style: {
+        // @ts-ignore
         ...props.style,
         ...computedStyle.value.innerTrackStyle,
       },
@@ -452,11 +466,15 @@ export function useSlider(props: UseSliderProps) {
       "aria-label": ariaLabel,
       "aria-labelledby": ariaLabel ? undefined : ariaLabelledBy,
       style: {
+        // @ts-ignore
         ...props.style,
         ...computedStyle.value.getThumbStyle(0),
       },
+      // @ts-ignore
       onKeyDown: callAllHandlers(props.onKeyDown, onKeyDown),
+      // @ts-ignore
       onFocus: callAllHandlers(props.onFocus, () => (isFocused.value = true)),
+      // @ts-ignore
       onBlur: callAllHandlers(props.onBlur, () => (isFocused.value = false)),
     }
   }
@@ -488,12 +506,13 @@ export function useSlider(props: UseSliderProps) {
       "data-invalid": dataAttr(!isInRange),
       "data-highlighted": dataAttr(isHighlighted),
       style: {
+        // @ts-ignore
         ...props.style,
         ...markerStyle,
       },
     }
   }
-
+  // @ts-ignore
   const getInputProps: PropGetter = computed(() => (props = {}) => {
     return {
       ...props,

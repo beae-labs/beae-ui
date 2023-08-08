@@ -16,29 +16,28 @@
  */
 
 import {
+  type PropType,
   defineComponent,
-  PropType,
   computed,
   cloneVNode,
   h,
   VNode,
-  DefineComponent,
 } from "vue"
 import {
-  beae,
-  HTMLBeaeProps,
-  SystemProps,
-  ThemingProps,
+  type BeaeProps,
+  type HTMLBeaeProps,
+  type ThemingProps,
+  type DOMElements,
+  type SystemStyleObject,
   StylesProvider,
   useMultiStyleConfig,
+  beae,
   useStyles,
-  SystemStyleObject,
-  BeaeProps,
 } from "@beae-ui/system"
 import { filterUndefined } from "@beae-ui/utils"
 import { getValidChildren, isObjectComponent, SNA, SNAO } from "@beae-ui/utils"
 import { vueThemingProps } from "@beae-ui/prop-utils"
-import { DOMElements } from "@beae-ui/system"
+import { SystemProps } from "@beae-ui/styled-system"
 
 /**
  * Breadcrumb (root)
@@ -63,7 +62,7 @@ export interface BreadcrumbProps
     ThemingProps<"Breadcrumb"> {}
 
 // TODO: fix a nhé @ToanTran
-export const Breadcrumb: DefineComponent<BreadcrumbProps> = defineComponent({
+export const Breadcrumb = defineComponent({
   props: {
     separator: {
       type: SNAO as PropType<BreadcrumbOptions["separator"]>,
@@ -124,6 +123,7 @@ export const Breadcrumb: DefineComponent<BreadcrumbProps> = defineComponent({
       )
 
       return h(
+        // @ts-ignore
         beae.nav,
         {
           as: props.as,
@@ -196,8 +196,8 @@ interface BreadcrumbItemOptions extends BreadcrumbOptions {
 
 export interface BreadcrumbItemProps extends BreadcrumbItemOptions, BeaeProps {}
 
-export const BreadcrumbItem: DefineComponent<BreadcrumbItemProps> =
-  defineComponent((props: BreadcrumbItemProps, { attrs, slots }) => {
+export const BreadcrumbItem = defineComponent(
+  (props: BreadcrumbItemProps, { slots }) => {
     const styles = useStyles()
     const itemStyles = computed<SystemStyleObject>(() => ({
       display: "inline-flex",
@@ -244,10 +244,13 @@ export const BreadcrumbItem: DefineComponent<BreadcrumbItemProps> =
         ],
       )
     }
-  })
+  },
+)
 
-// @ts-ignore "name" property is typically read-only for functional components
+// "name" property is typically read-only for functional components
+// @ts-ignore
 BreadcrumbItem.name = "BreadcrumbItem"
+// @ts-ignore
 BreadcrumbItem.props = {
   ...Breadcrumb.props,
   isLastChild: Boolean as PropType<boolean>,

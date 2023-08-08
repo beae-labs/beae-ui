@@ -55,13 +55,11 @@ export function useSizes<T extends HTMLElement | null>({
   return sizes.value as Array<ElementSize | undefined>
 }
 
-function isRef(ref: any): ref is RefObject<any> {
+function isRef(ref: any): any {
   return typeof ref === "object" && ref !== null && "current" in ref
 }
 
-export function useSize<T extends HTMLElement | null>(
-  subject: T | RefObject<T>,
-) {
+export function useSize<T extends HTMLElement | null>(subject: T | any) {
   const [size] = useSizes({
     observeMutation: false,
     getNodes() {

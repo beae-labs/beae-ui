@@ -1,24 +1,22 @@
 import {
+  type PropType,
+  type ComputedRef,
   h,
   defineComponent,
-  PropType,
   computed,
   ref,
   mergeProps,
-  ComputedRef,
 } from "vue"
 import {
-  beae,
-  ComponentWithProps,
-  DOMElements,
-  omitThemingProps,
+  type DOMElements,
+  type ThemingProps,
+  type SystemStyleObject,
   StylesProvider,
-  SystemStyleObject,
-  ThemingProps,
+  omitThemingProps,
   useMultiStyleConfig,
   useStyles,
   useTheme,
-  DeepPartial,
+  beae,
 } from "@beae-ui/system"
 import { Box } from "@beae-ui/layout"
 import { getValidChildren } from "@beae-ui/utils"
@@ -39,6 +37,7 @@ const useDynamicContainerStyles = (
 ) => {
   const theme = useTheme()
   const calculatedColorStyles = computed(
+    // @ts-ignore
     () => theme.components?.Avatar?.baseStyle(props)?.container,
   )
 
@@ -65,6 +64,7 @@ const AvatarDefaultImage = defineComponent({
     }))
 
     return () =>
+      // @ts-ignore
       h(
         Box,
         { __css: containerStyles.value },
@@ -141,109 +141,106 @@ export interface AvatarProps {
   initials: string
 }
 
-export const Avatar: ComponentWithProps<DeepPartial<AvatarProps>> =
-  defineComponent({
-    props: {
-      as: {
-        type: [Object, String] as PropType<DOMElements>,
-        default: "span",
-      },
-      src: {
-        type: String as PropType<AvatarProps["src"]>,
-      },
-      name: {
-        type: String as PropType<AvatarProps["name"]>,
-      },
-      initials: {
-        type: String as PropType<AvatarProps["initials"]>,
-      },
-      ...vueThemingProps,
+export const Avatar = defineComponent({
+  props: {
+    as: {
+      type: [Object, String] as PropType<DOMElements>,
+      default: "span",
     },
-    setup(props, { slots, attrs }) {
-      // Props handling
-      const mergedProps = computed(() => mergeProps({}, props, attrs))
-      const ownProps = computed(() => omitThemingProps(mergedProps.value))
-      const extractedAttrs = computed(() => extractImgAttrs(ownProps.value))
+    src: {
+      type: String as PropType<AvatarProps["src"]>,
+    },
+    name: {
+      type: String as PropType<AvatarProps["name"]>,
+    },
+    initials: {
+      type: String as PropType<AvatarProps["initials"]>,
+    },
+    ...vueThemingProps,
+  },
+  setup(props, { slots, attrs }) {
+    // Props handling
+    const mergedProps = computed(() => mergeProps({}, props, attrs))
+    const ownProps = computed(() => omitThemingProps(mergedProps.value))
+    const extractedAttrs = computed(() => extractImgAttrs(ownProps.value))
 
-      // State handling
-      const error = ref(false)
-      const pending = ref(true)
+    // State handling
+    const error = ref(false)
+    const pending = ref(true)
 
-      // Fetching custom icon
-      const validChildren = ref(getValidChildren(slots))
-      const customIcon = validChildren.value?.find((child, index) => {
-        if ((child.type as any).name === "CIcon") {
-          validChildren.value.splice(index, 1)
-          return true
-        }
-      })
+    // Fetching custom icon
+    const validChildren = ref(getValidChildren(slots))
+    const customIcon = validChildren.value?.find((child, index) => {
+      if ((child.type as any).name === "CIcon") {
+        validChildren.value.splice(index, 1)
+        return true
+      }
+    })
 
-      // Handling styles
-      const avatarGroupStyles = useAvatarGroup()
+    // Handling styles
+    const avatarGroupStyles = useAvatarGroup()
 
-      const themingProps = computed<ThemingProps>(() =>
-        filterUndefined({
-          colorScheme:
-            avatarGroupStyles?.value?.colorScheme || props.colorScheme,
-          variant: avatarGroupStyles?.value?.variant || props.variant,
-          size: avatarGroupStyles?.value?.size || props.size,
-          styleConfig:
-            avatarGroupStyles?.value?.styleConfig || props.styleConfig,
-        }),
+    const themingProps = computed<ThemingProps>(() =>
+      filterUndefined({
+        colorScheme: avatarGroupStyles?.value?.colorScheme || props.colorScheme,
+        variant: avatarGroupStyles?.value?.variant || props.variant,
+        size: avatarGroupStyles?.value?.size || props.size,
+        styleConfig: avatarGroupStyles?.value?.styleConfig || props.styleConfig,
+      }),
+    )
+
+    const styles = useMultiStyleConfig("Avatar", themingProps)
+    const containerStyles = useDynamicContainerStyles(props, styles)
+
+    const imgStyles = computed(() => ({
+      objectFit: "cover",
+      ...containerStyles.value,
+    }))
+
+    StylesProvider(styles)
+
+    return () =>
+      h(
+        beae.div,
+        {
+          __label: "avatar",
+          __css: containerStyles.value,
+          ...extractedAttrs.value.rest,
+        },
+        () => [
+          !error.value &&
+            h(beae.img, {
+              src: props.src,
+              __css: imgStyles.value,
+              onError: () => {
+                error.value = true
+                pending.value = false
+              },
+              onLoad: () => {
+                error.value = false
+                pending.value = false
+              },
+              alt: props.name,
+              ariaLabel: props.name,
+              display: pending.value
+                ? "none"
+                : (containerStyles.value.display as string),
+              ...extractedAttrs.value.imgAttrs,
+            }),
+          (pending.value || error.value) &&
+            (props.name
+              ? h(AvatarInitials, {
+                  initials: props.initials,
+                  name: props.name,
+                  ...extractedAttrs.value.rest,
+                })
+              : customIcon ??
+                h(AvatarDefaultImage, { ...extractedAttrs.value.rest })),
+          // validChildren.value,
+          slots.default?.(),
+        ],
       )
-
-      const styles = useMultiStyleConfig("Avatar", themingProps)
-      const containerStyles = useDynamicContainerStyles(props, styles)
-
-      const imgStyles = computed(() => ({
-        objectFit: "cover",
-        ...containerStyles.value,
-      }))
-
-      StylesProvider(styles)
-
-      return () =>
-        h(
-          beae.div,
-          {
-            __label: "avatar",
-            __css: containerStyles.value,
-            ...extractedAttrs.value.rest,
-          },
-          () => [
-            !error.value &&
-              h(beae.img, {
-                src: props.src,
-                __css: imgStyles.value,
-                onError: () => {
-                  error.value = true
-                  pending.value = false
-                },
-                onLoad: () => {
-                  error.value = false
-                  pending.value = false
-                },
-                alt: props.name,
-                ariaLabel: props.name,
-                display: pending.value
-                  ? "none"
-                  : (containerStyles.value.display as string),
-                ...extractedAttrs.value.imgAttrs,
-              }),
-            (pending.value || error.value) &&
-              (props.name
-                ? h(AvatarInitials, {
-                    initials: props.initials,
-                    name: props.name,
-                    ...extractedAttrs.value.rest,
-                  })
-                : customIcon ??
-                  h(AvatarDefaultImage, { ...extractedAttrs.value.rest })),
-            // validChildren.value,
-            slots.default?.(),
-          ],
-        )
-    },
-  })
+  },
+})
 
 export default Avatar

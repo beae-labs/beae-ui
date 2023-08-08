@@ -1,6 +1,9 @@
-import { computed, ComputedRef, defineComponent, h, PropType } from "vue"
-import { SystemProps, SystemStyleObject } from "@beae-ui/styled-system"
-import { beae, ThemingProps, ComponentWithProps } from "@beae-ui/system"
+import { type PropType, computed, ComputedRef, defineComponent, h } from "vue"
+import {
+  type SystemProps,
+  type SystemStyleObject,
+} from "@beae-ui/styled-system"
+import { beae, ThemingProps } from "@beae-ui/system"
 import { createContext } from "@beae-ui/utils"
 import { vueThemingProps } from "@beae-ui/prop-utils"
 
@@ -38,14 +41,13 @@ type ButtonGroupContext = ComputedRef<
   }
 >
 
-const [ButtonGroupProvider, useButtonGroup] = createContext<ButtonGroupContext>(
-  {
+const [ButtonGroupProvider, useButtonGroup]: any =
+  createContext<ButtonGroupContext>({
     strict: false,
     name: "ButtonGroupContext",
-  },
-)
+  })
 
-const ButtonGroup: ComponentWithProps<ButtonGroupProps> = defineComponent({
+const ButtonGroup = defineComponent({
   name: "ButtonGroup",
   props,
   setup(props, { attrs, slots }) {

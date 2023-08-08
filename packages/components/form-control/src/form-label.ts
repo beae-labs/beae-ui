@@ -1,11 +1,10 @@
 import { defineComponent, computed, h } from "vue"
 import {
+  type HTMLBeaeProps,
+  type ThemingProps,
   beae,
-  ComponentWithProps,
-  HTMLBeaeProps,
-  ThemingProps,
   useStyleConfig,
-  useStyles,
+  // useStyles,
 } from "@beae-ui/system"
 import { vueThemingProps } from "@beae-ui/prop-utils"
 import { useFormControlContext } from "./use-form-control"
@@ -55,25 +54,24 @@ export interface LRequiredIndicatorProps extends HTMLBeaeProps<"span"> {}
  * Used to show a "required" text or an asterisks (*) to indicate that
  * a field is required.
  */
-export const LRequiredIndicator: ComponentWithProps<LRequiredIndicatorProps> =
-  defineComponent({
-    name: "LRequiredIndicator",
-    setup(_, { attrs }) {
-      const field = useFormControlContext()
-      const styles = useStyles()
+export const LRequiredIndicator = defineComponent({
+  name: "LRequiredIndicator",
+  setup(_, { attrs }) {
+    const field = useFormControlContext()
+    // const styles = useStyles()
 
-      if (!field?.value?.isRequired?.value) return null
+    if (!field?.value?.isRequired?.value) return null
 
-      return () =>
-        h(
-          beae.span,
-          {
-            ...field?.value?.requiredIndicatorProps.value,
-            // __css : styles.value?.requiredIndicator,
-            __label: "form__required-indicator",
-            ...attrs,
-          },
-          h("*"),
-        )
-    },
-  })
+    return () =>
+      h(
+        beae.span,
+        {
+          ...field?.value?.requiredIndicatorProps.value,
+          // __css : styles.value?.requiredIndicator,
+          __label: "form__required-indicator",
+          ...attrs,
+        },
+        h("*"),
+      )
+  },
+})

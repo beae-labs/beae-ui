@@ -1,4 +1,5 @@
-import { ResponsiveValue, SystemProps } from "@beae-ui/system"
+import { ResponsiveValue } from "@beae-ui/system"
+import { type SystemProps } from "@beae-ui/styled-system"
 import { mapResponsive } from "@beae-ui/utils"
 
 export type StackDirection = ResponsiveValue<

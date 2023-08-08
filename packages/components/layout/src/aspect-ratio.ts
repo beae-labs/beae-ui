@@ -1,12 +1,6 @@
 import { mapResponsive } from "@beae-ui/utils"
-import {
-  beae,
-  HTMLBeaeProps,
-  ResponsiveValue,
-  DeepPartial,
-  ComponentWithProps,
-} from "@beae-ui/system"
-import { defineComponent, h, PropType } from "vue"
+import { type HTMLBeaeProps, type ResponsiveValue, beae } from "@beae-ui/system"
+import { defineComponent, h, type PropType } from "vue"
 
 interface AspectRatioOptions {
   /**
@@ -27,7 +21,7 @@ export interface AspectRatioProps
  *
  * @see Docs https://vue.beae-ui.com/docs/layout/aspect-ratio
  */
-export const AspectRatio: ComponentWithProps<DeepPartial<AspectRatioProps>> =
+export const AspectRatio = () =>
   defineComponent({
     name: "AspectRatio",
     props: {

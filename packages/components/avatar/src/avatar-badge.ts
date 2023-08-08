@@ -1,12 +1,16 @@
-import { h, defineComponent, PropType, computed } from "vue"
 import {
+  type PropType,
+  type DefineComponent,
+  h,
+  defineComponent,
+  computed,
+} from "vue"
+import {
+  type BeaeProps,
+  type SystemStyleObject,
+  type ThemingProps,
   beae,
-  BeaeProps,
-  ComponentWithProps,
-  SystemStyleObject,
-  ThemingProps,
   useStyles,
-  DeepPartial,
 } from "@beae-ui/system"
 import { getValidChildren } from "@beae-ui/utils"
 import { vueThemingProps } from "@beae-ui/prop-utils"
@@ -41,35 +45,34 @@ export interface AvatarBadgeProps
     ThemingProps<"AvatarBadge"> {
   placement?: BadgePlacement
 }
-export const AvatarBadge: ComponentWithProps<DeepPartial<AvatarBadgeProps>> =
-  defineComponent({
-    props: {
-      placement: String as PropType<AvatarBadgeProps["placement"]>,
-      ...vueThemingProps,
-    },
-    setup(props, { slots, attrs }) {
-      const styles = useStyles()
-      const placementStyles = computed(
-        () => placementMap[props.placement || "bottom-end"],
+export const AvatarBadge: DefineComponent = defineComponent({
+  props: {
+    placement: String as PropType<AvatarBadgeProps["placement"]>,
+    ...vueThemingProps,
+  },
+  setup(props, { slots, attrs }) {
+    const styles = useStyles()
+    const placementStyles = computed(
+      () => placementMap[props.placement || "bottom-end"],
+    )
+
+    const badgeStyles = computed(() => ({
+      // @ts-ignore
+      ...styles.value.badge,
+      ...placementStyles.value,
+    }))
+
+    return () =>
+      h(
+        beae.div,
+        {
+          __label: "avatar-badge",
+          __css: badgeStyles.value,
+          ...props,
+          ...attrs,
+        },
+
+        () => getValidChildren(slots),
       )
-
-      const badgeStyles = computed(() => ({
-        // @ts-ignore
-        ...styles.value.badge,
-        ...placementStyles.value,
-      }))
-
-      return () =>
-        h(
-          beae.div,
-          {
-            __label: "avatar-badge",
-            __css: badgeStyles.value,
-            ...props,
-            ...attrs,
-          },
-
-          () => getValidChildren(slots),
-        )
-    },
-  })
+  },
+})

@@ -16,29 +16,25 @@
  */
 
 import {
+  type PropType,
+  type ComputedRef,
   h,
   defineComponent,
-  PropType,
   computed,
-  ComputedRef,
   ref,
-  watch,
   Ref,
-  reactive,
 } from "vue"
 import {
-  beae,
-  DOMElements,
+  type DOMElements,
+  type HTMLBeaeProps,
+  type ThemingProps,
   StylesProvider,
-  ComponentWithProps,
-  HTMLBeaeProps,
-  ThemingProps,
+  beae,
   useMultiStyleConfig,
   useStyles,
-  DeepPartial,
 } from "@beae-ui/system"
 import { useId } from "@beae-ui/composables"
-import { createContext, genId, SNAO, getValidChildren } from "@beae-ui/utils"
+import { createContext, SNAO, getValidChildren } from "@beae-ui/utils"
 import { vueThemingProps } from "@beae-ui/prop-utils"
 import { filterUndefined, mergeWith } from "@beae-ui/utils"
 import { SystemStyleObject } from "@beae-ui/styled-system"
@@ -89,79 +85,78 @@ const [AccordionProvider, useAccordion] = createContext<AccordionContext>({
   strict: true,
 })
 
-export const Accordion: ComponentWithProps<DeepPartial<AccordionProps>> =
-  defineComponent({
-    name: "Accordion",
-    props: {
-      as: {
-        type: [String] as PropType<DOMElements>,
-        default: "div",
-      },
-      allowMultiple: Boolean as PropType<AccordionProps["allowMultiple"]>,
-      allowToggle: Boolean as PropType<AccordionProps["allowToggle"]>,
-      index: SNAO as PropType<AccordionProps["index"]>,
-      defaultIndex: SNAO as PropType<AccordionProps["defaultIndex"]>,
-      reduceMotion: {
-        type: Boolean as PropType<AccordionProps["reduceMotion"]>,
-        default: false,
-      },
-      ...vueThemingProps,
+export const Accordion = defineComponent({
+  name: "Accordion",
+  props: {
+    as: {
+      type: [String] as PropType<DOMElements>,
+      default: "div",
     },
-    setup(_props, { slots, attrs }) {
-      const opens: Ref<string[]> = ref([])
+    allowMultiple: Boolean as PropType<AccordionProps["allowMultiple"]>,
+    allowToggle: Boolean as PropType<AccordionProps["allowToggle"]>,
+    index: SNAO as PropType<AccordionProps["index"]>,
+    defaultIndex: SNAO as PropType<AccordionProps["defaultIndex"]>,
+    reduceMotion: {
+      type: Boolean as PropType<AccordionProps["reduceMotion"]>,
+      default: false,
+    },
+    ...vueThemingProps,
+  },
+  setup(_props, { slots, attrs }) {
+    const opens: Ref<string[]> = ref([])
 
-      const props = computed<AccordionProps>(() => mergeWith({}, _props, attrs))
-      const themingProps = computed<ThemingProps>(() =>
-        filterUndefined({
-          colorScheme: props.value.colorScheme,
-          variant: props.value.variant,
-          size: props.value.size,
-          styleConfig: props.value.styleConfig,
-        }),
-      )
+    const props = computed<AccordionProps>(() => mergeWith({}, _props, attrs))
+    const themingProps = computed<ThemingProps>(() =>
+      filterUndefined({
+        colorScheme: props.value.colorScheme,
+        variant: props.value.variant,
+        size: props.value.size,
+        styleConfig: props.value.styleConfig,
+      }),
+    )
 
-      const styles = useMultiStyleConfig("Accordion", themingProps)
+    const styles: any = useMultiStyleConfig("Accordion", themingProps)
 
-      const reduceMotion = computed(() => props.value.reduceMotion)
-      function setOpen(payload: string) {
-        if (props.value.allowMultiple) {
-          if (opens.value.includes(payload)) {
-            opens.value = opens.value.filter((id) => id != payload)
-          } else {
-            opens.value.push(payload)
+    const reduceMotion = computed(() => props.value.reduceMotion)
+    function setOpen(payload: string) {
+      if (props.value.allowMultiple) {
+        if (opens.value.includes(payload)) {
+          opens.value = opens.value.filter((id) => id != payload)
+        } else {
+          opens.value.push(payload)
+        }
+      } else {
+        if (opens.value.includes(payload)) {
+          if (props.value.allowToggle) {
+            opens.value = []
           }
         } else {
-          if (opens.value.includes(payload)) {
-            if (props.value.allowToggle) {
-              opens.value = []
-            }
-          } else {
-            opens.value = [payload]
-          }
+          opens.value = [payload]
         }
       }
+    }
 
-      AccordionProvider({
-        reduceMotion,
-        opens: opens,
-        setOpen: setOpen,
-      })
-      StylesProvider(styles)
+    AccordionProvider({
+      reduceMotion,
+      opens: opens,
+      setOpen: setOpen,
+    })
+    StylesProvider(styles)
 
-      return () => {
-        // const api = apiRef.value;
-        return h(
-          beae.div,
-          {
-            sx: {
-              "> div": styles.value.root,
-            },
+    return () => {
+      // const api = apiRef.value;
+      return h(
+        beae.div,
+        {
+          sx: {
+            "> div": styles.value.root,
           },
-          () => [h("div", getValidChildren(slots))],
-        )
-      }
-    },
-  })
+        },
+        () => [h("div", getValidChildren(slots))],
+      )
+    }
+  },
+})
 
 export interface AccordionItemProps extends HTMLBeaeProps<"div"> {
   disabled?: boolean
@@ -173,156 +168,151 @@ export interface AccordionItemContext {
   // isDisabled: ComputedRef<boolean | undefined>;
 }
 
-const [AccordionItemProvider, useAccordionItem] =
+const [AccordionItemProvider, useAccordionItem]: any =
   createContext<AccordionItemContext>({
     name: "AccordionItemContext",
     strict: true,
   })
-export const AccordionItem: ComponentWithProps<AccordionItemProps> =
-  defineComponent({
-    name: "AccordionItem",
-    props: {
-      disabled: Boolean as PropType<boolean>,
-      value: String as PropType<string>,
-    },
-    setup(props, { slots, attrs }) {
-      const _uid = useId(undefined, "accordion-item")
-      const id = computed(() => (attrs.id as string) || _uid.value)
-      AccordionItemProvider({
-        id,
-      })
+export const AccordionItem = defineComponent({
+  name: "AccordionItem",
+  props: {
+    disabled: Boolean as PropType<boolean>,
+    value: String as PropType<string>,
+  },
+  setup(props, { slots, attrs }) {
+    const _uid = useId(undefined, "accordion-item")
+    const id = computed(() => (attrs.id as string) || _uid.value)
+    AccordionItemProvider({
+      id,
+    })
 
-      const styles = useStyles()
+    const styles = useStyles()
 
-      const containerStyles = computed<SystemStyleObject>(() => ({
-        // @ts-ignore
-        ...styles.value.container,
-        overflowAnchor: "none",
-      }))
+    const containerStyles = computed<SystemStyleObject>(() => ({
+      // @ts-ignore
+      ...styles.value.container,
+      overflowAnchor: "none",
+    }))
 
-      return () =>
-        h(
-          beae.div,
-          {
-            __css: containerStyles.value,
-            ...attrs,
-          },
-          () => getValidChildren(slots),
-        )
-    },
-  })
+    return () =>
+      h(
+        beae.div,
+        {
+          __css: containerStyles.value,
+          ...attrs,
+        },
+        () => getValidChildren(slots),
+      )
+  },
+})
 
 export interface AccordionButtonProps extends HTMLBeaeProps<"button"> {
   disabled?: boolean
   _expanded?: SystemStyleObject
 }
-export const AccordionButton: ComponentWithProps<AccordionButtonProps> =
-  defineComponent({
-    name: "AccordionButton",
-    props: {
-      disabled: Boolean as PropType<boolean>,
-      _expanded: {} as PropType<SystemStyleObject>,
-    },
-    setup(props, { slots, attrs }) {
-      const { id } = useAccordionItem()
+export const AccordionButton = defineComponent({
+  name: "AccordionButton",
+  props: {
+    disabled: Boolean as PropType<boolean>,
+    _expanded: {} as PropType<SystemStyleObject>,
+  },
+  setup(props, { slots, attrs }) {
+    const { id } = useAccordionItem()
 
-      const { opens, setOpen } = useAccordion()
+    const { opens, setOpen } = useAccordion()
 
-      const styles = useStyles()
-      const buttonStyles = computed<SystemStyleObject>(() => ({
-        display: "flex",
-        alignItems: "center",
-        width: "100%",
-        outline: 0,
-        // @ts-ignore
-        ...styles.value.button,
-        ...(opens.value.includes(id.value) ? props._expanded : {}),
-      }))
+    const styles = useStyles()
+    const buttonStyles = computed<SystemStyleObject>(() => ({
+      display: "flex",
+      alignItems: "center",
+      width: "100%",
+      outline: 0,
+      // @ts-ignore
+      ...styles.value.button,
+      ...(opens.value.includes(id.value) ? props._expanded : {}),
+    }))
 
-      return () =>
-        h(
-          beae.button,
-          {
-            __css: buttonStyles.value,
-            ...attrs,
-            open: opens.value.includes(id.value),
-            onClick: () => setOpen(id.value),
-          },
-          () => getValidChildren(slots),
-        )
-    },
-  })
+    return () =>
+      h(
+        beae.button,
+        {
+          __css: buttonStyles.value,
+          ...attrs,
+          open: opens.value.includes(id.value),
+          onClick: () => setOpen(id.value),
+        },
+        () => getValidChildren(slots),
+      )
+  },
+})
 
 export interface AccordionPanelProps extends HTMLBeaeProps<"div"> {
   disabled?: boolean
 }
-export const AccordionPanel: ComponentWithProps<AccordionPanelProps> =
-  defineComponent({
-    name: "AccordionPanel",
-    props: {
-      disabled: Boolean as PropType<boolean>,
-    },
-    setup(props, { slots, attrs }) {
-      const { id } = useAccordionItem()
-      const { opens } = useAccordion()
-      const styles = useStyles()
+export const AccordionPanel = defineComponent({
+  name: "AccordionPanel",
+  props: {
+    disabled: Boolean as PropType<boolean>,
+  },
+  setup(_, { slots, attrs }) {
+    const { id } = useAccordionItem()
+    const { opens } = useAccordion()
+    const styles = useStyles()
 
-      return () => {
-        return h(LCollapse, { isOpen: opens.value.includes(id.value) }, () =>
-          h(
-            beae.div,
-            {
-              // @ts-ignore
-              __css: styles.value.panel,
-              ...attrs,
-            },
-            () => getValidChildren(slots),
-          ),
-        )
-      }
-    },
-  })
-
-export interface AccordionIconProps extends HTMLBeaeProps<"svg"> {}
-export const AccordionIcon: ComponentWithProps<AccordionIconProps> =
-  defineComponent({
-    name: "AccordionIcon",
-    setup(props, { slots, attrs }) {
-      const { reduceMotion, opens } = useAccordion()
-      const { id } = useAccordionItem()
-      const styles = useStyles()
-
-      const iconStyles = computed<SystemStyleObject>(() => ({
-        // opacity: isDisabled.value ? 0.4 : 1,
-        transform: opens.value.includes(id.value)
-          ? "rotate(-180deg)"
-          : undefined,
-        transition: reduceMotion.value ? undefined : "transform 0.2s",
-        transformOrigin: "center",
-        // @ts-ignore
-        ...styles.value.icon,
-      }))
-
-      return () =>
+    return () => {
+      return h(LCollapse, { isOpen: opens.value.includes(id.value) }, () =>
         h(
-          beae.svg,
+          beae.div,
           {
-            viewBox: "0 0 24 24",
-            ariaHidden: true,
-            __css: iconStyles.value,
-            size: "1em",
-            w: "1em",
-            h: "1em",
+            // @ts-ignore
+            __css: styles.value.panel,
             ...attrs,
           },
-          () =>
-            h(
-              "g",
-              h("path", {
-                fill: "currentColor",
-                d: "M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z",
-              }),
-            ),
-        )
-    },
-  })
+          () => getValidChildren(slots),
+        ),
+      )
+    }
+  },
+})
+
+export interface AccordionIconProps extends HTMLBeaeProps<"svg"> {}
+export const AccordionIcon = {
+  name: "AccordionIcon",
+  // @ts-ignore
+  setup(_, { attrs }) {
+    const { reduceMotion, opens } = useAccordion()
+    const { id } = useAccordionItem()
+    const styles = useStyles()
+
+    const iconStyles = computed<SystemStyleObject>(() => ({
+      // opacity: isDisabled.value ? 0.4 : 1,
+      transform: opens.value.includes(id.value) ? "rotate(-180deg)" : undefined,
+      transition: reduceMotion.value ? undefined : "transform 0.2s",
+      transformOrigin: "center",
+      // @ts-ignore
+      ...styles.value.icon,
+    }))
+
+    return () =>
+      h(
+        beae.svg,
+        {
+          viewBox: "0 0 24 24",
+          ariaHidden: true,
+          __css: iconStyles.value,
+          size: "1em",
+          w: "1em",
+          h: "1em",
+          ...attrs,
+        },
+        () =>
+          h(
+            "g",
+            h("path", {
+              fill: "currentColor",
+              d: "M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z",
+            }),
+          ),
+      )
+  },
+}

@@ -15,16 +15,14 @@
  * @see Theming https://ui.beae.com/docs/theming/component-style
  */
 
-import { h, defineComponent, computed, PropType, toRefs } from "vue"
+import { type PropType, h, defineComponent, computed, toRefs } from "vue"
 import {
-  beae,
-  ComponentWithProps,
-  DeepPartial,
-  DOMElements,
-  useMultiStyleConfig,
+  type DOMElements,
+  type HTMLBeaeProps,
   StylesProvider,
-  HTMLBeaeProps,
+  useMultiStyleConfig,
   useStyles,
+  beae,
 } from "@beae-ui/system"
 
 import {
@@ -52,40 +50,39 @@ export const formControlProps = {
   id: String as PropType<FormControlProps["id"]>,
 }
 
-export const FormControl: ComponentWithProps<DeepPartial<FormControlProps>> =
-  defineComponent({
-    props: {
-      as: {
-        type: [Object, String] as PropType<DOMElements>,
-        default: "div",
-      },
-      ...formControlProps,
+export const FormControl = defineComponent({
+  props: {
+    as: {
+      type: [Object, String] as PropType<DOMElements>,
+      default: "div",
     },
-    setup(_props, { slots, attrs }) {
-      const { as, ...props } = toRefs(_props)
-      const ownProps = computed(() => props)
-      const styles = useMultiStyleConfig("Form", props)
-      const { rootProps, ..._context } = useFormControlProvider(ownProps.value)
+    ...formControlProps,
+  },
+  setup(_props, { slots, attrs }) {
+    const { as, ...props } = toRefs(_props)
+    const ownProps = computed(() => props)
+    const styles = useMultiStyleConfig("Form", props)
+    const { rootProps, ..._context } = useFormControlProvider(ownProps.value)
 
-      const context: FormControlProviderContext = computed(() => _context)
+    const context: FormControlProviderContext = computed(() => _context)
 
-      FormControlProvider(context)
-      StylesProvider(styles)
+    FormControlProvider(context)
+    StylesProvider(styles)
 
-      return () =>
-        h(
-          beae.div,
-          {
-            as: as.value,
-            ...rootProps.value,
-            __css: styles.value.container,
-            __label: "form",
-            ...attrs,
-          },
-          slots,
-        )
-    },
-  })
+    return () =>
+      h(
+        beae.div,
+        {
+          as: as.value,
+          ...rootProps.value,
+          __css: styles.value.container,
+          __label: "form",
+          ...attrs,
+        },
+        slots,
+      )
+  },
+})
 
 export interface HelpTextProps extends HTMLBeaeProps<"div"> {}
 /**
@@ -97,25 +94,24 @@ export interface HelpTextProps extends HTMLBeaeProps<"div"> {}
  *
  * TODO: Handle Type Props pass into FormHelperText
  */
-// @ts-ignore
-export const FormHelperText: ComponentWithProps<DeepPartial<HelpTextProps>> =
-  defineComponent((props, { attrs, slots }) => {
-    const field = useFormControlContext()
-    const styles = useStyles()
-    const handleVNodeMounted = () => {
-      field.value.hasHelpText.value = true
-    }
 
-    return () =>
-      h(
-        beae.div,
-        {
-          __label: "form__helper-text",
-          onVnodeBeforeMount: handleVNodeMounted,
-          ...field.value.helperTextProps.value,
-          // @ts-ignore
-          __css: styles.value.helperText,
-        },
-        slots,
-      )
-  })
+export const FormHelperText = defineComponent((props, { attrs, slots }) => {
+  const field = useFormControlContext()
+  const styles = useStyles()
+  const handleVNodeMounted = () => {
+    field.value.hasHelpText.value = true
+  }
+
+  return () =>
+    h(
+      beae.div,
+      {
+        __label: "form__helper-text",
+        onVnodeBeforeMount: handleVNodeMounted,
+        ...field.value.helperTextProps.value,
+        // @ts-ignore
+        __css: styles.value.helperText,
+      },
+      slots,
+    )
+})

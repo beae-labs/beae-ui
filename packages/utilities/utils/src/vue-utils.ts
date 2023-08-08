@@ -15,6 +15,8 @@ export interface CreateContextOptions {
    * The display name of the context
    */
   name?: string
+  hookName?: any
+  providerName?: any
 }
 
 type CreateContextReturn<T> = [(opts: T) => void, (fallback?: T) => T, Symbol]

@@ -1,13 +1,11 @@
 import {
-  beae,
-  DOMElements,
-  ThemingProps,
+  type DOMElements,
+  type ThemingProps,
+  type HTMLBeaeProps,
   useStyleConfig,
-  HTMLBeaeProps,
-  ComponentWithProps,
-  DeepPartial,
+  beae,
 } from "@beae-ui/system"
-import { computed, defineComponent, h, PropType } from "vue"
+import { type PropType, computed, defineComponent, h } from "vue"
 import { filterUndefined } from "@beae-ui/utils"
 import { vueThemingProps } from "@beae-ui/prop-utils"
 
@@ -25,7 +23,7 @@ export interface KbdProps extends HTMLBeaeProps<"kbd">, ThemingProps<"Kbd"> {}
  *
  * @see Docs https://vue.beae-ui.com/docs/data-display/kbd
  */
-export const Kbd: ComponentWithProps<DeepPartial<KbdProps>> = defineComponent({
+export const Kbd = defineComponent({
   name: "Kbd",
   props: {
     as: {

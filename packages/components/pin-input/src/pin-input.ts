@@ -27,7 +27,7 @@ import {
 } from "./use-pin-input"
 
 const [StylesProvider, useStyles] = createStylesContext("PinInput")
-const [PinInputProvider, usePinInput] =
+const [PinInputProvider, usePinInput]: any =
   createContext<ComputedRef<ReturnType<typeof connect>>>()
 
 export { PinInputProvider, usePinInput }
@@ -83,7 +83,7 @@ export const PinInput = defineComponent({
   setup(props, { slots, attrs, emit }) {
     const styles = useStyleConfig("PinInput", props)
 
-    const inputStyles = computed(() => ({
+    const inputStyles: any = computed(() => ({
       ...styles.value,
       mx: props.spacing,
     }))

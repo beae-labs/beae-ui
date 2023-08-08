@@ -14,7 +14,7 @@ export interface ThemingProviderProps {
 }
 
 // @ts-ignore
-export const ThemingProvider = defineComponent({
+export const ThemingProvider: any = defineComponent({
   name: "ThemingProvider",
   props: {
     value: {

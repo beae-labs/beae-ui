@@ -1,11 +1,5 @@
-import {
-  beae,
-  ComponentWithProps,
-  DeepPartial,
-  ResponsiveValue,
-  DOMElements,
-} from "@beae-ui/system"
-import { h, defineComponent, PropType, computed } from "vue"
+import { type ResponsiveValue, type DOMElements, beae } from "@beae-ui/system"
+import { type PropType, h, defineComponent, computed } from "vue"
 import { SNAO } from "@beae-ui/utils"
 import { Grid, GridProps } from "./grid"
 import { isNull, isNumber, mapResponsive } from "@beae-ui/utils"
@@ -43,43 +37,43 @@ export interface SimpleGridProps extends GridProps, SimpleGridOptions {}
  *
  * @see Docs https://vue.beae-ui.com/docs/layout/simple-grid
  */
-export const SimpleGrid: ComponentWithProps<DeepPartial<SimpleGridProps>> =
-  defineComponent({
-    name: "SimpleGrid",
-    props: {
-      as: {
-        type: [Object, String] as PropType<DOMElements>,
-        default: "ul",
-      },
-      minChildWidth: SNAO as PropType<SimpleGridProps["minWidth"]>,
-      columns: SNAO as PropType<SimpleGridProps["columns"]>,
-      spacing: SNAO as PropType<SimpleGridProps["gridGap"]>,
-      spacingX: SNAO as PropType<SimpleGridProps["gridGap"]>,
-      spacingY: SNAO as PropType<SimpleGridProps["gridGap"]>,
+export const SimpleGrid = defineComponent({
+  name: "SimpleGrid",
+  props: {
+    as: {
+      type: [Object, String] as PropType<DOMElements>,
+      default: "ul",
     },
-    setup(props, { slots, attrs }) {
-      const templateColumns = computed(() =>
-        props.minChildWidth
-          ? widthToColumns(props.minChildWidth)
-          : countToColumns(props.columns),
-      )
+    minChildWidth: SNAO as PropType<SimpleGridProps["minWidth"]>,
+    columns: SNAO as PropType<SimpleGridProps["columns"]>,
+    spacing: SNAO as PropType<SimpleGridProps["gridGap"]>,
+    spacingX: SNAO as PropType<SimpleGridProps["gridGap"]>,
+    spacingY: SNAO as PropType<SimpleGridProps["gridGap"]>,
+  },
+  setup(props, { slots, attrs }) {
+    const templateColumns = computed(() =>
+      props.minChildWidth
+        ? widthToColumns(props.minChildWidth)
+        : countToColumns(props.columns),
+    )
 
-      return () =>
-        h(
-          beae(Grid, {
-            as: props.as,
-            __label: "simple-grid",
-            gap: props.spacing,
-            columnGap: props.spacingX,
-            rowGap: props.spacingY,
-            templateColumns: templateColumns.value,
-            ...attrs,
-          }),
-          {},
-          slots,
-        )
-    },
-  })
+    return () =>
+      h(
+        beae(Grid, {
+          as: props.as,
+          __label: "simple-grid",
+          gap: props.spacing,
+          columnGap: props.spacingX,
+          rowGap: props.spacingY,
+          // @ts-ignore
+          templateColumns: templateColumns.value,
+          ...attrs,
+        }),
+        {},
+        slots,
+      )
+  },
+})
 
 function toPx(n: string | number) {
   return isNumber(n) ? `${n}px` : n

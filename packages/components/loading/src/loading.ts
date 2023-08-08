@@ -1,12 +1,11 @@
-import { defineComponent, PropType, computed, h, toRefs } from "vue"
+import { type PropType, defineComponent, computed, h, toRefs } from "vue"
 
 import {
-  beae,
-  HTMLBeaeProps,
-  ComponentWithProps,
-  SystemStyleObject,
+  type HTMLBeaeProps,
+  type SystemStyleObject,
+  type DeepPartial,
   useMultiStyleConfig,
-  DeepPartial,
+  beae,
 } from "@beae-ui/system"
 import { getValidChildren } from "@beae-ui/utils"
 import {
@@ -29,62 +28,60 @@ export interface LoadingFilledTrackProps
  * It applies `background-color` and changes its width.
  *
  */
-const LoadingFilledTrack: ComponentWithProps<LoadingFilledTrackProps> =
-  defineComponent({
-    name: "LoadingFilledTrack",
-    props: {
-      value: Number as PropType<LoadingFilledTrackProps["value"]>,
-      min: {
-        type: Number as PropType<LoadingFilledTrackProps["min"]>,
-        default: 0,
-      },
-      max: {
-        type: Number as PropType<LoadingFilledTrackProps["max"]>,
-        default: 100,
-      },
-      valueText: String as PropType<LoadingFilledTrackProps["valueText"]>,
-      isIndeterminate: Boolean as PropType<
-        LoadingFilledTrackProps["isIndeterminate"]
-      >,
-      role: String as PropType<LoadingFilledTrackProps["role"]>,
-      color: String as PropType<LoadingFilledTrackProps["color"]>,
-      css: Object as PropType<DeepPartial<SystemStyleObject>>,
+const LoadingFilledTrack = defineComponent({
+  name: "LoadingFilledTrack",
+  props: {
+    value: Number as PropType<LoadingFilledTrackProps["value"]>,
+    min: {
+      type: Number as PropType<LoadingFilledTrackProps["min"]>,
+      default: 0,
     },
-    setup(props, { slots, attrs }) {
-      const { value, min, max, isIndeterminate, role, color, css } =
-        toRefs(props)
-      const styles = useMultiStyleConfig("Progress", props)
-      const loadingComputed = computed(() =>
-        getLoadingProps({
-          value: value.value,
-          min: min.value,
-          max: max.value,
-          isIndeterminate: isIndeterminate.value,
-          role: role.value,
-        }),
-      )
-      const trackStyle = computed<SystemStyleObject>(() => ({
-        height: "100%",
-        backgroundColor: color.value,
-        ...styles.value.filledTrack,
-        ...css.value,
-      }))
-      return () =>
-        h(
-          beae.div,
-          {
-            __label: "loading__filled-track",
-            ...attrs,
-            style: {
-              width: `${loadingComputed.value.percent}%`,
-            },
-            ...loadingComputed.value.bind,
-            __css: trackStyle.value,
+    max: {
+      type: Number as PropType<LoadingFilledTrackProps["max"]>,
+      default: 100,
+    },
+    valueText: String as PropType<LoadingFilledTrackProps["valueText"]>,
+    isIndeterminate: Boolean as PropType<
+      LoadingFilledTrackProps["isIndeterminate"]
+    >,
+    role: String as PropType<LoadingFilledTrackProps["role"]>,
+    color: String as PropType<LoadingFilledTrackProps["color"]>,
+    css: Object as PropType<DeepPartial<SystemStyleObject>>,
+  },
+  setup(props, { slots, attrs }) {
+    const { value, min, max, isIndeterminate, role, color, css } = toRefs(props)
+    const styles = useMultiStyleConfig("Progress", props)
+    const loadingComputed = computed(() =>
+      getLoadingProps({
+        value: value.value,
+        min: min.value,
+        max: max.value,
+        isIndeterminate: isIndeterminate.value,
+        role: role.value,
+      }),
+    )
+    const trackStyle = computed<SystemStyleObject>(() => ({
+      height: "100%",
+      backgroundColor: color.value,
+      ...styles.value.filledTrack,
+      ...css.value,
+    }))
+    return () =>
+      h(
+        beae.div,
+        {
+          __label: "loading__filled-track",
+          ...attrs,
+          style: {
+            width: `${loadingComputed.value.percent}%`,
           },
-          () => getValidChildren(slots),
-        )
-    },
-  })
+          ...loadingComputed.value.bind,
+          __css: trackStyle.value,
+        },
+        () => getValidChildren(slots),
+      )
+  },
+})
 
 export interface LoadingTrackProps extends HTMLBeaeProps<"div"> {}
 
@@ -161,7 +158,7 @@ export interface LoadingProps extends LoadingOptions, HTMLBeaeProps<"div"> {}
 //  * and speak the loading values.
 //  *
 //  */
-const Loading: ComponentWithProps<DeepPartial<LoadingProps>> = defineComponent({
+const Loading = defineComponent({
   name: `Loading`,
   props: {
     value: Number as PropType<LoadingProps["value"]>,
@@ -233,6 +230,7 @@ const Loading: ComponentWithProps<DeepPartial<LoadingProps>> = defineComponent({
           __css: trackStyle.value,
         },
         h(
+          // @ts-ignore
           LoadingFilledTrack,
           {
             min: min.value,
