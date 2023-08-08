@@ -1,19 +1,14 @@
-import { SystemProps } from "@beae-ui/styled-system"
+import { type SystemProps } from "@beae-ui/styled-system"
 import {
+  type PropType,
+  type Component,
   h,
   defineComponent,
-  PropType,
-  Component,
   computed,
   Fragment,
   createVNode,
 } from "vue"
-import {
-  beae,
-  ComponentWithProps,
-  DOMElements,
-  HTMLBeaeProps,
-} from "@beae-ui/system"
+import { type DOMElements, type HTMLBeaeProps, beae } from "@beae-ui/system"
 import {
   getDividerStyles,
   getStackStyles,
@@ -137,105 +132,115 @@ const stackProps = {
  * @see Docs https://vue.beae-ui.com/docs/layout/stack
  *
  */
-export const Stack: ComponentWithProps<StackProps> = defineComponent({
-  name: "Stack",
-  props: stackProps,
-  setup(props, { slots, attrs }) {
-    const direction = computed(() =>
-      props.isInline ? "row" : props.direction ?? "column",
-    )
+export const Stack: any = () =>
+  defineComponent({
+    name: "Stack",
+    props: stackProps,
+    setup(props, { slots, attrs }) {
+      const direction = computed(() =>
+        props.isInline ? "row" : props.direction ?? "column",
+      )
 
-    const styles = computed(() =>
-      getStackStyles({ direction: direction.value, spacing: props.spacing }),
-    )
+      const styles = computed(() =>
+        getStackStyles({ direction: direction.value, spacing: props.spacing }),
+      )
 
-    const dividerStyle = computed(() =>
-      getDividerStyles({ spacing: props.spacing, direction: direction.value }),
-    )
+      const dividerStyle = computed(() =>
+        getDividerStyles({
+          spacing: props.spacing,
+          direction: direction.value,
+        }),
+      )
 
-    const hasDivider = computed(() => !!props.divider)
+      const hasDivider = computed(() => !!props.divider)
 
-    const shouldUseChildren = computed(
-      () => !props.shouldWrapChildren && !hasDivider.value,
-    )
+      const shouldUseChildren = computed(
+        () => !props.shouldWrapChildren && !hasDivider.value,
+      )
 
-    return () => {
-      const validChildren = getValidChildren(slots)
-      const clones = shouldUseChildren.value
-        ? validChildren
-        : validChildren.map((child, index) => {
-            const isLast = index + 1 === validChildren.length
-            const wrappedChild = createVNode(StackItem, { key: index }, child)
-            const _child = props.shouldWrapChildren ? wrappedChild : child
+      return () => {
+        const validChildren = getValidChildren(slots)
+        const clones = shouldUseChildren.value
+          ? validChildren
+          : validChildren.map((child, index) => {
+              const isLast = index + 1 === validChildren.length
+              const wrappedChild = createVNode(StackItem, { key: index }, child)
+              const _child = props.shouldWrapChildren ? wrappedChild : child
 
-            if (!hasDivider.value) return _child
+              if (!hasDivider.value) return _child
 
-            // todo: temporary divider
-            const clonedDivider = createVNode(StackDivider, {
-              borderColor: "blue.200",
-              __css: dividerStyle.value,
+              // todo: temporary divider
+              const clonedDivider = createVNode(StackDivider, {
+                borderColor: "blue.200",
+                __css: dividerStyle.value,
+              })
+
+              const _divider = isLast ? null : clonedDivider
+
+              return createVNode(Fragment, { key: index }, [_child, _divider])
             })
 
-            const _divider = isLast ? null : clonedDivider
-
-            return createVNode(Fragment, { key: index }, [_child, _divider])
-          })
-
-      return h(
-        beae.div,
-        {
-          __label: attrs.label ? (attrs.label as string) : "stack",
-          display: "flex",
-          alignItems: props.align,
-          justifyContent: props.justify,
-          flexDirection: styles.value.flexDirection,
-          flexWrap: props.wrap,
-          __css: hasDivider.value ? {} : { [selector]: styles.value[selector] },
-        },
-        () => clones,
-      )
-    }
-  },
-})
+        return h(
+          beae.div,
+          {
+            __label: attrs.label ? (attrs.label as string) : "stack",
+            display: "flex",
+            alignItems: props.align,
+            justifyContent: props.justify,
+            flexDirection: styles.value.flexDirection,
+            flexWrap: props.wrap,
+            __css: hasDivider.value
+              ? {}
+              : { [selector]: styles.value[selector] },
+          },
+          () => clones,
+        )
+      }
+    },
+  })
 
 /**
  * A view that arranges its children in a horizontal line.
  */
-export const HStack: ComponentWithProps<StackProps> = defineComponent({
-  name: "HStack",
-  props: stackProps,
-  setup(props, { attrs, slots }) {
-    return () =>
-      h(
-        beae(Stack, {
-          __label: "stack-horizontal",
-          ...props,
-          ...attrs,
-          direction: "row",
-        }),
-        {},
-        slots,
-      )
-  },
-})
+export const HStack: any = () =>
+  defineComponent({
+    name: "HStack",
+    props: stackProps,
+    setup(props, { attrs, slots }) {
+      return () =>
+        h(
+          beae(Stack, {
+            __label: "stack-horizontal",
+            ...props,
+            ...attrs,
+            // @ts-ignore
+            direction: "row",
+          }),
+          {},
+          slots,
+        )
+    },
+  })
 
 /**
  * A view that arranges its children in a vertical line.
  */
-export const VStack: ComponentWithProps<StackProps> = defineComponent({
-  name: "VStack",
-  props: stackProps,
-  setup(props, { attrs, slots }) {
-    return () =>
-      h(
-        beae(Stack, {
-          __label: "stack-vertical",
-          ...props,
-          ...attrs,
-          direction: "column",
-        }),
-        {},
-        slots,
-      )
-  },
-})
+export const VStack: any = () =>
+  defineComponent({
+    name: "VStack",
+    props: stackProps,
+    setup(props, { attrs, slots }) {
+      return () =>
+        h(
+          beae(Stack, {
+            __label: "stack-vertical",
+            ...props,
+            ...attrs,
+            // @ts-ignore
+            direction: "column",
+          }),
+          {},
+          slots,
+        )
+    },
+  })

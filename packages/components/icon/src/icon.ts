@@ -106,7 +106,7 @@ export const Icon = defineComponent({
   },
 })
 
-export function createIconComponent(name: string) {
+export const createIconComponent: any = (name: string) => {
   const componentName = camelCase(name)
   const iconComponent = defineComponent({
     setup(props: IconProps, { slots, attrs }) {
@@ -122,7 +122,6 @@ export function createIconComponent(name: string) {
         )
     },
   })
-
   iconComponent.name = componentName
   return iconComponent
 }

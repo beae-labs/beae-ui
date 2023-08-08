@@ -1,15 +1,13 @@
-import { defineComponent, PropType, computed, h } from "vue"
+import { type PropType, defineComponent, computed, h } from "vue"
 import { SNAO, vueThemingProps } from "@beae-ui/prop-utils"
 import {
-  beae,
+  type DOMElements,
+  type ThemingProps,
+  type SystemStyleObject,
+  type HTMLBeaeProps,
   keyframes,
-  DOMElements,
-  ThemingProps,
   useStyleConfig,
-  SystemStyleObject,
-  HTMLBeaeProps,
-  ComponentWithProps,
-  DeepPartial,
+  beae,
 } from "@beae-ui/system"
 
 import { VisuallyHidden } from "@beae-ui/visually-hidden"
@@ -71,7 +69,7 @@ const defaultSpinnerProps = {
   speed: "0.45s",
 }
 
-const Spinner: ComponentWithProps<DeepPartial<SpinnerProps>> = defineComponent({
+const Spinner = defineComponent({
   props: {
     as: SNAO as PropType<SpinnerProps["as"]>,
     /**

@@ -15,20 +15,19 @@
  * @see Theming https://ui.beae.com/docs/theming/component-style
  */
 
-import { h, defineComponent, PropType } from "vue"
+import { type PropType, h, defineComponent } from "vue"
 import { FormControlOptions, useFormControl } from "@beae-ui/form-control"
 import {
-  beae,
+  type SystemStyleObject,
+  type ThemingProps,
+  type HTMLBeaeProps,
   omitThemingProps,
-  SystemStyleObject,
-  ThemingProps,
-  HTMLBeaeProps,
+  beae,
   useMultiStyleConfig,
 } from "@beae-ui/system"
 import { omit } from "@beae-ui/utils"
 import { vueThemingProps } from "@beae-ui/prop-utils"
 import { formControlProps } from "@beae-ui/form-control"
-import { filterUndefined } from "@beae-ui/utils"
 
 interface TextareaOptions {
   /**

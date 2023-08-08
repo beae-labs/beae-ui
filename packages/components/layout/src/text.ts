@@ -1,15 +1,13 @@
 import { filterUndefined, SNAO } from "@beae-ui/utils"
 import { vueThemingProps } from "@beae-ui/prop-utils"
 import {
-  beae,
-  HTMLBeaeProps,
-  ThemingProps,
-  SystemProps,
+  type HTMLBeaeProps,
+  type ThemingProps,
+  type DOMElements,
   useStyleConfig,
-  DOMElements,
-  ComponentWithProps,
-  DeepPartial,
+  beae,
 } from "@beae-ui/system"
+import { type SystemProps } from "@beae-ui/styled-system"
 import { computed, defineComponent, h, PropType } from "vue"
 
 export interface TextProps extends HTMLBeaeProps<"p">, ThemingProps<"Text"> {
@@ -35,14 +33,15 @@ export interface TextProps extends HTMLBeaeProps<"p">, ThemingProps<"Text"> {
  *
  * @see Docs https://vue.beae-ui.com/docs/typography/text
  */
-export const Text: ComponentWithProps<DeepPartial<TextProps>> = defineComponent(
-  {
+export const Text: any = () =>
+  defineComponent({
     name: "Text",
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,
         default: "p",
       },
+      // @ts-ignore
       align: SNAO as PropType<TextProps["textAlign"]>,
       decoration: SNAO as PropType<TextProps["textDecoration"]>,
       casing: SNAO as PropType<TextProps["textTransform"]>,
@@ -82,5 +81,4 @@ export const Text: ComponentWithProps<DeepPartial<TextProps>> = defineComponent(
           slots,
         )
     },
-  },
-)
+  })

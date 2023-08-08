@@ -1,8 +1,8 @@
 import {
+  type PropType,
   h,
   Transition,
   defineComponent,
-  PropType,
   ref,
   watch,
   cloneVNode,

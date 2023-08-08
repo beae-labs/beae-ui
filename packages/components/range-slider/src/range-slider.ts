@@ -1,14 +1,12 @@
 import { createContext, cx } from "@beae-ui/utils"
 import {
-  beae,
-  HTMLBeaeProps,
-  omitThemingProps,
-  ThemingProps,
+  type HTMLBeaeProps,
+  type ThemingProps,
+  type SystemStyleObject,
   useMultiStyleConfig,
   useTheme,
-  SystemStyleObject,
-  DeepPartial,
-  ComponentWithProps,
+  omitThemingProps,
+  beae,
 } from "@beae-ui/system"
 import {
   useRangeSlider,
@@ -16,14 +14,22 @@ import {
   UseRangeSliderReturn,
 } from "./use-range-slider"
 import { vueThemingProps } from "@beae-ui/prop-utils"
-import { PropType, defineComponent, computed, h, reactive, watch } from "vue"
+import {
+  type PropType,
+  type ComputedRef,
+  defineComponent,
+  computed,
+  h,
+  reactive,
+  watch,
+} from "vue"
 
 interface RangeSliderContext
   extends Omit<UseRangeSliderReturn, "getRootProps"> {
   name?: string | string[]
 }
 
-const [RangeSliderProvider, useRangeSliderContext] = createContext<
+const [RangeSliderProvider, useRangeSliderContext]: any = createContext<
   ComputedRef<RangeSliderContext>
 >({
   name: "SliderContext",
@@ -31,7 +37,7 @@ const [RangeSliderProvider, useRangeSliderContext] = createContext<
     "useSliderContext: `context` is undefined. Seems you forgot to wrap all slider components within <RangeSlider />",
 })
 
-const [RangeSliderStylesProvider, useRangeSliderStyles] = createContext<
+const [RangeSliderStylesProvider, useRangeSliderStyles]: any = createContext<
   Record<string, SystemStyleObject>
 >({
   name: `RangeSliderStylesContext`,
@@ -54,83 +60,83 @@ export interface RangeSliderProps
  * @see Docs     https://beae-ui.com/docs/form/slider
  * @see WAI-ARIA https://www.w3.org/WAI/ARIA/apg/patterns/slidertwothumb/
  */
-export const RangeSlider: ComponentWithProps<DeepPartial<RangeSliderProps>> =
-  defineComponent({
-    props: {
-      min: {
-        type: Number as PropType<RangeSliderProps["min"]>,
-        default: 1,
-      },
-      max: {
-        type: Number as PropType<RangeSliderProps["max"]>,
-        default: 100,
-      },
-      step: Number as PropType<RangeSliderProps["step"]>,
-      value: Array as PropType<RangeSliderProps["value"]>,
-      defaultValue: Array as PropType<RangeSliderProps["defaultValue"]>,
-      orientation: {
-        type: String as PropType<RangeSliderProps["orientation"]>,
-        default: () => "horizontal",
-      },
-      isReversed: Boolean as PropType<RangeSliderProps["isReversed"]>,
-      onChangeStart: Function as PropType<RangeSliderProps["onChangeStart"]>,
-      onChangeEnd: Function as PropType<RangeSliderProps["onChangeEnd"]>,
-      onChange: Function as PropType<RangeSliderProps["onChange"]>,
-      id: String as PropType<RangeSliderProps["id"]>,
-      name: String as PropType<RangeSliderProps["name"]>,
-      isDisabled: Boolean as PropType<RangeSliderProps["isDisabled"]>,
-      isReadOnly: Boolean as PropType<RangeSliderProps["isReadOnly"]>,
-      getAriaValueText: Function as PropType<
-        RangeSliderProps["getAriaValueText"]
-      >,
-      focusThumbOnChange: Boolean as PropType<
-        RangeSliderProps["focusThumbOnChange"]
-      >,
-      "aria-valuetext": Array as PropType<RangeSliderProps["aria-valuetext"]>,
-      "aria-label": Array as PropType<RangeSliderProps["aria-label"]>,
-      "aria-labelledby": Array as PropType<RangeSliderProps["aria-labelledby"]>,
-      direction: String as PropType<RangeSliderProps["direction"]>,
-      minStepsBetweenThumbs: Number as PropType<
-        RangeSliderProps["minStepsBetweenThumbs"]
-      >,
-      ...vueThemingProps,
+export const RangeSlider = defineComponent({
+  props: {
+    min: {
+      type: Number as PropType<RangeSliderProps["min"]>,
+      default: 1,
     },
-    emits: ["update:value"],
-    setup(props, { slots, emit }) {
-      const sliderProps = computed(() => props)
-
-      const styles = useMultiStyleConfig("Slider", sliderProps)
-      const ownProps = reactive(omitThemingProps(sliderProps.value))
-
-      const { direction } = useTheme()
-      ownProps.direction = direction
-
-      const { state, rootRef, getRootProps, ...context } =
-        useRangeSlider(ownProps)
-      const ctx = computed(() => {
-        return { ...context, name: sliderProps.value.name, state }
-      })
-
-      const value = computed(() => state.value.value)
-
-      watch(value, (val) => {
-        emit("update:value", val)
-      })
-
-      RangeSliderProvider(ctx)
-      RangeSliderStylesProvider(styles)
-      return () =>
-        h(
-          beae.div,
-          {
-            ref: rootRef,
-            __label: "slider",
-            __css: styles.value.container,
-          },
-          () => slots.default?.(),
-        )
+    max: {
+      type: Number as PropType<RangeSliderProps["max"]>,
+      default: 100,
     },
-  })
+    step: Number as PropType<RangeSliderProps["step"]>,
+    value: Array as PropType<RangeSliderProps["value"]>,
+    defaultValue: Array as PropType<RangeSliderProps["defaultValue"]>,
+    orientation: {
+      type: String as PropType<RangeSliderProps["orientation"]>,
+      default: () => "horizontal",
+    },
+    isReversed: Boolean as PropType<RangeSliderProps["isReversed"]>,
+    onChangeStart: Function as PropType<RangeSliderProps["onChangeStart"]>,
+    onChangeEnd: Function as PropType<RangeSliderProps["onChangeEnd"]>,
+    onChange: Function as PropType<RangeSliderProps["onChange"]>,
+    id: String as PropType<RangeSliderProps["id"]>,
+    name: String as PropType<RangeSliderProps["name"]>,
+    isDisabled: Boolean as PropType<RangeSliderProps["isDisabled"]>,
+    isReadOnly: Boolean as PropType<RangeSliderProps["isReadOnly"]>,
+    getAriaValueText: Function as PropType<
+      RangeSliderProps["getAriaValueText"]
+    >,
+    focusThumbOnChange: Boolean as PropType<
+      RangeSliderProps["focusThumbOnChange"]
+    >,
+    "aria-valuetext": Array as PropType<RangeSliderProps["aria-valuetext"]>,
+    "aria-label": Array as PropType<RangeSliderProps["aria-label"]>,
+    "aria-labelledby": Array as PropType<RangeSliderProps["aria-labelledby"]>,
+    direction: String as PropType<RangeSliderProps["direction"]>,
+    minStepsBetweenThumbs: Number as PropType<
+      RangeSliderProps["minStepsBetweenThumbs"]
+    >,
+    ...vueThemingProps,
+  },
+  emits: ["update:value"],
+  setup(props, { slots, emit }) {
+    const sliderProps = computed(() => props)
+
+    const styles = useMultiStyleConfig("Slider", sliderProps)
+    const ownProps = reactive(omitThemingProps(sliderProps.value))
+
+    const { direction } = useTheme()
+    // @ts-ignore
+    ownProps.direction = direction
+
+    const { state, rootRef, getRootProps, ...context } =
+      useRangeSlider(ownProps)
+    const ctx = computed(() => {
+      return { ...context, name: sliderProps.value.name, state }
+    })
+
+    const value = computed(() => state.value.value)
+
+    watch(value, (val) => {
+      emit("update:value", val)
+    })
+
+    RangeSliderProvider(ctx)
+    RangeSliderStylesProvider(styles)
+    return () =>
+      h(
+        beae.div,
+        {
+          ref: rootRef,
+          __label: "slider",
+          __css: styles.value.container,
+        },
+        () => slots.default?.(),
+      )
+  },
+})
 
 export interface RangeSliderThumbProps extends HTMLBeaeProps<"div"> {
   index: number
@@ -140,9 +146,7 @@ export interface RangeSliderThumbProps extends HTMLBeaeProps<"div"> {
  * Slider component that acts as the handle used to select predefined
  * values by dragging its handle along the track
  */
-export const RangeSliderThumb: ComponentWithProps<
-  DeepPartial<RangeSliderThumbProps>
-> = defineComponent({
+export const RangeSliderThumb = defineComponent({
   name: "RangeSliderThumb",
   props: {
     index: Number as PropType<RangeSliderThumbProps["index"]>,
@@ -163,6 +167,7 @@ export const RangeSliderThumb: ComponentWithProps<
         beae.div,
         {
           ...thumbProps.value,
+          // @ts-ignore
           __label: cx("slider__thumb", props.class),
           __css: styles.value.thumb,
         },
@@ -176,9 +181,7 @@ export const RangeSliderThumb: ComponentWithProps<
 
 export interface RangeSliderTrackProps extends HTMLBeaeProps<"div"> {}
 
-export const RangeSliderTrack: ComponentWithProps<
-  DeepPartial<RangeSliderTrackProps>
-> = defineComponent({
+export const RangeSliderTrack = defineComponent({
   name: "RangeSliderTrack",
   setup(props, { slots }) {
     const { getTrackProps } = useRangeSliderContext().value
@@ -189,6 +192,7 @@ export const RangeSliderTrack: ComponentWithProps<
         beae.div,
         {
           ...trackProps,
+          // @ts-ignore
           __label: cx("slider__track", props.class),
           __css: styles.value.track,
           "data-testid": "beae-range-slider-track",
@@ -233,9 +237,7 @@ export interface RangeSliderMarkProps extends HTMLBeaeProps<"div"> {
  *
  * @see Docs https://beae-ui.com/slider
  */
-export const RangeSliderMark: ComponentWithProps<
-  DeepPartial<RangeSliderMarkProps>
-> = defineComponent({
+export const RangeSliderMark = defineComponent({
   name: "RangeSliderMark",
   props: {
     value: Number as PropType<RangeSliderMarkProps["value"]>,
@@ -249,6 +251,7 @@ export const RangeSliderMark: ComponentWithProps<
         beae.div,
         {
           ...markProps,
+          // @ts-ignore
           __label: cx("slider__marker", props.class),
           __css: styles.value.mark,
         },

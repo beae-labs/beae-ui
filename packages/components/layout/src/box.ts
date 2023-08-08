@@ -1,11 +1,9 @@
-import { computed, defineComponent, h, PropType } from "vue"
+import { type PropType, computed, defineComponent, h } from "vue"
 import {
+  type DOMElements,
+  type SystemStyleObject,
+  type HTMLBeaeProps,
   beae,
-  DOMElements,
-  SystemStyleObject,
-  HTMLBeaeProps,
-  DeepPartial,
-  ComponentWithProps,
 } from "@beae-ui/system"
 
 export interface BoxProps extends HTMLBeaeProps<"div"> {}
@@ -16,7 +14,7 @@ export interface BoxProps extends HTMLBeaeProps<"div"> {}
  *
  * @see Docs https://beae-ui.beae.com/docs/layout/box
  */
-export const Box: ComponentWithProps<DeepPartial<BoxProps>> = defineComponent({
+export const Box = defineComponent({
   name: "Box",
   props: {
     as: {
@@ -60,59 +58,57 @@ export interface SquareProps extends Omit<BoxProps, Omitted> {
  *
  * @see Docs https://beae-ui.beae.com/docs/layout/box
  */
-export const LSquare: ComponentWithProps<DeepPartial<SquareProps>> =
-  defineComponent({
-    name: "LSquare",
-    props: {
-      size: [Object, String, Number] as PropType<SquareProps["size"]>,
-      centerContent: {
-        type: [Boolean] as PropType<SquareProps["centerContent"]>,
-        default: true,
-      },
+export const LSquare = defineComponent({
+  name: "LSquare",
+  props: {
+    size: [Object, String, Number] as PropType<SquareProps["size"]>,
+    centerContent: {
+      type: [Boolean] as PropType<SquareProps["centerContent"]>,
+      default: true,
     },
-    setup(props, { slots, attrs }) {
-      const styles = computed<SystemStyleObject>(() =>
-        props.centerContent
-          ? { display: "flex", alignItems: "center", justifyContent: "center" }
-          : {},
-      )
+  },
+  setup(props, { slots, attrs }) {
+    const styles = computed<SystemStyleObject>(() =>
+      props.centerContent
+        ? { display: "flex", alignItems: "center", justifyContent: "center" }
+        : {},
+    )
 
-      return () =>
-        h(
-          beae(Box, {
-            boxSize: props.size,
-            label: "square",
-          }),
-          {
-            __css: {
-              ...styles.value,
-              flexShrink: 0,
-              flexGrow: 0,
-            },
-            ...attrs,
+    return () =>
+      h(
+        beae(Box, {
+          boxSize: props.size,
+          label: "square",
+        }),
+        {
+          __css: {
+            ...styles.value,
+            flexShrink: 0,
+            flexGrow: 0,
           },
-          slots,
-        )
-    },
-  })
+          ...attrs,
+        },
+        slots,
+      )
+  },
+})
 
 /**
  * LCircle is the `Box` component implemented as a circle
  *
  * @see Docs https://beae-ui.beae.com/docs/layout/box
  */
-export const LCircle: ComponentWithProps<DeepPartial<SquareProps>> =
-  defineComponent({
-    name: "LCircle",
-    setup(_, { slots, attrs }) {
-      return () =>
-        h(
-          beae(LSquare, {
-            label: "circle",
-            borderRadius: "9999px",
-          }),
-          { ...attrs },
-          slots,
-        )
-    },
-  })
+export const LCircle = defineComponent({
+  name: "LCircle",
+  setup(_, { slots, attrs }) {
+    return () =>
+      h(
+        beae(LSquare, {
+          label: "circle",
+          borderRadius: "9999px",
+        }),
+        { ...attrs },
+        slots,
+      )
+  },
+})

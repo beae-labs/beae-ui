@@ -15,18 +15,16 @@
  * @see Theming https://ui.beae.com/docs/theming/component-style
  */
 
-import { h, ref, defineComponent, PropType } from "vue"
+import { type PropType, h, ref, defineComponent } from "vue"
 import {
+  type HTMLBeaeProps,
+  type ThemingProps,
   beae,
-  ComponentWithProps,
-  cssVar,
-  DeepPartial,
-  HTMLBeaeProps,
   keyframes,
   omitThemingProps,
-  ThemingProps,
   useStyleConfig,
 } from "@beae-ui/system"
+import { cssVar } from "@beae-ui/styled-system"
 import { vueThemingProps } from "@beae-ui/prop-utils"
 import { usePrevious, useToken } from "@beae-ui/composables"
 import { useIsFirstRender } from "./use-is-first-render"
@@ -85,91 +83,90 @@ const bgFade = keyframes({
   },
 })
 
-export const Skeleton: ComponentWithProps<DeepPartial<SkeletonProps>> =
-  defineComponent({
-    name: "Skeleton",
-    props: {
-      startColor: {
-        type: String as PropType<SkeletonProps["startColor"]>,
-        default: "#EDF2F7",
-      },
-      endColor: {
-        type: String as PropType<SkeletonProps["endColor"]>,
-        default: "#A0AEC0",
-      },
-      isLoaded: {
-        type: Boolean as PropType<SkeletonProps["isLoaded"]>,
-      },
-      fadeDuration: {
-        type: Number as PropType<SkeletonProps["fadeDuration"]>,
-        default: 0.4,
-      },
-      speed: {
-        type: Number as PropType<SkeletonProps["speed"]>,
-        default: 0.8,
-      },
-      ...vueThemingProps,
+export const Skeleton = defineComponent({
+  name: "Skeleton",
+  props: {
+    startColor: {
+      type: String as PropType<SkeletonProps["startColor"]>,
+      default: "#EDF2F7",
     },
-    setup(props, { slots, attrs }) {
-      const styles = useStyleConfig("Skeleton", props)
-      const isFirstRender = useIsFirstRender()
-      const { fadeDuration, speed, ...rest } = omitThemingProps(props)
+    endColor: {
+      type: String as PropType<SkeletonProps["endColor"]>,
+      default: "#A0AEC0",
+    },
+    isLoaded: {
+      type: Boolean as PropType<SkeletonProps["isLoaded"]>,
+    },
+    fadeDuration: {
+      type: Number as PropType<SkeletonProps["fadeDuration"]>,
+      default: 0.4,
+    },
+    speed: {
+      type: Number as PropType<SkeletonProps["speed"]>,
+      default: 0.8,
+    },
+    ...vueThemingProps,
+  },
+  setup(props, { slots, attrs }) {
+    const styles = useStyleConfig("Skeleton", props)
+    const isFirstRender = useIsFirstRender()
+    const { fadeDuration, speed, ...rest } = omitThemingProps(props)
 
+    //@ts-ignore
+    const [startColorVar, endColorVar] = useToken("colors", [
       //@ts-ignore
-      const [startColorVar, endColorVar] = useToken("colors", [
-        //@ts-ignore
-        props.startColor,
-        //@ts-ignore
-        props.endColor,
-      ])
+      props.startColor,
+      //@ts-ignore
+      props.endColor,
+    ])
 
-      const wasPreviouslyLoaded = usePrevious(ref(props.isLoaded))
+    const wasPreviouslyLoaded = usePrevious(ref(props.isLoaded))
 
-      const cssVarStyles = {
-        ...(startColorVar && { [$startColor.variable]: startColorVar }),
-        ...(endColorVar && { [$endColor.variable]: endColorVar }),
-      }
+    const cssVarStyles = {
+      ...(startColorVar && { [$startColor.variable]: startColorVar }),
+      ...(endColorVar && { [$endColor.variable]: endColorVar }),
+    }
 
-      const baseStyle = {
-        boxShadow: "none",
-        backgroundClip: "padding-box",
-        cursor: "default",
-        color: "transparent",
-        pointerEvents: "none",
-        userSelect: "none",
-        "&::before, &::after, *": {
-          visibility: "hidden",
-        },
-      }
+    const baseStyle = {
+      boxShadow: "none",
+      backgroundClip: "padding-box",
+      cursor: "default",
+      color: "transparent",
+      pointerEvents: "none",
+      userSelect: "none",
+      "&::before, &::after, *": {
+        visibility: "hidden",
+      },
+    }
 
-      const animation =
-        isFirstRender || wasPreviouslyLoaded.value
-          ? "none"
-          : `${fade} ${fadeDuration}s`
+    const animation =
+      isFirstRender || wasPreviouslyLoaded.value
+        ? "none"
+        : `${fade} ${fadeDuration}s`
 
-      return () => [
-        props.isLoaded &&
-          h(
-            beae.div,
-            {
-              __css: {
-                animation,
-              },
-              ...rest,
-            },
-            slots,
-          ),
-        !props.isLoaded &&
-          h(beae.div, {
+    return () => [
+      props.isLoaded &&
+        h(
+          beae.div,
+          {
             __css: {
-              ...baseStyle,
-              ...styles.value,
-              ...cssVarStyles,
-              _dark: { ...cssVarStyles },
-              animation: `${speed}s linear infinite alternate ${bgFade}`,
+              animation,
             },
-            ...attrs,
-          }),
-      ]
-    },
-  })
+            ...rest,
+          },
+          slots,
+        ),
+      !props.isLoaded &&
+        h(beae.div, {
+          __css: {
+            ...baseStyle,
+            ...styles.value,
+            ...cssVarStyles,
+            _dark: { ...cssVarStyles },
+            animation: `${speed}s linear infinite alternate ${bgFade}`,
+          },
+          ...attrs,
+        }),
+    ]
+  },
+})

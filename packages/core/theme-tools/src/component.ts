@@ -26,11 +26,11 @@ export type GlobalStyles = {
   global?: SystemStyleInterpolation
 }
 
-export type JSXElementStyles = {
-  [K in keyof JSX.IntrinsicElements]?: SystemStyleObject
+export type JSXElementStyles<T> = {
+  [K in keyof T]?: T[K]
 }
 
-export type Styles = GlobalStyles & JSXElementStyles
+export type Styles = GlobalStyles & JSXElementStyles<SystemStyleObject>
 
 export function mode<T>(light: T, dark: T) {
   return (props: Record<string, any> | StyleFunctionProps) =>

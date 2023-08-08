@@ -1,14 +1,12 @@
-import { h, defineComponent, PropType, computed, ComputedRef } from "vue"
+import { type PropType, h, defineComponent, computed, ComputedRef } from "vue"
 import {
-  beae,
-  ThemingProps,
+  type ThemingProps,
+  type DOMElements,
+  type SystemStyleObject,
+  type HTMLBeaeProps,
   useMultiStyleConfig,
   createStylesContext,
-  DOMElements,
-  SystemStyleObject,
-  ComponentWithProps,
-  DeepPartial,
-  HTMLBeaeProps,
+  beae,
 } from "@beae-ui/system"
 
 import { createContext, getValidChildren } from "@beae-ui/utils"
@@ -41,7 +39,8 @@ const STATUSES = {
   loading: { icon: LoadingIcon, colorScheme: "blue" },
 }
 
-const [StylesProvider, useStyles] = createStylesContext("Alert")
+const [StylesProvider, useStyles]: any = createStylesContext("Alert")
+
 type AlertStatus = keyof typeof STATUSES
 export type AlertVariant =
   | "solid"
@@ -54,7 +53,7 @@ interface AlertContext {
   status: ComputedRef<AlertStatus>
 }
 
-const [AlertProvider, useAlertContext] = createContext<AlertContext>({
+const [AlertProvider, useAlertContext]: any = createContext<AlertContext>({
   name: "AlertContext",
   errorMessage:
     "useAlertContext: `context` is undefined. Seems you forgot to wrap alert components in `<Lalert />`",
@@ -78,81 +77,78 @@ export interface AlertProps
 }
 import { toRefs } from "vue"
 
-export const Alert: ComponentWithProps<DeepPartial<AlertProps>> =
-  defineComponent({
-    name: "Alert",
-    props: {
-      as: {
-        type: [String, Object] as PropType<DOMElements>,
-        default: "div",
-      },
-      status: String as PropType<AlertProps["status"]>,
-      ...vueThemingProps,
+export const Alert = defineComponent({
+  name: "Alert",
+  props: {
+    as: {
+      type: [String, Object] as PropType<DOMElements>,
+      default: "div",
     },
-    setup(props, { slots, attrs }) {
-      const { status, colorScheme, variant } = toRefs(props)
+    status: String as PropType<AlertProps["status"]>,
+    ...vueThemingProps,
+  },
+  setup(props, { slots, attrs }) {
+    const { status, colorScheme, variant } = toRefs(props)
 
-      const computedColorScheme = computed(
-        () =>
-          colorScheme.value || STATUSES?.[status?.value]?.colorScheme || "blue",
+    const computedColorScheme: any = computed(
+      () =>
+        // @ts-ignore
+        colorScheme.value || STATUSES?.[status?.value]?.colorScheme || "blue",
+    )
+    const themingProps = computed<ThemingProps>(() => ({
+      colorScheme: computedColorScheme.value,
+      variant: variant.value,
+    }))
+
+    const styles = useMultiStyleConfig("Alert", themingProps)
+
+    const alertStyles = computed<SystemStyleObject>(() => ({
+      width: "100%",
+      display: "flex",
+      alignItems: "center",
+      position: "relative",
+      overflow: "hidden",
+      ...styles.value.container,
+    }))
+    AlertProvider({ status: status })
+    StylesProvider(styles)
+
+    return () =>
+      h(
+        beae.div,
+        {
+          role: "alert",
+          __label: "alert",
+          __css: alertStyles.value,
+          ...attrs,
+        },
+        () => getValidChildren(slots),
       )
-      const themingProps = computed<ThemingProps>(() => ({
-        colorScheme: computedColorScheme.value,
-        variant: variant.value,
-      }))
-
-      const styles = useMultiStyleConfig("Alert", themingProps)
-
-      const alertStyles = computed<SystemStyleObject>(() => ({
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        position: "relative",
-        overflow: "hidden",
-        ...styles.value.container,
-      }))
-      AlertProvider({ status: status })
-      StylesProvider(styles)
-
-      return () =>
-        h(
-          beae.div,
-          {
-            role: "alert",
-            __label: "alert",
-            __css: alertStyles.value,
-            ...attrs,
-          },
-          () => getValidChildren(slots),
-        )
-    },
-  })
+  },
+})
 
 export interface AlertTitleProps extends HTMLBeaeProps<"div"> {}
-export const AlertTitle: ComponentWithProps<DeepPartial<AlertTitleProps>> =
-  defineComponent({
-    name: "AlertTitle",
-    setup(_, { attrs, slots }) {
-      const styles = useStyles()
+export const AlertTitle = defineComponent({
+  name: "AlertTitle",
+  setup(_, { attrs, slots }) {
+    const styles = useStyles()
 
-      return () =>
-        h(
-          beae.div,
-          {
-            __label: "alert__title",
-            // TODO: add text into type of useStyleConfig
-            // @ts-ignore
-            __css: styles.value?.title,
-            ...attrs,
-          },
-          slots,
-        )
-    },
-  })
+    return () =>
+      h(
+        beae.div,
+        {
+          __label: "alert__title",
+          // TODO: add text into type of useStyleConfig
+          // @ts-ignore
+          __css: styles.value?.title,
+          ...attrs,
+        },
+        slots,
+      )
+  },
+})
 export interface AlertDescriptionProps extends HTMLBeaeProps<"div"> {}
-export const AlertDescription: ComponentWithProps<
-  DeepPartial<AlertDescriptionProps>
-> = defineComponent({
+export const AlertDescription = defineComponent({
   name: "AlertDescription",
   setup(_, { attrs, slots }) {
     const styles = useStyles()
@@ -172,41 +168,39 @@ export const AlertDescription: ComponentWithProps<
   },
 })
 export interface AlertIconProps extends HTMLBeaeProps<"span"> {}
-export const AlertIcon: ComponentWithProps<DeepPartial<AlertIconProps>> =
-  defineComponent({
-    name: "AlertIcon",
-    setup(_, { attrs, slots }) {
-      const styles = useStyles()
-      const { status } = useAlertContext()
-      const { icon: BaseIcon } = STATUSES?.[status?.value] ?? {
-        colorScheme: "blue",
-        icon: InfoIcon,
-      }
+export const AlertIcon = defineComponent({
+  name: "AlertIcon",
+  setup(_, { attrs, slots }) {
+    const styles = useStyles()
+    const { status } = useAlertContext()
+    // @ts-ignore
+    const { icon: BaseIcon } = STATUSES?.[status?.value] ?? {
+      colorScheme: "blue",
+      icon: InfoIcon,
+    }
 
-      const css = computed(() =>
-        // TODO: add text into type of useStyleConfig
-        // TODO: Issue loading on alert component not working
-        // @ts-ignore
-        status.value === "loading" ? styles.value?.spinner : styles.value?.icon,
+    const css = computed(() =>
+      // TODO: add text into type of useStyleConfig
+      // TODO: Issue loading on alert component not working
+      // @ts-ignore
+      status.value === "loading" ? styles.value?.spinner : styles.value?.icon,
+    )
+
+    const validChildren = getValidChildren(slots)
+
+    return () =>
+      h(
+        beae.span,
+        {
+          display: "inherit",
+          __label: "alert__icon",
+          ...attrs,
+          // TODO: add text into type of useStyleConfig
+          // @ts-ignore
+          __css: css.value,
+        },
+        () =>
+          validChildren.length ? slots : h(BaseIcon, { h: "100%", w: "100%" }),
       )
-
-      const validChildren = getValidChildren(slots)
-
-      return () =>
-        h(
-          beae.span,
-          {
-            display: "inherit",
-            __label: "alert__icon",
-            ...attrs,
-            // TODO: add text into type of useStyleConfig
-            // @ts-ignore
-            __css: css.value,
-          },
-          () =>
-            validChildren.length
-              ? slots
-              : h(BaseIcon, { h: "100%", w: "100%" }),
-        )
-    },
-  })
+  },
+})

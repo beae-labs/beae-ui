@@ -1,4 +1,4 @@
-import { SystemProps } from "@beae-ui/system"
+import { type SystemProps } from "@beae-ui/styled-system"
 import { BaseThemedComponentProps } from "@beae-ui/prop-utils"
 
 type ButtonTypes = "button" | "reset" | "submit"

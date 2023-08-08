@@ -1,12 +1,16 @@
-import { h, defineComponent, PropType, DefineComponent, computed } from "vue"
 import {
+  type PropType,
+  type DefineComponent,
+  h,
+  defineComponent,
+  computed,
+} from "vue"
+import {
+  type BeaeProps,
+  type SystemStyleObject,
+  type ThemingProps,
   beae,
-  BeaeProps,
-  ComponentWithProps,
-  SystemStyleObject,
-  ThemingProps,
   useMultiStyleConfig,
-  DeepPartial,
 } from "@beae-ui/system"
 import { Icon } from "@beae-ui/icon"
 import { filterUndefined, getValidChildren } from "@beae-ui/utils"
@@ -20,30 +24,27 @@ export interface TagProps extends BeaeProps, TagOptions, ThemingProps<"Tag"> {}
 
 export interface TagLabelProps extends BeaeProps, ThemingProps<"TagLabel"> {}
 
-export const TagLabel: ComponentWithProps<DeepPartial<TagLabelProps>> =
-  defineComponent({
-    props: {
-      ...vueThemingProps,
-    },
-    setup(props, { slots, attrs }) {
-      const themingProps = computed<ThemingProps>(() =>
-        filterUndefined({
-          colorScheme: props.colorScheme,
-          variant: props.variant,
-          size: props.size,
-          styleConfig: props.styleConfig,
-        }),
-      )
-      const styles = useMultiStyleConfig("Tag", themingProps)
+export const TagLabel: DefineComponent = defineComponent({
+  props: {
+    ...vueThemingProps,
+  },
+  setup(props, { slots, attrs }) {
+    const themingProps = computed<ThemingProps>(() =>
+      filterUndefined({
+        colorScheme: props.colorScheme,
+        variant: props.variant,
+        size: props.size,
+        styleConfig: props.styleConfig,
+      }),
+    )
+    const styles = useMultiStyleConfig("Tag", themingProps)
 
-      return () =>
-        h(
-          beae.span,
-          { __css: styles.value.label, noOfLines: 1, ...attrs },
-          () => getValidChildren(slots),
-        )
-    },
-  })
+    return () =>
+      h(beae.span, { __css: styles.value.label, noOfLines: 1, ...attrs }, () =>
+        getValidChildren(slots),
+      )
+  },
+})
 
 export interface TagCloseButtonProps
   extends BeaeProps,
@@ -73,9 +74,7 @@ const CloseButtonProps = {
   ...vueThemingProps,
 }
 
-export const TagCloseButton: ComponentWithProps<
-  DeepPartial<TagCloseButtonProps>
-> = defineComponent({
+export const TagCloseButton = defineComponent({
   props: CloseButtonProps,
   setup(props, { slots, attrs }) {
     const themingProps = computed<ThemingProps>(() =>
@@ -114,7 +113,7 @@ export const TagCloseButton: ComponentWithProps<
   },
 })
 
-export const Tag: ComponentWithProps<DeepPartial<TagProps>> = defineComponent({
+export const Tag = defineComponent({
   props: TagProps,
   setup(props, { slots, attrs }) {
     const themingProps = computed<ThemingProps>(() =>

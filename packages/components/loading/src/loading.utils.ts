@@ -47,7 +47,7 @@ export interface GetLoadingPropsOptions {
   valueText?: string
   getValueText?(value: number, percent: number): string
   isIndeterminate?: boolean
-  role?: React.AriaRole
+  role?: string
 }
 
 /**

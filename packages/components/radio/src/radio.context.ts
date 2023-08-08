@@ -9,7 +9,7 @@ export type RadioGroupContext = Pick<
 > &
   Omit<ThemingProps<"Radio">, "orientation"> & {}
 
-export const [RadioGroupProvider, useRadioGroupContext] = createContext<
+export const [RadioGroupProvider, useRadioGroupContext]: any = createContext<
   ComputedRef<RadioGroupContext>
 >({
   name: "RadioGroupContext",

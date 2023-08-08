@@ -15,13 +15,13 @@
  * @see Theming https://ui.beae.com/docs/theming/component-style
  */
 
-import { h, defineComponent, PropType, computed } from "vue"
+import { type PropType, h, defineComponent, computed } from "vue"
 import {
-  beae,
-  DOMElements,
-  SystemStyleObject,
-  ThemingProps,
+  type DOMElements,
+  type SystemStyleObject,
+  type ThemingProps,
   useStyleConfig,
+  beae,
 } from "@beae-ui/system"
 import { filterUndefined } from "@beae-ui/utils"
 import { Icon } from "@beae-ui/icon"
@@ -30,9 +30,7 @@ const CloseIcon = defineComponent({
   setup(_, { attrs }) {
     return () =>
       h(
-        beae(Icon, {
-          focusable: false,
-        }),
+        beae(Icon, {}),
         {
           "aria-hidden": true,
           name: "close",

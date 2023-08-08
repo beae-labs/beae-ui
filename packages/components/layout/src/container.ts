@@ -1,12 +1,10 @@
-import { h, defineComponent, PropType, computed } from "vue"
+import { type PropType, h, defineComponent, computed } from "vue"
 import {
-  beae,
-  DOMElements,
-  ThemingProps,
+  type DOMElements,
+  type ThemingProps,
+  type HTMLBeaeProps,
   useStyleConfig,
-  HTMLBeaeProps,
-  DeepPartial,
-  ComponentWithProps,
+  beae,
 } from "@beae-ui/system"
 import { filterUndefined } from "@beae-ui/utils"
 import { vueThemingProps } from "@beae-ui/prop-utils"
@@ -29,46 +27,45 @@ export interface ContainerProps
  *
  * It also sets a default max-width of `60ch` (60 characters).
  */
-export const Container: ComponentWithProps<DeepPartial<ContainerProps>> =
-  defineComponent({
-    name: "Container",
-    props: {
-      as: {
-        type: [Object, String] as PropType<DOMElements>,
-        default: "div",
-      },
-      centerContent: {
-        type: [Boolean] as PropType<ContainerProps["centerContent"]>,
-      },
-      ...vueThemingProps,
+export const Container = defineComponent({
+  name: "Container",
+  props: {
+    as: {
+      type: [Object, String] as PropType<DOMElements>,
+      default: "div",
     },
-    setup(props, { slots, attrs }) {
-      const themingProps = computed<ThemingProps>(() =>
-        filterUndefined({
-          colorScheme: props.colorScheme,
-          variant: props.variant,
-          size: props.size,
-          styleConfig: props.styleConfig,
-        }),
-      )
-      const styles = useStyleConfig("Container", themingProps)
+    centerContent: {
+      type: [Boolean] as PropType<ContainerProps["centerContent"]>,
+    },
+    ...vueThemingProps,
+  },
+  setup(props, { slots, attrs }) {
+    const themingProps = computed<ThemingProps>(() =>
+      filterUndefined({
+        colorScheme: props.colorScheme,
+        variant: props.variant,
+        size: props.size,
+        styleConfig: props.styleConfig,
+      }),
+    )
+    const styles = useStyleConfig("Container", themingProps)
 
-      return () =>
-        h(
-          beae.div,
-          {
-            __label: "container",
-            __css: {
-              ...styles.value,
-              ...(props.centerContent && {
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }),
-            },
-            ...attrs,
+    return () =>
+      h(
+        beae.div,
+        {
+          __label: "container",
+          __css: {
+            ...styles.value,
+            ...(props.centerContent && {
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }),
           },
-          slots,
-        )
-    },
-  })
+          ...attrs,
+        },
+        slots,
+      )
+  },
+})

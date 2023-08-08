@@ -1,11 +1,11 @@
-import { ComponentWithProps, DeepPartial } from "@beae-ui/system"
-import { defineComponent, PropType, h, computed } from "vue"
+// import { ComponentWithProps, DeepPartial } from "@beae-ui/system"
+import { type PropType, defineComponent, h, computed } from "vue"
 import {
   Modal,
   ModalContent,
   ModalProps,
   modalProps,
-  ModalContentProps,
+  // ModalContentProps,
 } from "./modal"
 
 export interface LAlertDialogProps
@@ -17,57 +17,58 @@ export interface LAlertDialogProps
  * LAlertDialog
  * Data wrapper for the alert dialog component
  */
-export const LAlertDialog: ComponentWithProps<DeepPartial<LAlertDialogProps>> =
-  defineComponent({
-    name: "LAlertDialog",
-    props: {
-      ...modalProps,
-      leastDestructiveRef: [Function, String] as PropType<
-        ModalProps["initialFocusRef"]
-      >,
-    },
-    emits: ["update:modelValue", "close", "escape"],
-    setup(props, { attrs, slots, emit }) {
-      const isOpen = computed(() => props.modelValue!)
 
-      const handleUpdateModelValue = (val: boolean) => {
-        emit("update:modelValue", val)
-      }
+export const LAlertDialog = defineComponent({
+  name: "LAlertDialog",
+  props: {
+    ...modalProps,
+    leastDestructiveRef: [Function, String] as PropType<
+      ModalProps["initialFocusRef"]
+    >,
+  },
+  emits: ["update:modelValue", "close", "escape"],
+  setup(props, { attrs, slots, emit }) {
+    const isOpen = computed(() => props.modelValue!)
 
-      return () => {
-        const {
-          modelValue,
-          "onUpdate:modelValue": updateModelValue,
-          ...rest
-        } = props
-        return h(
-          Modal,
-          {
-            ...rest,
-            ...attrs,
-            modelValue: isOpen.value,
-            /* eslint-disable-next-line */
-            // @ts-ignore
-            "onUpdate:modelValue": handleUpdateModelValue,
-            label: "alertdialog",
-            initialFocusRef: props.leastDestructiveRef,
-          },
-          slots,
-        )
-      }
-    },
-  })
+    const handleUpdateModelValue = (val: boolean) => {
+      emit("update:modelValue", val)
+    }
+
+    return () => {
+      const {
+        modelValue,
+        "onUpdate:modelValue": updateModelValue,
+        ...rest
+      } = props
+      return h(
+        // @ts-ignore
+        Modal,
+        {
+          ...rest,
+          ...attrs,
+          modelValue: isOpen.value,
+          /* eslint-disable-next-line */
+          // @ts-ignore
+          "onUpdate:modelValue": handleUpdateModelValue,
+          label: "alertdialog",
+          initialFocusRef: props.leastDestructiveRef,
+        },
+        slots,
+      )
+    }
+  },
+})
 
 /**
  * LAlertDialogContent
  * Wrapper for the alert dialog content
  */
-export const LAlertDialogContent: ComponentWithProps<
-  DeepPartial<ModalContentProps>
-> = defineComponent({
+
+export const LAlertDialogContent = defineComponent({
   name: "LAlertDialogContent",
   inheritAttrs: false,
   setup(_, { attrs, slots }) {
+    // @ts-ignore
     return () => h(ModalContent, { ...attrs, role: "alertdialog" }, slots)
   },
 })

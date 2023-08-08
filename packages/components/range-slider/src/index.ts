@@ -9,7 +9,6 @@ export {
   useRangeSliderStyles,
 } from "./range-slider"
 export type {
-  RangeSliderInnerTrackProps,
   RangeSliderMarkProps,
   RangeSliderProps,
   RangeSliderTrackProps,

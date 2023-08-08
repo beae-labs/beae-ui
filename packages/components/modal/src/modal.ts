@@ -16,30 +16,29 @@
  */
 
 import {
+  type PropType,
+  type ToRefs,
+  type UnwrapRef,
+  type ComputedRef,
+  type Ref,
   h,
   defineComponent,
-  PropType,
   reactive,
-  ComputedRef,
   toRefs,
   computed,
-  ToRefs,
   mergeProps,
-  UnwrapRef,
   watch,
   unref,
   withDirectives,
   watchEffect,
   onErrorCaptured,
-  Ref,
 } from "vue"
 import {
-  beae,
-  ComponentWithProps,
-  DeepPartial,
-  HTMLBeaeProps,
+  type ComponentWithProps,
+  type HTMLBeaeProps,
+  type SystemStyleObject,
   StylesProvider,
-  SystemStyleObject,
+  beae,
   useMultiStyleConfig,
   useStyles,
 } from "@beae-ui/system"
@@ -238,6 +237,7 @@ export const modalProps = {
   },
 }
 
+// @ts-ignore
 export const Modal: ComponentWithProps<ModalProps> = defineComponent({
   name: "Modal",
   props: modalProps,
@@ -295,119 +295,118 @@ export interface ModalContentProps extends HTMLBeaeProps<"section"> {
  * ModalContent is used to group modal's content. It has all the
  * necessary `aria-*` properties to indicate that it is a modal
  */
-export const ModalContent: ComponentWithProps<DeepPartial<ModalContentProps>> =
-  defineComponent({
-    name: "ModalContent",
-    inheritAttrs: false,
-    emits: ["click", "mousedown", "keydown"],
-    setup(_, { attrs, slots, emit }) {
-      const {
-        dialogContainerProps,
-        dialogProps,
-        blockScrollOnMount,
-        modelValue,
-        motionPreset,
-      } = unref(useModalContext())
-      const styles = useStyles()
-      const transitionId = useId("modal-content")
 
-      /** Handles exit transition */
-      const leave = (done: VoidFunction) => {
-        const motions = useMotions()
-        const instance = motions[transitionId.value]
-        instance?.leave(() => {
-          done()
-        })
+export const ModalContent = defineComponent({
+  name: "ModalContent",
+  inheritAttrs: false,
+  emits: ["click", "mousedown", "keydown"],
+  setup(_, { attrs, slots, emit }) {
+    const {
+      dialogContainerProps,
+      dialogProps,
+      blockScrollOnMount,
+      modelValue,
+      motionPreset,
+    } = unref(useModalContext())
+    const styles = useStyles()
+    const transitionId = useId("modal-content")
+
+    /** Handles exit transition */
+    const leave = (done: VoidFunction) => {
+      const motions = useMotions()
+      const instance = motions[transitionId.value]
+      instance?.leave(() => {
+        done()
+      })
+    }
+
+    watch(modelValue!, (newVal) => {
+      if (!newVal) {
+        leave(() => null)
       }
+    })
 
-      watch(modelValue!, (newVal) => {
-        if (!newVal) {
-          leave(() => null)
-        }
+    // Scroll lock
+    watchEffect((onInvalidate) => {
+      if (!blockScrollOnMount!.value) return
+      if (modelValue.value !== true) return
+
+      let overflow = document.documentElement.style.overflow
+      let paddingRight = document.documentElement.style.paddingRight
+
+      let scrollbarWidth =
+        window.innerWidth - document.documentElement.clientWidth
+
+      document.documentElement.style.overflow = "hidden"
+      document.documentElement.style.paddingRight = `${scrollbarWidth}px`
+
+      onInvalidate(() => {
+        document.documentElement.style.overflow = overflow
+        document.documentElement.style.paddingRight = paddingRight
       })
+    })
 
-      // Scroll lock
-      watchEffect((onInvalidate) => {
-        if (!blockScrollOnMount!.value) return
-        if (modelValue.value !== true) return
+    const dialogContainerStyles = computed<SystemStyleObject>(() => ({
+      display: "flex",
+      width: "100vw",
+      height: "100vh",
+      position: "fixed",
+      left: 0,
+      top: 0,
+      // @ts-ignore
+      ...styles.value.dialogContainer,
+    }))
 
-        let overflow = document.documentElement.style.overflow
-        let paddingRight = document.documentElement.style.paddingRight
+    const dialogStyles = computed<SystemStyleObject>(() => ({
+      display: "flex",
+      flexDirection: "column",
+      position: "relative",
+      width: "100%",
+      outline: 0,
+      // @ts-ignore
+      ...styles.value.dialog,
+    }))
 
-        let scrollbarWidth =
-          window.innerWidth - document.documentElement.clientWidth
-
-        document.documentElement.style.overflow = "hidden"
-        document.documentElement.style.paddingRight = `${scrollbarWidth}px`
-
-        onInvalidate(() => {
-          document.documentElement.style.overflow = overflow
-          document.documentElement.style.paddingRight = paddingRight
-        })
-      })
-
-      const dialogContainerStyles = computed<SystemStyleObject>(() => ({
-        display: "flex",
-        width: "100vw",
-        height: "100vh",
-        position: "fixed",
-        left: 0,
-        top: 0,
+    return () => {
+      return h(
         // @ts-ignore
-        ...styles.value.dialogContainer,
-      }))
-
-      const dialogStyles = computed<SystemStyleObject>(() => ({
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
-        width: "100%",
-        outline: 0,
-        // @ts-ignore
-        ...styles.value.dialog,
-      }))
-
-      return () => {
-        return h(
-          // @ts-ignore
-          beae("div", {
-            label: "modal__content-container",
-            __css: dialogContainerStyles.value,
-          }),
-          dialogContainerProps.value({ emit }),
-          () => [
-            modelValue!.value &&
-              withDirectives(
-                h(
-                  beae("section", {
-                    __css: dialogStyles.value,
-                    label: "modal__content",
-                  }),
-                  {
-                    ...dialogProps.value({ emit }),
-                    ...attrs,
-                  },
-                  slots,
-                ),
-                [
-                  [
-                    MotionDirective(dialogMotionPresets[motionPreset?.value!]),
-                    transitionId.value,
-                  ],
-                ],
+        beae("div", {
+          label: "modal__content-container",
+          __css: dialogContainerStyles.value,
+        }),
+        dialogContainerProps.value({ emit }),
+        () => [
+          modelValue!.value &&
+            withDirectives(
+              h(
+                beae("section", {
+                  __css: dialogStyles.value,
+                  label: "modal__content",
+                }),
+                {
+                  ...dialogProps.value({ emit }),
+                  ...attrs,
+                },
+                slots,
               ),
-          ],
-        )
-      }
-    },
-  })
+              [
+                [
+                  MotionDirective(dialogMotionPresets[motionPreset?.value!]),
+                  transitionId.value,
+                ],
+              ],
+            ),
+        ],
+      )
+    }
+  },
+})
 
 /**
  * ModalOverlay renders a backdrop behind the modal. It is
  */
-export const ModalOverlay: ComponentWithProps<
-  DeepPartial<HTMLBeaeProps<"div">>
-> = defineComponent({
+
+export const ModalOverlay = defineComponent({
   name: "ModalOverlay",
   setup(_, { attrs }) {
     const styles = useStyles()
@@ -443,9 +442,8 @@ export const ModalOverlay: ComponentWithProps<
 /**
  * ModalHeader
  */
-export const ModalHeader: ComponentWithProps<
-  DeepPartial<HTMLBeaeProps<"header">>
-> = defineComponent({
+
+export const ModalHeader = defineComponent({
   name: "ModalHeader",
   setup(_, { attrs, slots }) {
     const { hasHeader, headerId } = unref(useModalContext())
@@ -482,45 +480,43 @@ export const ModalHeader: ComponentWithProps<
  * ModalBody
  *
  */
-export const ModalBody: ComponentWithProps<DeepPartial<HTMLBeaeProps<"div">>> =
-  defineComponent({
-    name: "ModalBody",
-    setup(_, { slots, attrs }) {
-      const { bodyId, hasBody } = unref(useModalContext())
-      const styles = useStyles()
+export const ModalBody = defineComponent({
+  name: "ModalBody",
+  setup(_, { slots, attrs }) {
+    const { bodyId, hasBody } = unref(useModalContext())
+    const styles = useStyles()
 
-      const [bodyRef, bodyEl] = useRef()
+    const [bodyRef, bodyEl] = useRef()
 
-      /**
-       * Used to bind the `aria-descibedby` attribute
-       */
-      watch(bodyEl, (el) => {
-        hasBody.value = !!el
-      })
+    /**
+     * Used to bind the `aria-descibedby` attribute
+     */
+    watch(bodyEl, (el) => {
+      hasBody.value = !!el
+    })
 
-      return () =>
-        h(
-          beae("div", {
-            label: "modal__body",
-            // @ts-ignore
-            __css: styles.value.body,
-          }),
-          {
-            id: bodyId.value,
-            ...attrs,
-            ref: bodyRef,
-          },
-          slots,
-        )
-    },
-  })
+    return () =>
+      h(
+        beae("div", {
+          label: "modal__body",
+          // @ts-ignore
+          __css: styles.value.body,
+        }),
+        {
+          id: bodyId.value,
+          ...attrs,
+          ref: bodyRef,
+        },
+        slots,
+      )
+  },
+})
 
 /**
  * ModalFooter
  */
-export const ModalFooter: ComponentWithProps<
-  DeepPartial<HTMLBeaeProps<"footer">>
-> = defineComponent({
+
+export const ModalFooter = defineComponent({
   name: "ModalFooter",
   setup(_, { slots, attrs }) {
     const styles = useStyles()
@@ -549,9 +545,8 @@ export const ModalFooter: ComponentWithProps<
  * ModalCloseButton
  *
  */
-export const ModalCloseButton: ComponentWithProps<
-  DeepPartial<HTMLBeaeProps<"button">>
-> = defineComponent({
+
+export const ModalCloseButton = defineComponent({
   name: "ModalCloseButton",
   emits: ["click"],
   setup(_, { attrs, emit }) {

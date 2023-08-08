@@ -10,8 +10,6 @@ import { getIds, getIsReversed, getStyles, orient } from "./slider-utils"
 import {
   CSSProperties,
   ComputedRef,
-  Ref,
-  ToRef,
   computed,
   onMounted,
   reactive,
@@ -251,6 +249,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
   const getValueFromPointer = (event: any) => {
     if (!trackRef.value) return
     eventSource.value = "pointer"
+    // @ts-ignore
     const rect = trackRef.value.$el.getBoundingClientRect()
     const { clientX, clientY } = event.touches?.[0] ?? event
 
@@ -288,7 +287,9 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       actions.setValueAtIndex(index, next)
     },
     reset() {
+      // @ts-ignore
       valueState.value = initialValue.value
+      // @ts-ignore
       onChange?.(initialValue.value)
     },
   })
@@ -297,7 +298,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
    * Keyboard interaction to ensure users can operate
    * the slider using only their keyboard.
    */
-  const onKeyDown = (event) => {
+  const onKeyDown = (event: any) => {
     const eventKey = event.key
     const keyMap: Record<string, any> = {
       ArrowRight: () => actions.stepUp(activeIndex.value),
@@ -338,6 +339,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
     () =>
       getStyles({
         isReversed,
+        // @ts-ignore
         orientation,
         thumbRects,
         thumbPercents: thumbPercents.value,
@@ -395,6 +397,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
   }
   onMounted(() => {
     if (rootRef.value) {
+      // @ts-ignore
       usePanEvent(rootRef, {
         onPanSessionStart(event) {
           if (!isInteractive) return
@@ -423,6 +426,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       tabIndex: -1,
       "aria-disabled": ariaAttr(isDisabled),
       "data-focused": dataAttr(isFocused.value),
+      // @ts-ignore
       style: { ...props.style, ...computedStyle.value.rootStyle },
     }
   }
@@ -433,6 +437,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       id: ids.track,
       ref: trackRef,
       "data-disabled": dataAttr(isDisabled),
+      // @ts-ignore
       style: { ...props.style, ...computedStyle.value.trackStyle },
     }
   }
@@ -442,6 +447,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       ...props,
       id: ids.innerTrack,
       style: {
+        // @ts-ignore
         ...props.style,
         ...computedStyle.value.innerTrackStyle,
       },
@@ -478,12 +484,16 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       "aria-labelledby": ariaLabel?.[index]
         ? undefined
         : ariaLabelledBy?.[index],
+      // @ts-ignore
       style: { ...props.style, ...computedStyle.value.getThumbStyle(index) },
+      // @ts-ignore
       onKeyDown: callAllHandlers(props.onKeyDown, onKeyDown),
+      // @ts-ignore
       onFocus: callAllHandlers(props.onFocus, () => {
         isFocused.value = true
         activeIndex.value = index
       }),
+      // @ts-ignore
       onBlur: callAllHandlers(props.onBlur, () => {
         isFocused.value = false
         activeIndex.value = -1
@@ -530,6 +540,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       "data-invalid": dataAttr(!isInRange),
       "data-highlighted": dataAttr(isHighlighted),
       style: {
+        // @ts-ignore
         ...props.style,
         ...markerStyle,
       },
@@ -546,7 +557,7 @@ export function useRangeSlider(props: UseRangeSliderProps) {
       name: Array.isArray(name) ? name[index] : `${name}-${index}`,
     }
   }
-
+  // @ts-ignore
   const state = computed<ComputedRef<RangeSliderState>>(() => {
     return {
       value: valueComputed.value,

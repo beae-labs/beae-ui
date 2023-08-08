@@ -1,11 +1,9 @@
-import { h, defineComponent, PropType, reactive } from "vue"
+import { type PropType, h, defineComponent, reactive } from "vue"
 import {
+  type DOMElements,
+  type ThemingProps,
+  type SystemStyleObject,
   beae,
-  DOMElements,
-  ThemingProps,
-  SystemStyleObject,
-  ComponentWithProps,
-  DeepPartial,
 } from "@beae-ui/system"
 
 export interface FlexProps {
@@ -53,8 +51,8 @@ export interface FlexProps {
   shrink?: SystemStyleObject["flexShrink"]
 }
 
-export const Flex: ComponentWithProps<DeepPartial<FlexProps>> = defineComponent(
-  {
+export const Flex: any = () =>
+  defineComponent({
     props: {
       as: {
         type: [Object, String] as PropType<DOMElements>,
@@ -97,5 +95,4 @@ export const Flex: ComponentWithProps<DeepPartial<FlexProps>> = defineComponent(
           slots,
         )
     },
-  },
-)
+  })

@@ -1,13 +1,11 @@
 import {
-  beae,
-  DOMElements,
-  ThemingProps,
+  type DOMElements,
+  type ThemingProps,
+  type HTMLBeaeProps,
   useStyleConfig,
-  DeepPartial,
-  ComponentWithProps,
-  HTMLBeaeProps,
+  beae,
 } from "@beae-ui/system"
-import { h, defineComponent, PropType, computed } from "vue"
+import { type PropType, h, defineComponent, computed } from "vue"
 import { filterUndefined } from "@beae-ui/utils"
 import { vueThemingProps } from "@beae-ui/prop-utils"
 
@@ -32,8 +30,8 @@ export interface LinkProps extends HTMLBeaeProps<"a">, ThemingProps<"Link"> {
  *
  * @see Docs https://vue.beae-ui.com/docs/layout/link
  */
-export const Link: ComponentWithProps<DeepPartial<LinkProps>> = defineComponent(
-  {
+export const Link = () =>
+  defineComponent({
     name: "Link",
     props: {
       as: {
@@ -68,5 +66,4 @@ export const Link: ComponentWithProps<DeepPartial<LinkProps>> = defineComponent(
           slots,
         )
     },
-  },
-)
+  })

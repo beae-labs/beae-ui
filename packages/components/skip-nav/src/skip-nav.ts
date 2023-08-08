@@ -17,11 +17,10 @@
 
 import { defineComponent, computed, h } from "vue"
 import {
-  beae,
-  ComponentWithProps,
-  HTMLBeaeProps,
-  SystemStyleObject,
+  type HTMLBeaeProps,
+  type SystemStyleObject,
   useStyleConfig,
+  beae,
 } from "@beae-ui/system"
 import { Box } from "@beae-ui/layout"
 import { getValidChildren } from "@beae-ui/utils"
@@ -30,84 +29,83 @@ const FALLBACK_ID = "beae-skip-nav"
 
 export interface SkipNavLinkProps extends HTMLBeaeProps<"a"> {}
 
-export const SkipNavLink: ComponentWithProps<SkipNavLinkProps> =
-  defineComponent({
-    name: "SkipNavLink",
-    props: {
-      id: {
-        type: String,
-        default: FALLBACK_ID,
-      },
+export const SkipNavLink = defineComponent({
+  name: "SkipNavLink",
+  props: {
+    id: {
+      type: String,
+      default: FALLBACK_ID,
     },
-    setup(props, { slots, attrs }) {
-      // @ts-ignore
-      const styles = useStyleConfig("SkipLink", props)
+  },
+  setup(props, { slots, attrs }) {
+    // @ts-ignore
+    const styles = useStyleConfig("SkipLink", props)
 
-      const skipLinkStyles = computed<SystemStyleObject>(() => {
-        return {
-          userSelect: "none",
-          border: "0",
-          borderRadius: "md",
-          fontWeight: "semibold",
-          height: "1px",
-          width: "1px",
-          margin: "-1px",
-          padding: "0",
-          outline: "0",
-          overflow: "hidden",
-          position: "absolute",
-          clip: "rect(0 0 0 0)",
-          ...styles.value,
-          _focus: {
-            clip: "auto",
-            width: "auto",
-            height: "auto",
-            boxShadow: "outline",
-            padding: "1rem",
-            position: "fixed",
-            top: "1.5rem",
-            insetStart: "1.5rem",
-          },
-        }
-      })
-
-      return () => {
-        return h(
-          beae.a,
-          {
-            href: `#${props.id}`,
-            __css: skipLinkStyles.value,
-            ...attrs,
-          },
-          () => getValidChildren(slots),
-        )
+    const skipLinkStyles = computed<SystemStyleObject>(() => {
+      return {
+        userSelect: "none",
+        border: "0",
+        borderRadius: "md",
+        fontWeight: "semibold",
+        height: "1px",
+        width: "1px",
+        margin: "-1px",
+        padding: "0",
+        outline: "0",
+        overflow: "hidden",
+        position: "absolute",
+        clip: "rect(0 0 0 0)",
+        ...styles.value,
+        _focus: {
+          clip: "auto",
+          width: "auto",
+          height: "auto",
+          boxShadow: "outline",
+          padding: "1rem",
+          position: "fixed",
+          top: "1.5rem",
+          insetStart: "1.5rem",
+        },
       }
-    },
-  })
+    })
+
+    return () => {
+      return h(
+        beae.a,
+        {
+          href: `#${props.id}`,
+          __css: skipLinkStyles.value,
+          ...attrs,
+        },
+        () => getValidChildren(slots),
+      )
+    }
+  },
+})
 
 export interface SkipNavContentProps extends HTMLBeaeProps<"div"> {}
 
-export const SkipNavContent: ComponentWithProps<SkipNavContentProps> =
-  defineComponent({
-    name: "SkipNavContent",
-    props: {
-      id: {
-        type: String,
-        default: FALLBACK_ID,
-      },
+export const SkipNavContent = defineComponent({
+  name: "SkipNavContent",
+  props: {
+    id: {
+      type: String,
+      default: FALLBACK_ID,
     },
-    setup(props, { attrs, slots }) {
-      return () => {
-        return h(
-          Box,
-          {
-            tabIndex: "-1",
-            id: props.id,
-            "data-testid": FALLBACK_ID,
-            ...attrs,
-          },
-          () => getValidChildren(slots),
-        )
-      }
-    },
-  })
+  },
+  setup(props, { attrs, slots }) {
+    return () => {
+      // @ts-ignore
+      return h(
+        Box,
+        {
+          tabIndex: "-1",
+          id: props.id,
+          "data-testid": FALLBACK_ID,
+          ...attrs,
+        },
+        () => getValidChildren(slots),
+      )
+    }
+  },
+})

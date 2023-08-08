@@ -34,6 +34,7 @@
   "dependencies": {
     "@beae-ui/layout": "workspace:^",
     "@beae-ui/prop-utils": "workspace:^",
+    "@beae-ui/styled-system": "workspace:^",
     "@beae-ui/system": "workspace:^",
     "@beae-ui/utils": "workspace:^",
     "vue": "^3.3.4"

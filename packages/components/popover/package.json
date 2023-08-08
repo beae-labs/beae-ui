@@ -38,7 +38,8 @@
     "@beae-ui/prop-utils": "workspace:^",
     "@beae-ui/system": "workspace:^",
     "@beae-ui/utils": "workspace:^",
-    "@beae-ui/vue-utils": "workspace:^"
+    "@beae-ui/vue-utils": "workspace:^",
+    "@vueuse/motion": "^2.0.0"
   },
   "devDependencies": {
     "clean-package": "2.2.0",
